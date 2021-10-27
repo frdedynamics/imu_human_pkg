@@ -38,6 +38,8 @@ The package contains several folders and the descriptions are given there:
 
 
 -- TODO:
+
+```bash
 .
 ├── action
 │   └── handCalibration.action
@@ -51,6 +53,8 @@ The package contains several folders and the descriptions are given there:
 ├── src
 ├── ui
 └── urdf
+
+```
 
 7 directories, 5 files
 
