@@ -79,9 +79,9 @@ Then start ROS Master with `roscore` and start the GUI with `rosrun imu_human_pk
 
 ### Dependencies
 Some necessary dependencies are already installed with `rosdep install imu_human_pkg` command. In addition to those, you need to have 
-- **awindamonitor** for sensors: `git clone https://github.com/Raffa87/xsense-awinda.git`
-- If you want to use real UR: `https://sdurobotics.gitlab.io/ur_rtde/index.html`
-- If you want to control ROS-i supported simulated robot models in Gazebo:`https://moveit.ros.org/robots/`
+- [**awindamonitor** for sensors](git clone https://github.com/Raffa87/xsense-awinda.git)
+- [If you want to use real UR](https://sdurobotics.gitlab.io/ur_rtde/index.html)
+- [If you want to control ROS-i supported simulated robot models in Gazebo](https://moveit.ros.org/robots/)
 
 
 ## Useful open-source links
@@ -93,4 +93,5 @@ Some necessary dependencies are already installed with `rosdep install imu_human
 ### IMU and HRC
 
 ### Miscellaneous
+- [Deciding the default human body measurements](http://www.oandplibrary.org/al/pdf/1964_01_044.pdf)
 
