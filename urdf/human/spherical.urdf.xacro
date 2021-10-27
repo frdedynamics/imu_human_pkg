@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:macro name="spherical" params="name parent child *origin">
+
+    <joint name="${name}_1" type="revolute">
+      <axis xyz="-1 0 0" />
+      <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+      <parent link="${parent}"/>
+      <child link="${name}_virt_link_z"/>
+    </joint>
+
+    <link name="${name}_virt_link_z">
+      <inertial>
+        <mass value="0.025" />
+        <inertia ixx="5.8083e-4" ixy="0" ixz="0" iyy="3.0833e-5" iyz="0" izz="5.9083e-4" />
+      </inertial>
+    </link>
+
+
+    <joint name="${name}_2" type="revolute">
+      <axis xyz="0 1 0" />
+      <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+      <parent link="${name}_virt_link_z"/>
+      <child link="${name}_virt_link_x"/>
+    </joint>
+
+    <link name="${name}_virt_link_x">
+      <inertial>
+        <mass value="0.025" />
+        <inertia ixx="5.8083e-4" ixy="0" ixz="0" iyy="3.0833e-5" iyz="0" izz="5.9083e-4" />
+      </inertial>
+    </link>
+
+
+    <joint name="${name}_3" type="revolute">
+      <axis xyz="0 0 1" />
+      <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+      <parent link="${name}_virt_link_x"/>
+      <child link="${name}_virt_link_y"/>
+    </joint>
+
+    <link name="${name}_virt_link_y">
+      <inertial>
+        <mass value="0.025" />
+        <inertia ixx="5.8083e-4" ixy="0" ixz="0" iyy="3.0833e-5" iyz="0" izz="5.9083e-4" />
+      </inertial>
+    </link>
+
+
+    <joint name="${name}_F" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${name}_virt_link_y"/>
+      <child link="${child}"/>
+    </joint>
+</xacro:macro>
+
+</robot>
