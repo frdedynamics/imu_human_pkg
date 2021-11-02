@@ -95,4 +95,6 @@ Some necessary dependencies are already installed with `rosdep install imu_human
 
 ### Miscellaneous
 - [Deciding the default human body measurements](http://www.oandplibrary.org/al/pdf/1964_01_044.pdf)
+- [Offline human model in Gazebo](https://iopscience.iop.org/article/10.1088/1757-899X/825/1/012006/pdf)
+- [How we decide to move - Internal models in the cerebellum](https://www.sciencedirect.com/science/article/pii/S1364661398012212)
 
