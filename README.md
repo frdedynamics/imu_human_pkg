@@ -82,6 +82,7 @@ Some necessary dependencies are already installed with `rosdep install imu_human
 - [**awindamonitor** for sensors](git clone https://github.com/Raffa87/xsense-awinda.git)
 - [If you want to use real UR](https://sdurobotics.gitlab.io/ur_rtde/index.html)
 - [If you want to control ROS-i supported simulated robot models in Gazebo](https://moveit.ros.org/robots/)
+  - For example (in the paper referred): [Franka Emika Panda in Gazebo controlled by Moveit](https://github.com/frankaemika/franka_ros)
 
 
 ## Useful open-source links
