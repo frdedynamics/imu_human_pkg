@@ -1,19 +1,18 @@
-human:
-  # Publish all joint states -----------------------------------
-  joint_state_controller:
-    type: joint_state_controller/JointStateController
-    publish_rate: 50  
+# Publish all joint states -----------------------------------
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50  
 
-  # Position Controllers ---------------------------------------
-  joint_1_1_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: joint_1_1
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  joint_1_2_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: joint_1_2
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  joint_1_3_position_controller:
-    type: effort_controllers/JointPositionController
-    joint: joint_1_3
-    pid: {p: 100.0, i: 0.01, d: 10.0}
+# Position Controllers ---------------------------------------
+joint_1_1_position_controller:
+  type: effort_controllers/JointPositionController
+  joint: joint_1_1
+  pid: {p: 100.0, i: 0.01, d: 10.0}
+joint_1_2_position_controller:
+  type: effort_controllers/JointPositionController
+  joint: joint_1_2
+  pid: {p: 100.0, i: 0.01, d: 10.0}
+joint_1_3_position_controller:
+  type: effort_controllers/JointPositionController
+  joint: joint_1_3
+  pid: {p: 100.0, i: 0.01, d: 10.0}

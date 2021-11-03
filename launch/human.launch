@@ -2,10 +2,24 @@
 
 <launch>
 
-  <group ns = "/human">
-    <!-- Load joint controller configurations from YAML file to parameter server -->
-    <rosparam file="$(find imu_human_pkg)/config/human_control.yaml" command="load"/>
+  <!-- Start Gazebo -->
+  <arg name="world" default="empty"/> 
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="true"/>
+  
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find imu_human_pkg)/worlds/custom.world"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="$(arg headless)"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
 
+  <group ns = "human">
     <!-- Load human model to parameter server -->
     <param name="human_description" command="$(find xacro)/xacro '$(find imu_human_pkg)/urdf/human/human.urdf.xacro'"/>
 
@@ -23,33 +37,10 @@
       <remap from="joint_states" to="human_joint_states" />
       <remap from="robot_description" to="human_description" />
     </node>
+
+    <!-- Spawn human in Gazebo -->
+    <node name="human_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"  args="-urdf -param human_description -model human"/>
   </group>
-
-  <!-- Start Gazebo -->
-  <arg name="world" default="empty"/> 
-  <arg name="paused" default="false"/>
-  <arg name="use_sim_time" default="true"/>
-  <arg name="gui" default="true"/>
-  <arg name="headless" default="false"/>
-  <arg name="debug" default="false"/>
-  
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find imu_human_pkg)/worlds/custom.world"/>
-    <arg name="paused" value="$(arg paused)"/>
-    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
-    <arg name="gui" value="$(arg gui)"/>
-    <arg name="headless" value="$(arg headless)"/>
-    <arg name="debug" value="$(arg debug)"/>
-  </include>
-
-
-  <!-- Spawn human in Gazebo -->
-  <node name="human_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" ns="/human"
-   args="-urdf -param human_description -model human"/>
-
-  <!-- Load the controllers -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/human" args="joint_1_1_position_controller joint_1_2_position_controller joint_1_3_position_controller joint_state_controller"/>
-
 
 </launch>
 

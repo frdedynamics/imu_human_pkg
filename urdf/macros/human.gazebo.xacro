@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="human" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="human_gazebo">
+  <xacro:macro name="human">
 
     <gazebo>
       <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-        <robotNamespace>/human</robotNamespace>
+        <robotNamespace>human</robotNamespace>
       </plugin>
     </gazebo>
 

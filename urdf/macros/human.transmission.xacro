@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="human" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="human_trans">
+  <xacro:macro name="human">
 
     <transmission name="tran_1_1">
       <type>transmission_interface/SimpleTransmission</type>
