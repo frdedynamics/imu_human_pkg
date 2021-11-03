@@ -9,10 +9,10 @@
       </plugin>
     </gazebo>
 
-    <gazebo reference="base_link">
+    <!-- <gazebo reference="base_link">
       <turnGravityOff>true</turnGravityOff>
       <static>true</static>
-    </gazebo>
+    </gazebo> -->
 
   </xacro:macro>
 
