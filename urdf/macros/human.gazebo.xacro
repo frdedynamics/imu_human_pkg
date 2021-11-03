@@ -3,29 +3,15 @@
 
   <xacro:macro name="human_gazebo">
 
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/human</robotNamespace>
+      </plugin>
+    </gazebo>
+
     <gazebo reference="base_link">
       <turnGravityOff>true</turnGravityOff>
       <static>true</static>
-    </gazebo>
-
-    <!-- Wrist flex -->
-
-    <gazebo reference="${side}_wrist_flex_link">
-      <turnGravityOff>false</turnGravityOff>
-    </gazebo>
-    <gazebo reference="${side}_wrist_flex_joint">
-      <stopKd value="1.0" />
-      <stopKp value="1000000.0" />
-    </gazebo>
-
-    <!-- Wrist roll -->
-
-    <gazebo reference="${side}_wrist_roll_link">
-      <turnGravityOff>true</turnGravityOff>
-      <material value="PR2/RollLinks" />
-    </gazebo>
-    <gazebo reference="${side}_wrist_roll_joint">
-      <fudgeFactor value="0.5" />
     </gazebo>
 
   </xacro:macro>

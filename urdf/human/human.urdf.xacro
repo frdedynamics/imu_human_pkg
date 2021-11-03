@@ -1,64 +1,15 @@
 <?xml version="1.0" ?>
 <robot name="human" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:include filename="$(find imu_human_pkg)/urdf/macros/measurements.xacro" />
+  <xacro:include filename="$(find imu_human_pkg)/urdf/macros/materials.xacro" />
+  <xacro:include filename="$(find imu_human_pkg)/urdf/macros/human.gazebo.xacro" />
+  <xacro:include filename="$(find imu_human_pkg)/urdf/macros/human.transmission.xacro" />
+
   <gazebo>
     <static>true</static>
-  </gazebo>
-
-
-  <material name="blue">
-    <color rgba="0 0 0.8 1"/>
-  </material>
-  <material name="black">
-    <color rgba="0 0 0 1"/>
-  </material>
-  <material name="white">
-    <color rgba="1 1 1 1"/>
-  </material>
+  </gazebo>  
   
-  
-  <xacro:property name="l_neck" value="0.053" />
-  <xacro:property name="head" value="0.212-${neck}" />
-  <xacro:property name="l_upper_trunk" value="0.410" />
-  <xacro:property name="l_lower_trunk" value="0.135" />
-  <xacro:property name="l_upper_arm" value="0.65" />
-  <xacro:property name="l_forearm" value="0.299" />
-  <xacro:property name="l_hand" value="0.203" />
-  <xacro:property name="l_thigh" value="0.449" />
-  <xacro:property name="l_shank" value="0.429" />
-  <xacro:property name="l_foot" value="0.06" />
-  <xacro:property name="whole_body" value="1.7268" />
-
-  <xacro:property name="w_neck" value="${l_neck/5}" />
-  <xacro:property name="w_upper_trunk" value="${l_upper_trunk/5}" />
-  <xacro:property name="w_lower_trunk" value="${l_lower_trunk/2}" />
-  <xacro:property name="w_upper_arm" value="${l_upper_arm/3}" />
-  <xacro:property name="w_forearm" value="${l_forearm/3}" />
-  <xacro:property name="w_hand" value="${l_hand/3}" />
-  <xacro:property name="w_thigh" value="${l_thigh/3}" />
-  <xacro:property name="w_shank" value="${l_shank/3}" />
-  <xacro:property name="w_foot" value="${l_foot/3}" />
-
-  <xacro:property name="cm_head" value="0.361" />
-  <xacro:property name="cm_upper_trunk" value="0.497" />
-  <xacro:property name="cm_lower_trunk" value="0.518" />
-  <xacro:property name="cm_upper_arm" value="0.427" />
-  <xacro:property name="cm_forearm" value="0.417" />
-  <xacro:property name="cm_hand" value="0.361" />
-  <xacro:property name="cm_thigh" value="0.430" />
-  <xacro:property name="cm_shank" value="0.443" />
-  <xacro:property name="cm_foot" value="0.436" />
-
-  <xacro:property name="d_head" value="1085.1" />
-  <xacro:property name="d_upper_trunk" value="1068.6" />
-  <xacro:property name="d_lower_trunk" value="1068.6" />
-  <xacro:property name="d_upper_arm" value="1088.0" />
-  <xacro:property name="d_forearm" value="1108.6" />
-  <xacro:property name="d_hand" value="1112.6" />
-  <xacro:property name="d_thigh" value="1068.6" />
-  <xacro:property name="d_shank" value="1100.2" />
-  <xacro:property name="d_foot" value="1089.3" />
-
   <xacro:include filename="$(find imu_human_pkg)/urdf/macros/spherical.xacro"/>
   <create/>
 
