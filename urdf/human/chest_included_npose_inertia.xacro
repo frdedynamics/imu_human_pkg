@@ -1,6 +1,10 @@
 <?xml version="1.0" ?>
 <robot name="human_upper" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <gazebo>
+    <static>false</static>
+  </gazebo>
+
   <material name="blue">
     <color rgba="0 0 0.8 1"/>
   </material>
@@ -63,57 +67,42 @@
   <joint name="world_joint" type="fixed">
     <parent link="world"/>
     <child link="base_link"/>
-    <origin rpy="0.0 0.0 0.0" xyz="0 0 ${l_foot+l_shank+l_thigh+l_lower_trunk}"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
   </joint>
 
   <link name="base_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <sphere radius="0.1"/>
+        <box size="1 1 1"/>
       </geometry>
-      <material name="white"/>
     </visual>
   </link>
 
-  <!--<xacro:spherical name="joint_1" parent="base_link" child="link_01">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-  </xacro:spherical>-->
-  <joint name="human_base" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
+  <joint name="base_link__link_01" type="revolute">
+    <axis xyz="1 0 0" rpy="0 0 0"/> 
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <origin rpy="0 0 0" xyz="0 0 0.5"/>  
     <parent link="base_link"/>
-    <child link="link_02"/>
+    <child link="link_01"/>
   </joint>
 
-  <!--<xacro:cylindrical_part name="link_02" density="1" cm="1" length="5" radius="2">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-  </xacro:cylindrical_part>-->
-  <xacro:property name="mass" value="${pi*l_upper_arm*pow(w_upper_arm,2)*d_upper_arm}" /> 
 
-  <link name="link_02">
-      <visual>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <!--<mesh filename="package://pr2_description/meshes/torso_v0/torso_lift.dae"  /> -->
-          <cylinder length="${l_upper_arm}" radius="${w_upper_arm}"/>
-        </geometry>
-        <material name="blue" />
-      </visual>
-      <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <cylinder length="${l_upper_arm}" radius="${w_upper_arm}"/>
-        </geometry>
-      </collision>
-      <inertial>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <mass value="${mass}"/>
-        <inertia
-          ixx="${mass*(3*pow(w_upper_arm,2)+pow(l_upper_arm,2))/12}" ixy="0.0" ixz="0.0"
-          iyy="${mass*(3*pow(w_upper_arm,2)+pow(l_upper_arm,2))/12}" iyz="0.0"
-          izz="${mass*pow(w_upper_arm,2)/2}"/>
-      </inertial>
-    </link>
+  <!-- <joint name="base_link__link_01" type="fixed">
+    <parent link="base_link"/>
+    <child link="link_01"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+  </joint> -->
+
+
+  <link name="link_01">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.5"/>
+      <geometry>
+        <cylinder radius="0.35" length="0.4"/>
+      </geometry>
+    </visual>
+  </link>
 
 
 </robot>

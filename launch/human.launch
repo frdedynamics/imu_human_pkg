@@ -1,45 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <launch>
-
-  <!-- <param name="human_description" command="$(find xacro)/xacro '$(find arm_motion_controller_py3)/urdf/human/chest_included.xacro'"/> -->
   <param name="human_description" command="$(find xacro)/xacro '$(find imu_human_pkg)/urdf/human/chest_included_npose_inertia.xacro'"/>
 
   <!-- Combine joint values -->
   <node name="human_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
     <remap from="robot_description" to="human_description" />
-    <remap from="joint_states" to="/joint_states_human" />
+    <remap from="joint_states" to="human_joint_states" />
   </node>
 
   <!-- Show in Rviz   -->
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find imu_human_pkg)/launch/config/config.rviz"/> 
 
-  <!-- publish joint state
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-    <param name="use_gui" value="True"/>
-    <remap from="joint_states" to="/joint_states_human" />
-  </node>-->
-
-  <arg name="world" default="empty"/> 
-  <arg name="paused" default="false"/>
-  <arg name="use_sim_time" default="true"/>
-  <arg name="gui" default="true"/>
-  <arg name="headless" default="false"/>
-  <arg name="debug" default="false"/>
-  
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find imu_human_pkg)/worlds/custom.world"/>
-    <arg name="paused" value="$(arg paused)"/>
-    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
-    <arg name="gui" value="$(arg gui)"/>
-    <arg name="headless" value="$(arg headless)"/>
-    <arg name="debug" value="$(arg debug)"/>
-  </include>
-
-  <node name="human_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
-   args="-urdf -param human_description -model human_upper"/>
-
+  <!-- publish joint state -->
+  <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+    <remap from="joint_states" to="human_joint_states" />
+    <remap from="robot_description" to="human_description" />
+  </node>
 
 </launch>
-
 
