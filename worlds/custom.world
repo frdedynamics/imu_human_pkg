@@ -1,0 +1,22 @@
+<sdf version="1.4">
+    <world name="default">
+       <include>
+         <uri>model://sun</uri>
+       </include>
+       <include>
+         <uri>model://ground_plane</uri>
+       </include>
+       <include>
+         <uri>model://Example_AR</uri>
+         <pose>2 2 0.09 0 0 0</pose>
+       </include>
+       
+     <!--the light source created in the world file-->
+      <light type="directional" name="my_light" cast_shadows="false">
+      	<direction xyz="0 0 -1"/>
+      	<specular rgba=".1 .1 .1 1"/>
+      </light>
+    </world>
+</sdf>
+
+

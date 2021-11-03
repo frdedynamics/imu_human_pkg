@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:macro name="cylindrical_part" params="name density cm length radius *origin">
+
+  <xacro:property name="mass" value="${pi*length*pow(radius,2)*density}" /> 
+
+    <!--<joint name="${name}_joint" type="revolute">
+      <axis xyz="-1 0 0" />
+      <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+    </joint>-->
+
+    <link name="${name}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <!--<mesh filename="package://pr2_description/meshes/torso_v0/torso_lift.dae"  /> -->
+          <cylinder length="${length}" radius="${radius}"/>
+        </geometry>
+        <material name="blue" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="${length}" radius="${radius}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="${mass}"/>
+        <inertia
+          ixx="${mass*(3*pow(radius,2)+pow(length,2))/12}" ixy="0.0" ixz="0.0"
+          iyy="${mass*(3*pow(radius,2)+pow(length,2))/12}" iyz="0.0"
+          izz="${mass*pow(radius,2)/2}"/>
+      </inertial>
+    </link>
+</xacro:macro>
+
+</robot>
