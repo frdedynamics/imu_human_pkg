@@ -107,7 +107,7 @@
 
   <link name="link_01">
       <visual>
-        <origin xyz="0 0 0" rpy="0 0 0" />
+        <origin xyz="0 0 ${l_upper_arm/2}" rpy="0 0 0" />
         <geometry>
           <!--<mesh filename="package://pr2_description/meshes/torso_v0/torso_lift.dae"  /> -->
           <cylinder length="${l_upper_arm}" radius="${w_upper_arm}"/>
