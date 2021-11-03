@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <launch>
-  <param name="human_description" command="$(find xacro)/xacro '$(find imu_human_pkg)/urdf/human/chest_included_npose_inertia.xacro'"/>
+  <param name="human_description" command="$(find xacro)/xacro '$(find imu_human_pkg)/urdf/human/human.urdf.xacro'"/>
 
   <!-- Combine joint values -->
   <node name="human_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
@@ -35,7 +35,7 @@
   </include>
 
   <node name="human_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
-   args="-urdf -param human_description -model human_upper"/>
+   args="-urdf -param human_description -model human"/>
 
 
 </launch>

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<robot name="human_upper" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="human" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <gazebo>
     <static>true</static>
@@ -59,8 +59,7 @@
   <xacro:property name="d_shank" value="1100.2" />
   <xacro:property name="d_foot" value="1089.3" />
 
-  <xacro:include filename="spherical.urdf.xacro"/>
-  <xacro:include filename="arm.urdf.xacro"/>
+  <xacro:include filename="$(find imu_human_pkg)/urdf/macros/spherical.xacro"/>
   <create/>
 
   <xacro:property name="mass" value="${pi*l_upper_arm*pow(w_upper_arm,2)*d_upper_arm}" /> 
