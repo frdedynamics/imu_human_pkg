@@ -5,8 +5,8 @@
     publish_rate: 50  
 
   # Position Controllers ---------------------------------------
-  joint_1_1_position_controller:
-    type: effort_controllers/PositionJointInterface
+  joint_1_position_controller:
+    type: position_controllers/JointPositionController
     joint: joint_1
 
 
