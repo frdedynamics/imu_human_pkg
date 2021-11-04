@@ -9,4 +9,9 @@
             <!-- <legacyModeNS>true</legacyModeNS> -->
         </plugin>
     </gazebo>
+
+    <gazebo reference="base_link">
+        <static>true</static>
+        <turnGravityOff>true</turnGravityOff>
+    </gazebo>
 </robot>

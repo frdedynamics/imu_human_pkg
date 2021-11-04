@@ -5,6 +5,7 @@
 <xacro:macro name="spherical" params="name parent child *origin">
 
     <joint name="${name}_x" type="revolute">
+      <xacro:insert_block name="origin" />
       <axis xyz="1 0 0" />
       <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
       <parent link="${parent}"/>
@@ -50,7 +51,6 @@
 
 
     <joint name="${name}_F" type="fixed">
-      <xacro:insert_block name="origin" />
       <parent link="${name}_virt_link_3"/>
       <child link="${child}"/>
     </joint>
