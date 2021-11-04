@@ -98,11 +98,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        link_01:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         world:
           Alpha: 1
           Show Axes: true
@@ -120,8 +115,6 @@ Visualization Manager:
         All Enabled: true
         base_link:
           Value: true
-        link_01:
-          Value: true
         world:
           Value: true
       Marker Alpha: 1
@@ -133,8 +126,7 @@ Visualization Manager:
       Tree:
         world:
           base_link:
-            link_01:
-              {}
+            {}
       Update Interval: 0
       Value: true
   Enabled: true
@@ -173,17 +165,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -0.2208341360092163
-        Y: 0.007688630372285843
-        Z: 0.36276018619537354
+        X: -0.17670591175556183
+        Y: -0.12265371531248093
+        Z: 0.4587510824203491
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -0.12960141897201538
+      Pitch: -0.14960135519504547
       Target Frame: <Fixed Frame>
-      Yaw: 0.23540392518043518
+      Yaw: 0.04541436582803726
     Saved: ~
 Window Geometry:
   Displays:
