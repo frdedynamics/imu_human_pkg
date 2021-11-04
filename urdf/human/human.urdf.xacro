@@ -10,10 +10,11 @@
   <create/>
 
   <xacro:property name="mass" value="${pi*l_upper_arm*pow(w_upper_arm,2)*d_upper_arm}" /> 
+  <xacro:property name="radius" value="0.1" />
 
   <link name="world"/>
   <joint name="world_joint" type="fixed">
-    <origin xyz="0 0 0.1" rpy="0 0 0" />
+    <origin xyz="0 0 ${radius}" rpy="0 0 0" />
     <parent link="world"/>
     <child link="base_link"/>
     <!-- <origin rpy="0.0 0.0 0.0" xyz="0 0 ${l_foot+l_shank+l_thigh+l_lower_trunk}"/> -->
@@ -21,24 +22,23 @@
   </joint>
 
   <link name="base_link">
-    <origin xyz="0 0 0.1" rpy="0 0 0" />
     <visual>
       <geometry>
-        <sphere radius="0.1"/>
+        <sphere radius="${radius}"/>
       </geometry>
       <material name="white"/>
     </visual>
     <collision>
       <geometry>
-        <sphere radius="0.1"/>
+        <sphere radius="${radius}"/>
       </geometry>
     </collision>
     <inertial>
       <mass value="${mass}"/>
       <inertia
-        ixx="${2*mass*pow(0.1,2)/5}" ixy="0.0" ixz="0.0"
-        iyy="${2*mass*pow(0.1,2)/5}" iyz="0.0"
-        izz="${2*mass*pow(0.1,2)/5}"/>
+        ixx="${2*mass*pow(radius,2)/5}" ixy="0.0" ixz="0.0"
+        iyy="${2*mass*pow(radius,2)/5}" iyz="0.0"
+        izz="${2*mass*pow(radius,2)/5}"/>
     </inertial>
   </link>
 
@@ -46,13 +46,13 @@
     <origin rpy="0 0 0" xyz="0 0 0"/>
   </xacro:spherical> -->
 
-  <!-- <joint name="joint_1" type="revolute">
-    <origin xyz="0 0 0.1" rpy="0 0 0" />
+  <joint name="joint_1" type="revolute">
+    <origin xyz="0 0 ${radius}" rpy="0 0 0" />
     <axis xyz="0 1 0"/>
     <parent link="base_link"/>
     <child link="link_01"/>
     <limit effort="1" lower="-1.57079632679" upper="1.57079632679" velocity="1"/>
-  </joint> -->
+  </joint>
 
 
 
@@ -60,27 +60,29 @@
     <origin rpy="0 0 0" xyz="0 0 0"/>
   </xacro:cylindrical_part>-->
 
-  <!-- <link name="link_01">
-    <origin xyz="0 0 0" rpy="0 0 0" />
+  <link name="link_01">
       <visual>
+        <origin xyz="0 0 ${2*radius}" rpy="0 0 0" />
         <geometry>
           <cylinder length="${l_upper_arm}" radius="${w_upper_arm}"/>
         </geometry>
         <material name="blue" />
       </visual>
       <collision>
+        <origin xyz="0 0 ${2*radius}" rpy="0 0 0" />
         <geometry>
           <cylinder length="${l_upper_arm}" radius="${w_upper_arm}"/>
         </geometry>
       </collision>
       <inertial>
+        <origin xyz="0 0 ${2*radius}" rpy="0 0 0" />
         <mass value="${mass}"/>
         <inertia
           ixx="${mass*(3*pow(w_upper_arm,2)+pow(l_upper_arm,2))/12}" ixy="0.0" ixz="0.0"
           iyy="${mass*(3*pow(w_upper_arm,2)+pow(l_upper_arm,2))/12}" iyz="0.0"
           izz="${mass*pow(w_upper_arm,2)/2}"/>
       </inertial>
-    </link> -->
+    </link>
 
     <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
