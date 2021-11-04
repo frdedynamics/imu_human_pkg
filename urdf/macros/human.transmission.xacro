@@ -1,49 +1,14 @@
 <?xml version="1.0"?>
 <robot name="human" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-
-  <transmission name="tran_1_1">
+  <transmission name="joint_1_1_tran1">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="joint_1_1">
+    <joint name="joint_1">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
-    <actuator name="motor_1_1">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    <actuator name="joint_1_1_motor1">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-<!-- 
-    <transmission name="tran_1_1">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="joint_1_1">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="motor_1_1">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
-
-    <transmission name="tran_1_2">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="joint_1_2">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="motor_1_2">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
-
-    <transmission name="tran_1_3">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="joint_1_3">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="motor_1_3">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission> -->
 
 </robot>

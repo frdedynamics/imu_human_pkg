@@ -3,8 +3,8 @@
 
   <xacro:include filename="$(find imu_human_pkg)/urdf/macros/measurements.xacro" />
   <xacro:include filename="$(find imu_human_pkg)/urdf/macros/materials.xacro" />
-  <!-- <xacro:include filename="$(find imu_human_pkg)/urdf/macros/human.gazebo.xacro" />
-  <xacro:include filename="$(find imu_human_pkg)/urdf/macros/human.transmission.xacro" /> --> 
+  <xacro:include filename="$(find imu_human_pkg)/urdf/macros/human.gazebo.xacro" /> 
+  <xacro:include filename="$(find imu_human_pkg)/urdf/macros/human.transmission.xacro" /> 
   
   <xacro:include filename="$(find imu_human_pkg)/urdf/macros/spherical.xacro"/>
   <create/>
@@ -84,17 +84,9 @@
       </inertial>
     </link>
 
-    <gazebo>
-        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-            <robotNamespace>/human</robotNamespace>
-            <robotParam>human_description</robotParam>
-            <controlPeriod>0.001</controlPeriod>
-            <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-            <!-- <legacyModeNS>true</legacyModeNS> -->
-        </plugin>
-    </gazebo>
 
-    <transmission name="joint_1_1_tran1">
+
+    <!-- <transmission name="joint_1_1_tran1">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="joint_1">
         <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
@@ -102,7 +94,7 @@
       <actuator name="joint_1_1_motor1">
         <mechanicalReduction>1</mechanicalReduction>
       </actuator>
-    </transmission>
+    </transmission> -->
 
 
 <!-- 
