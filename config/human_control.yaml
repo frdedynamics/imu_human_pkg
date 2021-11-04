@@ -5,23 +5,23 @@
     publish_rate: 50  
 
   # Position Controllers ---------------------------------------
-  joint_1_1_position_controller:
+  joint_1_x_position_controller:
     type: position_controllers/JointPositionController
-    joint: joint_1_1
+    joint: joint_1_x
 
-  joint_1_2_position_controller:
+  joint_1_y_position_controller:
     type: position_controllers/JointPositionController
-    joint: joint_1_2
+    joint: joint_1_y
 
-  joint_1_3_position_controller:
+  joint_1_z_position_controller:
     type: position_controllers/JointPositionController
-    joint: joint_1_3
+    joint: joint_1_z
 
 
   gazebo_ros_control/pid_gains:
-    joint_1_1: {p: 1.0, i: 0.0, d: 1.0}
-    joint_1_2: {p: 1.0, i: 0.0, d: 1.0}
-    joint_1_3: {p: 1.0, i: 0.0, d: 1.0}
+    joint_1_x: {p: 1.0, i: 0.0, d: 1.0}
+    joint_1_y: {p: 1.0, i: 0.0, d: 1.0}
+    joint_1_z: {p: 1.0, i: 0.0, d: 1.0}
 
 
     

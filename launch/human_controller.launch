@@ -7,8 +7,8 @@
 
 
      <!-- Load the controllers -->
-    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="human" args="joint_1_1_position_controller joint_1_2_position_controller
-    joint_1_3_position_controller joint_state_controller"/>
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="human" args="joint_1_x_position_controller joint_1_y_position_controller
+    joint_1_z_position_controller joint_state_controller"/>
 
 </launch>
 
