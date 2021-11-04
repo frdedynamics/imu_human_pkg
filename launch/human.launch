@@ -8,7 +8,7 @@
   <arg name="use_sim_time" default="true"/>
   <arg name="gui" default="true"/>
   <arg name="headless" default="false"/>
-  <arg name="debug" default="true"/>
+  <arg name="debug" default="false"/>
   
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find imu_human_pkg)/worlds/custom.world"/>
@@ -18,6 +18,9 @@
     <arg name="headless" value="$(arg headless)"/>
     <arg name="debug" value="$(arg debug)"/>
   </include>
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find imu_human_pkg)/config/human_control.yaml" command="load"/>
 
   <group ns = "human">
     <!-- Load human model to parameter server -->

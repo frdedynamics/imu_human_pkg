@@ -9,7 +9,6 @@ Panels:
         - /RobotModel2
         - /RobotModel2/Links1
         - /RobotModel2/Links1/base_link1
-        - /RobotModel2/Links1/link_021
         - /RobotModel2/Links1/world1
         - /TF1
         - /TF1/Frames1
@@ -99,8 +98,8 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        link_02:
-          Alpha: 0.5
+        link_01:
+          Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
@@ -121,7 +120,7 @@ Visualization Manager:
         All Enabled: true
         base_link:
           Value: true
-        link_02:
+        link_01:
           Value: true
         world:
           Value: true
@@ -134,7 +133,7 @@ Visualization Manager:
       Tree:
         world:
           base_link:
-            link_02:
+            link_01:
               {}
       Update Interval: 0
       Value: true
@@ -174,17 +173,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -0.3145415186882019
-        Y: -0.1286437064409256
-        Z: 0.9038865566253662
+        X: -0.2208341360092163
+        Y: 0.007688630372285843
+        Z: 0.36276018619537354
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.2153986394405365
+      Pitch: -0.12960141897201538
       Target Frame: <Fixed Frame>
-      Yaw: 0.19540396332740784
+      Yaw: 0.23540392518043518
     Saved: ~
 Window Geometry:
   Displays:
