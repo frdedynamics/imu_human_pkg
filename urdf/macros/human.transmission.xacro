@@ -3,10 +3,30 @@
 
   <transmission name="joint_1_1_tran1">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="joint_1">
+    <joint name="joint_1_1">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
     <actuator name="joint_1_1_motor1">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="joint_1_2_tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_1_2">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_1_2_motor1">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="joint_1_3_tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_1_3">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="joint_1_3_motor1">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>

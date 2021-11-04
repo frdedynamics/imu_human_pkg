@@ -42,17 +42,17 @@
     </inertial>
   </link>
 
-  <!-- <xacro:spherical name="joint_1" parent="base_link" child="link_01">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-  </xacro:spherical> -->
+  <xacro:spherical name="joint_1" parent="base_link" child="link_01">
+    <origin rpy="0 0 0" xyz="0 0 ${radius}"/>
+  </xacro:spherical>
 
-  <joint name="joint_1" type="revolute">
+  <!-- <joint name="joint_1" type="revolute">
     <origin xyz="0 0 ${radius}" rpy="0 0 0" />
     <axis xyz="0 1 0"/>
     <parent link="base_link"/>
     <child link="link_01"/>
     <limit effort="1" lower="-1.57079632679" upper="1.57079632679" velocity="1"/>
-  </joint>
+  </joint> -->
 
 
 
@@ -83,50 +83,5 @@
           izz="${mass*pow(w_upper_arm,2)/2}"/>
       </inertial>
     </link>
-
-
-
-    <!-- <transmission name="joint_1_1_tran1">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="joint_1">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="joint_1_1_motor1">
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission> -->
-
-
-<!-- 
-    <gazebo>
-      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-        <robotNamespace>/human</robotNamespace>
-      </plugin>
-    </gazebo>
-
-    <gazebo>
-      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-        <robotNamespace>/human</robotNamespace>
-        <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-      </plugin>
-    </gazebo> -->
- 
-    <!-- <gazebo>
-      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-        <robotNamespace>human</robotNamespace>
-        <controlPeriod>0.001</controlPeriod>
-        <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-      </plugin>
-    </gazebo> -->
-
-    <!-- <gazebo>
-      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-        <robotNamespace>human</robotNamespace>
-      </plugin>
-    </gazebo> -->
-
-
-
-
 
 </robot>
