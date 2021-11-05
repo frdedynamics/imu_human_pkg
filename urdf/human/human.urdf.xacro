@@ -9,7 +9,7 @@
   <xacro:include filename="$(find imu_human_pkg)/urdf/macros/spherical.xacro"/>
   <create/>
 
-  <xacro:property name="mass" value="${pi*l_upper_arm*pow(w_upper_arm,2)*d_upper_arm}" /> 
+  <xacro:property name="mass" value="${pi*l_upper_arm*pow(w_upper_arm,2)*d_upper_arm*0.0001}" /> 
   <xacro:property name="radius" value="0.1" />
 
   <link name="world"/>
