@@ -12,15 +12,17 @@
   <xacro:property name="l_shank" value="0.429" />
   <xacro:property name="l_foot" value="0.06" />
   <xacro:property name="whole_body" value="1.7268" />
+  <xacro:property name="thickness" value="0.002" />
 
-  <xacro:property name="w_neck" value="${l_neck/5}" />
-  <xacro:property name="w_upper_trunk" value="${l_upper_trunk/5}" />
-  <xacro:property name="w_lower_trunk" value="${l_lower_trunk/2}" />
-  <xacro:property name="w_upper_arm" value="${l_upper_arm/3}" />
-  <xacro:property name="w_forearm" value="${l_forearm/3}" />
+  <xacro:property name="r_neck" value="${l_neck/5}" />
+  <xacro:property name="r_head" value="${head/2}" />
+  <xacro:property name="r_upper_trunk" value="${l_upper_trunk/5}" />
+  <xacro:property name="r_lower_trunk" value="${l_lower_trunk/2}" />
+  <xacro:property name="r_upper_arm" value="${l_upper_arm/3}" />
+  <xacro:property name="r_forearm" value="${l_forearm/3}" />
   <xacro:property name="w_hand" value="${l_hand/3}" />
-  <xacro:property name="w_thigh" value="${l_thigh/3}" />
-  <xacro:property name="w_shank" value="${l_shank/3}" />
+  <xacro:property name="r_thigh" value="${l_thigh/3}" />
+  <xacro:property name="r_shank" value="${l_shank/3}" />
   <xacro:property name="w_foot" value="${l_foot/3}" />
 
   <xacro:property name="cm_head" value="0.361" />
@@ -33,6 +35,7 @@
   <xacro:property name="cm_shank" value="0.443" />
   <xacro:property name="cm_foot" value="0.436" />
 
+  <xacro:property name="d_neck" value="1085.1" />
   <xacro:property name="d_head" value="1085.1" />
   <xacro:property name="d_upper_trunk" value="1068.6" />
   <xacro:property name="d_lower_trunk" value="1068.6" />
@@ -42,5 +45,22 @@
   <xacro:property name="d_thigh" value="1068.6" />
   <xacro:property name="d_shank" value="1100.2" />
   <xacro:property name="d_foot" value="1089.3" />
+
+  <!-- <xacro:property name="mass" value="${pi*l_upper_arm*pow(w_upper_arm,2)*d_upper_arm*0.001}" /> 
+  <xacro:property name="radius" value="0.1" /> -->
+
+  <xacro:property name="m_base_link" value="0.01" /> 
+  <xacro:property name="r_base_link" value="0.01" />
+
+  <xacro:property name="m_neck" value="${pi*l_neck*pow(r_neck,2)*d_neck*0.001}" /> 
+  <xacro:property name="m_head" value="${(4/3)*pi*pow(r_head,3)*0.001}" /> 
+  <xacro:property name="m_upper_trunk" value="${pi*l_upper_trunk*pow(r_upper_trunk,2)*d_upper_trunk*0.001}" /> 
+  <xacro:property name="m_lower_trunk" value="${pi*l_lower_trunk*pow(r_lower_trunk,2)*d_lower_trunk*0.001}" /> 
+  <xacro:property name="m_upper_arm" value="${pi*l_upper_arm*pow(r_upper_arm,2)*d_upper_arm*0.001}" /> 
+  <xacro:property name="m_forearm" value="${pi*l_forearm*pow(r_forearm,2)*d_forearm*0.001}" /> 
+  <xacro:property name="m_thigh" value="${pi*l_thigh*pow(r_thigh,2)*d_thigh*0.001}" /> 
+  <xacro:property name="m_shank" value="${pi*l_shank*pow(r_shank,2)*d_shank*0.001}" /> 
+  <xacro:property name="m_hand" value="${l_hand*w_hand*thickness*d_hand*0.001}" /> 
+  <xacro:property name="m_foot" value="${l_foot*w_foot*thickness*d_foot*0.001}" /> 
 
 </robot>
