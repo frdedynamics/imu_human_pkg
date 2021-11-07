@@ -54,16 +54,17 @@
 
   <xacro:property name="m_base_link" value="0.01" /> 
   <xacro:property name="r_base_link" value="0.01" />
+  <xacro:property name="unit_scale" value="0.0001" />
 
-  <xacro:property name="m_neck" value="${pi*l_neck*pow(r_neck,2)*d_neck*0.001}" /> 
-  <xacro:property name="m_head" value="${(4/3)*pi*pow(r_head,3)*0.001}" /> 
-  <xacro:property name="m_upper_trunk" value="${pi*l_upper_trunk*pow(r_upper_trunk,2)*d_upper_trunk*0.001}" /> 
-  <xacro:property name="m_lower_trunk" value="${pi*l_lower_trunk*pow(r_lower_trunk,2)*d_lower_trunk*0.001}" /> 
-  <xacro:property name="m_upper_arm" value="${pi*l_upper_arm*pow(r_upper_arm,2)*d_upper_arm*0.001}" /> 
-  <xacro:property name="m_forearm" value="${pi*l_forearm*pow(r_forearm,2)*d_forearm*0.001}" /> 
-  <xacro:property name="m_thigh" value="${pi*l_thigh*pow(r_thigh,2)*d_thigh*0.001}" /> 
-  <xacro:property name="m_shank" value="${pi*l_shank*pow(r_shank,2)*d_shank*0.001}" /> 
-  <xacro:property name="m_hand" value="${l_hand*w_hand*thickness*d_hand*0.001}" /> 
-  <xacro:property name="m_foot" value="${l_foot*w_foot*thickness*d_foot*0.001}" /> 
+  <xacro:property name="m_neck" value="${pi*l_neck*pow(r_neck,2)*d_neck*unit_scale}" /> 
+  <xacro:property name="m_head" value="${(4/3)*pi*pow(r_head,3)*unit_scale}" /> 
+  <xacro:property name="m_upper_trunk" value="${pi*l_upper_trunk*pow(r_upper_trunk,2)*d_upper_trunk*unit_scale}" /> 
+  <xacro:property name="m_lower_trunk" value="${pi*l_lower_trunk*pow(r_lower_trunk,2)*d_lower_trunk*unit_scale}" /> 
+  <xacro:property name="m_upper_arm" value="${pi*l_upper_arm*pow(r_upper_arm,2)*d_upper_arm*unit_scale}" /> 
+  <xacro:property name="m_forearm" value="${pi*l_forearm*pow(r_forearm,2)*d_forearm*unit_scale}" /> 
+  <xacro:property name="m_thigh" value="${pi*l_thigh*pow(r_thigh,2)*d_thigh*unit_scale}" /> 
+  <xacro:property name="m_shank" value="${pi*l_shank*pow(r_shank,2)*d_shank*unit_scale}" /> 
+  <xacro:property name="m_hand" value="${l_hand*w_hand*thickness*d_hand*unit_scale}" /> 
+  <xacro:property name="m_foot" value="${l_foot*w_foot*thickness*d_foot*unit_scale}" /> 
 
 </robot>
