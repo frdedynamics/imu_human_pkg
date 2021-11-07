@@ -81,14 +81,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.sub_joint_states = rospy.Subscriber("/joint_states", JointState, self.cb_joint_states)
         rospy.loginfo("started")
 
-    def closeEvent(self, event):
-        print("Killing all nodes. Please wait!")
-        self.textEdit.insertPlainText("Killing all nodes. Please wait!")  # Why not working?
-        self.launch.shutdown()
-        p = os.popen("killall -9 gzserver gzclient")
-        p = os.popen("killall -9 roscore")
-        event.accept()
-
     def connect_robot_clicked(self):
         # "TODO"
         self.pushButton_spawn_models.setEnabled(True)
@@ -108,6 +100,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def colift_clicked(self):
         pass
 
+    def closeEvent(self, event):
+        event.ignore()
+        print("Killing all nodes. Please wait!")
+        self.textEdit.insertPlainText("Killing all nodes. Please wait!")  # Why not working?
+        try:
+            self.launch.shutdown()
+            p = os.popen("killall -9 gzserver gzclient")
+            p = os.popen("killall -9 roscore")
+        except AttributeError as e:
+            print(e)
+            print("Exiting...")
+        event.accept()
 
 
 
