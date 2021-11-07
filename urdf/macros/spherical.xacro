@@ -2,11 +2,11 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-<xacro:macro name="spherical" params="name parent child *origin">
+<xacro:macro name="spherical" params="name parent child x y z *origin">
 
     <joint name="${name}_y" type="revolute">
       <xacro:insert_block name="origin" />
-      <axis xyz="0 1 0" />
+      <axis xyz="0 ${y} 0" />
       <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
       <parent link="${parent}"/>
       <child link="${name}_virt_link_1"/>
@@ -19,9 +19,8 @@
       </inertial>
     </link>
 
-
     <joint name="${name}_x" type="revolute">
-      <axis xyz="1 0 0" />
+      <axis xyz="${x} 0 0" />
       <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
       <parent link="${name}_virt_link_1"/>
       <child link="${name}_virt_link_2"/>
@@ -36,7 +35,7 @@
 
 
     <joint name="${name}_z" type="revolute">
-      <axis xyz="0 0 1" />
+      <axis xyz="0 0 ${z}" />
       <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
       <parent link="${name}_virt_link_2"/>
       <child link="${name}_virt_link_3"/>
