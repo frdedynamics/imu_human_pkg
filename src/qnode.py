@@ -29,6 +29,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.comboBox_robot_name.addItems(['Panda', 'UR5e', 'KUKA iiwa'])
         self.lineEdit_robot_ip.setDisabled(True)  
 
+        self.pushButton_calibrate_human.setToolTip("Set the human in N-pose\nCalibration will be completed\nin 3 seconds.")
+        self.pushButton_connect_robot.setDisabled(True)
+        self.pushButton_connect_robot.setToolTip("Simulation: Necessary models are uploaded to parameter server.\nReal robot: Real-time data exchange is set up.")
+        self.pushButton_spawn_models.setDisabled(True)
+        self.pushButton_spawn_models.setToolTip("Simulation-only: Human and robot models are spawn in Gazebo")
+        self.pushButton_start_controllers.setDisabled(True)
+        self.pushButton_spawn_models.setToolTip("Simulation-only: Human and robot controllers are started")
+        self.pushButton_teleoperate.setDisabled(True)
+        self.pushButton_teleoperate.setToolTip("Left hand orientation is mapped robot wrist joints\nRight hand respective position is mapped end-effector position")
+        self.pushButton_colift.setDisabled(True)
+        self.pushButton_colift.setToolTip("HRC process starts: IDLE-APPROACH-COLIFT-RELEASE")
+
+
+
         self.radioButton_real_robot.clicked.connect(self.real_robot_selected)
         self.radioButton_simulation.clicked.connect(self.simulation_selected)
     

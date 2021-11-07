@@ -268,7 +268,7 @@
       <string>Colift</string>
      </property>
     </widget>
-    <widget class="QTextEdit" name="textEdit">
+    <widget class="QTextEdit" name="textEdit_status">
      <property name="geometry">
       <rect>
        <x>220</x>
