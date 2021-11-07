@@ -41,10 +41,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_colift.setDisabled(True)
         self.pushButton_colift.setToolTip("HRC process starts: IDLE-APPROACH-COLIFT-RELEASE")
 
-
-
         self.radioButton_real_robot.clicked.connect(self.real_robot_selected)
         self.radioButton_simulation.clicked.connect(self.simulation_selected)
+        self.pushButton_calibrate_human.clicked.connect(self.calibrate_human_clicked)
+        self.pushButton_connect_robot.clicked.connect(self.connect_robot_clicked)
+        self.pushButton_spawn_models.clicked.connect(self.spawn_models_clicked)
+        self.pushButton_start_controllers.clicked.connect(self.start_controllers_clicked)
+        self.pushButton_teleoperate.clicked.connect(self.teleoperate_clicked)
+        self.pushButton_colift.clicked.connect(self.colift_clicked)
     
     def real_robot_selected(self):
         self.textEdit.setText("Real robot selected")
@@ -55,6 +59,32 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.textEdit.setText("Simulation Selected")
         self.lineEdit_robot_ip.setDisabled(True)
         self.comboBox_robot_name.setEnabled(True)
+
+    def calibrate_human_clicked(self):
+        # "TODO"
+        self.pushButton_connect_robot.setEnabled(True)
+        self.groupBox_human.setDisabled(True)
+        self.groupBox_robots.setDisabled(True)
+
+    def connect_robot_clicked(self):
+        # "TODO"
+        self.pushButton_spawn_models.setEnabled(True)
+
+    def spawn_models_clicked(self):
+        # "TODO"
+        self.pushButton_start_controllers.setEnabled(True)
+
+    def start_controllers_clicked(self):
+        # "TODO"
+        self.pushButton_teleoperate.setEnabled(True)
+        self.pushButton_colift.setEnabled(True)
+
+    def teleoperate_clicked(self):
+        pass
+
+    def colift_clicked(self):
+        pass
+
 
 
 
