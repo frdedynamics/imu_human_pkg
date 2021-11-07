@@ -109,13 +109,13 @@
         <material name="white"/>
         </visual>
         <collision>
-        <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_shank/2}"/>
         <geometry>
             <cylinder length="${l_shank}" radius="${r_shank}"/>
         </geometry>
         </collision>
         <inertial>
-        <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_shank/2}"/>
         <mass value="${m_shank}"/>
         <inertia
             ixx="${m_shank*(3*pow(r_shank,2)+pow(l_shank,2))/12}" ixy="0.0" ixz="0.0"
@@ -139,13 +139,13 @@
         <material name="white"/>
         </visual>
         <collision>
-        <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-thickness/2}"/>
+        <origin rpy="0 0 0" xyz="0 0 ${-thickness/2}"/>
         <geometry>
             <box size="${l_foot} ${w_foot} ${thickness}"/>
         </geometry>
         </collision>
         <inertial>
-        <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_shank/2}"/>
         <mass value="${m_foot}"/>
         <inertia
             ixx="${m_foot*(pow(thickness,2) + pow(w_foot,2))/12}" ixy="0.0" ixz="0.0"
@@ -169,13 +169,13 @@
         <material name="white"/>
         </visual>
         <collision>
-        <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_shank/2}"/>
         <geometry>
             <cylinder length="${l_shank}" radius="${r_shank}"/>
         </geometry>
         </collision>
         <inertial>
-        <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_shank/2}"/>
         <mass value="${m_shank}"/>
         <inertia
             ixx="${m_shank*(3*pow(r_shank,2)+pow(l_shank,2))/12}" ixy="0.0" ixz="0.0"
@@ -199,13 +199,13 @@
         <material name="white"/>
         </visual>
         <collision>
-        <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-thickness/2}"/>
+        <origin rpy="0 0 0" xyz="0 0 ${-thickness/2}"/>
         <geometry>
             <box size="${l_foot} ${w_foot} ${thickness}"/>
         </geometry>
         </collision>
         <inertial>
-        <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_shank/2}"/>
         <mass value="${m_foot}"/>
         <inertia
             ixx="${m_foot*(pow(thickness,2) + pow(w_foot,2))/12}" ixy="0.0" ixz="0.0"

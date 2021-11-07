@@ -165,7 +165,7 @@
         </inertial> -->
     </link>
 
-    <joint name="joint_neck" type="fixed">
+    <joint name="upper_trunk_to_neck" type="fixed">
         <origin rpy="0 0 0" xyz="0 0 ${l_upper_trunk}"/>
         <parent link="upper_trunk"/>
         <child link="neck"/>
@@ -200,7 +200,7 @@
         </inertial> -->
     </link>
 
-    <joint name="joint_head" type="fixed">
+    <joint name="neck_to_head" type="fixed">
         <origin rpy="0 0 0" xyz="0 0 ${l_neck}"/>
         <parent link="neck"/>
         <child link="head"/>
@@ -227,6 +227,66 @@
             ixx="${2*m_head*pow(r_head,2)/5}" ixy="0.0" ixz="0.0"
             iyy="${2*m_head*pow(r_head,2)/5}" iyz="0.0"
             izz="${2*m_head*pow(r_head,2)/5}"/>
+        </inertial>
+    </link>
+
+    <joint name="left_forearm_to_hand" type="fixed">
+        <origin rpy="0 0 0" xyz="0 0 ${-l_forearm}"/>
+        <parent link="left_forearm"/>
+        <child link="left_hand"/>
+    </joint>
+
+    <link name="left_hand">
+        <visual>
+        <origin rpy="0 ${pi/2} 0" xyz="${r_forearm/2} 0 ${-thickness/2}"/>
+        <geometry>
+            <box size="${l_hand} ${w_hand} ${thickness}"/>
+        </geometry>
+        <material name="white"/>
+        </visual>
+        <collision>
+        <origin rpy="0 ${pi/2} 0" xyz="0 0 ${-thickness/2}"/>
+        <geometry>
+            <box size="${l_hand} ${w_hand} ${thickness}"/>
+        </geometry>
+        </collision>
+        <inertial>
+        <origin rpy="0 ${pi/2} 0" xyz="0 0 ${-l_forearm/2}"/>
+        <mass value="${m_hand}"/>
+        <inertia
+            ixx="${m_hand*(pow(thickness,2) + pow(w_hand,2))/12}" ixy="0.0" ixz="0.0"
+            iyy="${m_hand*(pow(l_hand,2) + pow(thickness,2))/12}" iyz="0.0"
+            izz="${m_hand*(pow(l_hand,2) + pow(w_hand,2))/12}"/>
+        </inertial>
+    </link>
+
+    <joint name="right_forearm_to_hand" type="fixed">
+        <origin rpy="0 0 0" xyz="0 0 ${-l_forearm}"/>
+        <parent link="right_forearm"/>
+        <child link="right_hand"/>
+    </joint>
+
+    <link name="right_hand">
+        <visual>
+        <origin rpy="0 ${pi/2} 0" xyz="${r_forearm/2} 0 ${-thickness/2}"/>
+        <geometry>
+            <box size="${l_hand} ${w_hand} ${thickness}"/>
+        </geometry>
+        <material name="white"/>
+        </visual>
+        <collision>
+        <origin rpy="0 ${pi/2} 0" xyz="0 0 ${-thickness/2}"/>
+        <geometry>
+            <box size="${l_hand} ${w_hand} ${thickness}"/>
+        </geometry>
+        </collision>
+        <inertial>
+        <origin rpy="0 ${pi/2} 0" xyz="0 0 ${-l_forearm/2}"/>
+        <mass value="${m_hand}"/>
+        <inertia
+            ixx="${m_hand*(pow(thickness,2) + pow(w_hand,2))/12}" ixy="0.0" ixz="0.0"
+            iyy="${m_hand*(pow(l_hand,2) + pow(thickness,2))/12}" iyz="0.0"
+            izz="${m_hand*(pow(l_hand,2) + pow(w_hand,2))/12}"/>
         </inertial>
     </link>
 </xacro:macro>
