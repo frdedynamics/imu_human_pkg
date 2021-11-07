@@ -8,6 +8,7 @@
   
   <xacro:include filename="$(find imu_human_pkg)/urdf/macros/spherical.xacro"/>
   <xacro:include filename="$(find imu_human_pkg)/urdf/human/human_lower.xacro"/>
+  <!-- <xacro:include filename="$(find imu_human_pkg)/urdf/human/human_upper.xacro"/> -->
   <create/>
 
   <link name="world"/>
@@ -15,7 +16,6 @@
     <origin xyz="0 0 0" rpy="0 0 0" />
     <parent link="world"/>
     <child link="base_link"/>
-    <!-- <origin rpy="0.0 0.0 0.0" xyz="0 0 ${l_foot+l_shank+l_thigh+l_lower_trunk}"/> -->
     <origin rpy="0 0 0" xyz="0 0 0"/>
   </joint>
 
@@ -43,51 +43,7 @@
     </inertial>
   </link>
 
-  <xacro:human_lower />
-
-
-
-
-  <!-- <xacro:spherical name="base_to_lower_trunk" parent="base_link" child="lower_trunk">
-    <origin rpy="0.0 0.0 0.0" xyz="0 0 1"/>
-  </xacro:spherical> -->
-
-  <!-- <joint name="joint_1" type="revolute">
-    <origin xyz="0 0 ${radius}" rpy="0 0 0" />
-    <axis xyz="0 1 0"/>
-    <parent link="base_link"/>
-    <child link="link_01"/>
-    <limit effort="1" lower="-1.57079632679" upper="1.57079632679" velocity="1"/>
-  </joint> -->
-
-
-
-  <!--<xacro:cylindrical_part name="link_02" density="1" cm="1" length="5" radius="2">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-  </xacro:cylindrical_part>-->
-
-  <!-- <link name="link_01">
-      <visual>
-        <origin xyz="0 0 ${2*radius}" rpy="0 0 0" />
-        <geometry>
-          <cylinder length="${l_upper_arm}" radius="${w_upper_arm}"/>
-        </geometry>
-        <material name="blue" />
-      </visual>
-      <collision>
-        <origin xyz="0 0 ${2*radius}" rpy="0 0 0" />
-        <geometry>
-          <cylinder length="${l_upper_arm}" radius="${w_upper_arm}"/>
-        </geometry>
-      </collision>
-      <inertial>
-        <origin xyz="0 0 ${2*radius}" rpy="0 0 0" />
-        <mass value="${mass}"/>
-        <inertia
-          ixx="${mass*(3*pow(w_upper_arm,2)+pow(l_upper_arm,2))/12}" ixy="0.0" ixz="0.0"
-          iyy="${mass*(3*pow(w_upper_arm,2)+pow(l_upper_arm,2))/12}" iyz="0.0"
-          izz="${mass*pow(w_upper_arm,2)/2}"/>
-      </inertial>
-    </link> -->
+  <xacro:human_lower/>
+  <!-- <xacro:human_upper/> -->
 
 </robot>

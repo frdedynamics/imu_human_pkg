@@ -146,11 +146,11 @@
         </collision>
         <inertial>
         <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
-        <mass value="${m_hand}"/>
+        <mass value="${m_foot}"/>
         <inertia
-            ixx="${m_hand*(pow(thickness,2) + pow(w_hand,2))/12}" ixy="0.0" ixz="0.0"
-            iyy="${m_hand*(pow(l_hand,2) + pow(thickness,2))/12}" iyz="0.0"
-            izz="${m_hand*(pow(l_hand,2) + pow(w_hand,2))/12}"/>
+            ixx="${m_foot*(pow(thickness,2) + pow(w_foot,2))/12}" ixy="0.0" ixz="0.0"
+            iyy="${m_foot*(pow(l_foot,2) + pow(thickness,2))/12}" iyz="0.0"
+            izz="${m_foot*(pow(l_foot,2) + pow(w_foot,2))/12}"/>
         </inertial>
     </link>
 
@@ -206,11 +206,11 @@
         </collision>
         <inertial>
         <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
-        <mass value="${m_hand}"/>
+        <mass value="${m_foot}"/>
         <inertia
-            ixx="${m_hand*(pow(thickness,2) + pow(w_hand,2))/12}" ixy="0.0" ixz="0.0"
-            iyy="${m_hand*(pow(l_hand,2) + pow(thickness,2))/12}" iyz="0.0"
-            izz="${m_hand*(pow(l_hand,2) + pow(w_hand,2))/12}"/>
+            ixx="${m_foot*(pow(thickness,2) + pow(w_foot,2))/12}" ixy="0.0" ixz="0.0"
+            iyy="${m_foot*(pow(l_foot,2) + pow(thickness,2))/12}" iyz="0.0"
+            izz="${m_foot*(pow(l_foot,2) + pow(w_foot,2))/12}"/>
         </inertial>
     </link>
 
