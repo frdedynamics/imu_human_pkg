@@ -9,7 +9,7 @@
   <xacro:include filename="$(find imu_human_pkg)/urdf/macros/spherical.xacro"/>
   <create/>
 
-    <link name="world"/>
+  <link name="world"/>
   <joint name="world_joint" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0" />
     <parent link="world"/>
@@ -191,6 +191,67 @@
         izz="${m_hand*(pow(l_hand,2) + pow(w_hand,2))/12}"/>
     </inertial>
   </link>
+
+    <joint name="right_thight_to_shank" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 ${-l_thigh}"/>
+    <parent link="right_thigh"/>
+    <child link="right_shank"/>
+  </joint>
+
+  <link name="right_shank">
+    <visual>
+    <origin rpy="0 0 0" xyz="0 0 ${-l_shank/2}"/>
+      <geometry>
+        <cylinder length="${l_shank}" radius="${r_shank}"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
+      <geometry>
+        <cylinder length="${l_shank}" radius="${r_shank}"/>
+      </geometry>
+    </collision>
+    <inertial>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
+      <mass value="${m_shank}"/>
+      <inertia
+        ixx="${m_shank*(3*pow(r_shank,2)+pow(l_shank,2))/12}" ixy="0.0" ixz="0.0"
+        iyy="${m_shank*(3*pow(r_shank,2)+pow(l_shank,2))/12}" iyz="0.0"
+        izz="${m_shank*pow(r_shank,2)/2}"/>
+    </inertial>
+  </link>
+
+  <joint name="right_shank_to_foot" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 ${-l_shank}"/>
+    <parent link="right_shank"/>
+    <child link="right_foot"/>
+  </joint>
+
+  <link name="right_foot">
+    <visual>
+    <origin rpy="0 0 0" xyz="${r_shank/2} 0 ${-thickness/2}"/>
+      <geometry>
+        <box size="${l_foot} ${w_foot} ${thickness}"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-thickness/2}"/>
+      <geometry>
+        <box size="${l_foot} ${w_foot} ${thickness}"/>
+      </geometry>
+    </collision>
+    <inertial>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
+      <mass value="${m_hand}"/>
+      <inertia
+        ixx="${m_hand*(pow(thickness,2) + pow(w_hand,2))/12}" ixy="0.0" ixz="0.0"
+        iyy="${m_hand*(pow(l_hand,2) + pow(thickness,2))/12}" iyz="0.0"
+        izz="${m_hand*(pow(l_hand,2) + pow(w_hand,2))/12}"/>
+    </inertial>
+  </link>
+
 
 
 
