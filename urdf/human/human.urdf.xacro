@@ -162,6 +162,36 @@
     </inertial>
   </link>
 
+  <joint name="left_shank_to_foot" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 ${-l_shank}"/>
+    <parent link="left_shank"/>
+    <child link="left_foot"/>
+  </joint>
+
+  <link name="left_foot">
+    <visual>
+    <origin rpy="0 0 0" xyz="${r_shank/2} 0 ${-thickness/2}"/>
+      <geometry>
+        <box size="${l_foot} ${w_foot} ${thickness}"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-thickness/2}"/>
+      <geometry>
+        <box size="${l_foot} ${w_foot} ${thickness}"/>
+      </geometry>
+    </collision>
+    <inertial>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
+      <mass value="${m_hand}"/>
+      <inertia
+        ixx="${m_hand*(pow(thickness,2) + pow(w_hand,2))/12}" ixy="0.0" ixz="0.0"
+        iyy="${m_hand*(pow(l_hand,2) + pow(thickness,2))/12}" iyz="0.0"
+        izz="${m_hand*(pow(l_hand,2) + pow(w_hand,2))/12}"/>
+    </inertial>
+  </link>
+
 
 
   <!-- <xacro:spherical name="base_to_lower_trunk" parent="base_link" child="lower_trunk">
