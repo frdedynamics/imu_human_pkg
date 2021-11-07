@@ -17,15 +17,15 @@
   <xacro:property name="whole_body" value="1.7268" />
   <xacro:property name="thickness" value="0.02" />
 
-  <xacro:property name="r_neck" value="${l_neck/5}" />
+  <xacro:property name="r_neck" value="${l_neck/2}" />
   <xacro:property name="r_head" value="0.15" />
-  <xacro:property name="r_upper_trunk" value="${l_upper_trunk/1.5}" />
-  <xacro:property name="r_lower_trunk" value="${l_lower_trunk*1.25}" />
-  <xacro:property name="r_upper_arm" value="${l_upper_arm/6}" />
+  <xacro:property name="r_upper_trunk" value="${l_upper_trunk/2}" />
+  <xacro:property name="r_lower_trunk" value="${l_lower_trunk}" />
+  <xacro:property name="r_upper_arm" value="${l_upper_arm/6.5}" />
   <xacro:property name="r_forearm" value="${l_forearm/7}" />
   <xacro:property name="w_hand" value="${l_hand/3}" />
-  <xacro:property name="r_thigh" value="${l_thigh/4}" />
-  <xacro:property name="r_shank" value="${l_shank/5}" />
+  <xacro:property name="r_thigh" value="${l_thigh/4.5}" />
+  <xacro:property name="r_shank" value="${l_shank/5.5}" />
   <xacro:property name="w_foot" value="0.06" />
 
   <xacro:property name="cm_head" value="0.361" />
