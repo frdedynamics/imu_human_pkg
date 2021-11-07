@@ -8,7 +8,7 @@
   
   <xacro:include filename="$(find imu_human_pkg)/urdf/macros/spherical.xacro"/>
   <xacro:include filename="$(find imu_human_pkg)/urdf/human/human_lower.xacro"/>
-  <!-- <xacro:include filename="$(find imu_human_pkg)/urdf/human/human_upper.xacro"/> -->
+  <xacro:include filename="$(find imu_human_pkg)/urdf/human/human_upper.xacro"/>
   <create/>
 
   <link name="world"/>
@@ -44,6 +44,6 @@
   </link>
 
   <xacro:human_lower/>
-  <!-- <xacro:human_upper/> -->
+  <xacro:human_upper/>
 
 </robot>
