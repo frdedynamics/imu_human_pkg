@@ -19,12 +19,21 @@
       </inertial>
     </link>
 
-    <joint name="${name}_x" type="revolute">
-      <axis xyz="${x} 0 0" />
-      <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
-      <parent link="${name}_virt_link_1"/>
-      <child link="${name}_virt_link_2"/>
-    </joint>
+    <xacro:if value="${x == 'fixed'}">
+      <joint name="${name}_x" type="fixed">
+        <parent link="${name}_virt_link_1"/>
+        <child link="${name}_virt_link_2"/>
+      </joint>
+    </xacro:if>
+
+    <xacro:unless value="${x == 'fixed'}">
+      <joint name="${name}_x" type="revolute">
+        <axis xyz="${x} 0 0" />
+        <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/>
+        <parent link="${name}_virt_link_1"/>
+        <child link="${name}_virt_link_2"/>
+      </joint>
+    </xacro:unless>
 
     <link name="${name}_virt_link_2">
       <inertial>
