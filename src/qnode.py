@@ -61,17 +61,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.comboBox_robot_name.setEnabled(True)
 
     def calibrate_human_clicked(self):
-        # "TODO"
+        # Get package path
+        command = 'rospack find imu_human_pkg'
+        p = os.popen(command)
+        self.pkg_path = str(p.read().split())[2:-2]
+
         self.pushButton_connect_robot.setEnabled(True)
         self.groupBox_human.setDisabled(True)
         self.groupBox_robots.setDisabled(True)
         self.textEdit.moveCursor(QTextCursor.End)
         self.textEdit.insertPlainText("Calibrating")
         self.textEdit.moveCursor(QTextCursor.End)
-        command = 'ls'
-        p = os.popen(command)
-        output = p.read()
-        self.textEdit.insertPlainText(output)
+
+        rospy.init_node('imu_human_gui', anonymous=False)
+        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
+        roslaunch.configure_logging(uuid)
+        self.launch = roslaunch.parent.ROSLaunchParent(uuid, [self.pkg_path+"/launch/human.launch"])
+        self.launch.start()
+        self.sub_joint_states = rospy.Subscriber("/joint_states", JointState, self.cb_joint_states)
+        rospy.loginfo("started")
+
+    def closeEvent(self, event):
+        print("Killing all nodes. Please wait!")
+        self.textEdit.insertPlainText("Killing all nodes. Please wait!")  # Why not working?
+        self.launch.shutdown()
+        p = os.popen("killall -9 gzserver gzclient")
+        p = os.popen("killall -9 roscore")
+        event.accept()
 
     def connect_robot_clicked(self):
         # "TODO"
