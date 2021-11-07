@@ -14,4 +14,68 @@
         <static>true</static>
         <turnGravityOff>true</turnGravityOff>
     </gazebo>
+
+    <gazebo reference="head">
+       <material>Gazebo/Orange</material>
+    </gazebo>
+
+    <gazebo reference="neck">
+       <material>Gazebo/DarkOrangeTransparentOverlay</material>
+    </gazebo>
+
+    <gazebo reference="left_hand">
+       <material>Gazebo/Orange</material>
+    </gazebo>
+
+    <gazebo reference="right_hand">
+       <material>Gazebo/Orange</material>
+    </gazebo>
+
+    <gazebo reference="left_foot">
+       <material>Gazebo/Orange</material>
+    </gazebo>
+
+    <gazebo reference="right_foot">
+       <material>Gazebo/Orange</material>
+    </gazebo>
+
+    <gazebo reference="upper_trunk">
+       <material>Gazebo/Grass</material>
+    </gazebo>
+
+    <gazebo reference="lower_trunk">
+       <material>Gazebo/Green</material>
+    </gazebo>
+
+    <gazebo reference="left_thigh">
+       <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <gazebo reference="right_thigh">
+       <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <gazebo reference="left_shank">
+       <material>Gazebo/SkyBlue</material>
+    </gazebo>
+
+    <gazebo reference="right_shank">
+       <material>Gazebo/SkyBlue</material>
+    </gazebo>
+
+    <gazebo reference="left_upper_arm">
+       <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <gazebo reference="left_forearm">
+       <material>Gazebo/SkyBlue</material>
+    </gazebo>
+
+    <gazebo reference="right_upper_arm">
+       <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <gazebo reference="right_forearm">
+       <material>Gazebo/SkyBlue</material>
+    </gazebo>
 </robot>
