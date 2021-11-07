@@ -9,6 +9,7 @@ Panels:
         - /RobotModel2
         - /RobotModel2/Links1
         - /RobotModel2/Links1/base_link1
+        - /RobotModel2/Links1/upper_trunk1
         - /RobotModel2/Links1/world1
         - /TF1
         - /TF1/Frames1
@@ -98,6 +99,109 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        base_to_upper_trunk_virt_link_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_to_upper_trunk_virt_link_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_to_upper_trunk_virt_link_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_elbow_virt_link_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_elbow_virt_link_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_elbow_virt_link_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_foot:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_forearm:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_shank:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_shoulder_virt_link_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_shoulder_virt_link_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_shoulder_virt_link_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_thigh:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_upper_arm:
+          Alpha: 0.5
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        lower_trunk:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_foot:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_shank:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_shoulder_virt_link_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_shoulder_virt_link_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_shoulder_virt_link_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_thigh:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_upper_arm:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        upper_trunk:
+          Alpha: 0.5
+          Show Axes: false
+          Show Trail: false
+          Value: true
         world:
           Alpha: 1
           Show Axes: true
@@ -115,6 +219,52 @@ Visualization Manager:
         All Enabled: true
         base_link:
           Value: true
+        base_to_upper_trunk_virt_link_1:
+          Value: true
+        base_to_upper_trunk_virt_link_2:
+          Value: true
+        base_to_upper_trunk_virt_link_3:
+          Value: true
+        left_elbow_virt_link_1:
+          Value: true
+        left_elbow_virt_link_2:
+          Value: true
+        left_elbow_virt_link_3:
+          Value: true
+        left_foot:
+          Value: true
+        left_forearm:
+          Value: true
+        left_shank:
+          Value: true
+        left_shoulder_virt_link_1:
+          Value: true
+        left_shoulder_virt_link_2:
+          Value: true
+        left_shoulder_virt_link_3:
+          Value: true
+        left_thigh:
+          Value: true
+        left_upper_arm:
+          Value: true
+        lower_trunk:
+          Value: true
+        right_foot:
+          Value: true
+        right_shank:
+          Value: true
+        right_shoulder_virt_link_1:
+          Value: true
+        right_shoulder_virt_link_2:
+          Value: true
+        right_shoulder_virt_link_3:
+          Value: true
+        right_thigh:
+          Value: true
+        right_upper_arm:
+          Value: true
+        upper_trunk:
+          Value: true
         world:
           Value: true
       Marker Alpha: 1
@@ -126,7 +276,33 @@ Visualization Manager:
       Tree:
         world:
           base_link:
-            {}
+            base_to_upper_trunk_virt_link_1:
+              base_to_upper_trunk_virt_link_2:
+                base_to_upper_trunk_virt_link_3:
+                  upper_trunk:
+                    left_shoulder_virt_link_1:
+                      left_shoulder_virt_link_2:
+                        left_shoulder_virt_link_3:
+                          left_upper_arm:
+                            left_elbow_virt_link_1:
+                              left_elbow_virt_link_2:
+                                left_elbow_virt_link_3:
+                                  left_forearm:
+                                    {}
+                    right_shoulder_virt_link_1:
+                      right_shoulder_virt_link_2:
+                        right_shoulder_virt_link_3:
+                          right_upper_arm:
+                            {}
+            lower_trunk:
+              left_thigh:
+                left_shank:
+                  left_foot:
+                    {}
+              right_thigh:
+                right_shank:
+                  right_foot:
+                    {}
       Update Interval: 0
       Value: true
   Enabled: true
@@ -157,7 +333,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.8725926876068115
+      Distance: 2.7904574871063232
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -165,17 +341,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -0.17670591175556183
-        Y: -0.12265371531248093
-        Z: 0.4587510824203491
+        X: -0.10324316471815109
+        Y: -0.6157695651054382
+        Z: 0.797111988067627
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -0.14960135519504547
+      Pitch: 0.6503983736038208
       Target Frame: <Fixed Frame>
-      Yaw: 0.04541436582803726
+      Yaw: 0.030435357242822647
     Saved: ~
 Window Geometry:
   Displays:

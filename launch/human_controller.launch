@@ -16,6 +16,9 @@
           right_shoulder_y_position_controller
           right_shoulder_x_position_controller
           right_shoulder_z_position_controller
+          <!-- left_elbow_y_position_controller
+          left_elbow_x_position_controller
+          left_elbow_z_position_controller -->
           joint_state_controller"/>
 
 </launch>

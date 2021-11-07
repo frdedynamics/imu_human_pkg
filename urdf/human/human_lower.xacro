@@ -35,7 +35,7 @@
     </link>
 
     <joint name="lower_trunk_to_left_thigh" type="fixed">
-        <origin rpy="0 0 0" xyz="0 ${-r_lower_trunk} ${-l_lower_trunk/2}"/>
+        <origin rpy="0 0 0" xyz="0 ${-r_lower_trunk/2} ${-l_lower_trunk/2}"/>
         <parent link="lower_trunk"/>
         <child link="left_thigh"/>
     </joint>
@@ -65,7 +65,7 @@
     </link>
 
     <joint name="lower_trunk_to_right_thigh" type="fixed">
-        <origin rpy="0 0 0" xyz="0 ${r_lower_trunk} ${-l_lower_trunk/2}"/>
+        <origin rpy="0 0 0" xyz="0 ${r_lower_trunk/2} ${-l_lower_trunk/2}"/>
         <parent link="lower_trunk"/>
         <child link="right_thigh"/>
     </joint>

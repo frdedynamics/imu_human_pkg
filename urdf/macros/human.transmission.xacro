@@ -93,34 +93,37 @@
     </actuator>
   </transmission>
 
-  <!-- <transmission name="joint_1_1_tran1">
+
+  <!-- <transmission name="left_elbow_y_trans">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="joint_1_x">
+    <joint name="left_elbow_y">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
-    <actuator name="joint_1_1_motor1">
+    <actuator name="left_elbow_y_motor">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-  <transmission name="joint_1_2_tran1">
+  <transmission name="left_elbow_x_trans">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="joint_1_y">
+    <joint name="left_elbow_x">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
-    <actuator name="joint_1_2_motor1">
+    <actuator name="left_elbow_x_motor">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
-  <transmission name="joint_1_3_tran1">
+  <transmission name="left_elbow_z_trans">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="joint_1_z">
+    <joint name="left_elbow_z">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
-    <actuator name="joint_1_3_motor1">
+    <actuator name="left_elbow_z_motor">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission> -->
+
+
 
 </robot>
