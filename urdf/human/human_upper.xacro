@@ -116,6 +116,34 @@
         </inertial>
     </link>
 
+    <xacro:spherical name="right_elbow" parent="right_upper_arm" child="right_forearm" x="fixed" y="1" z="-1">
+        <origin rpy="0 0 0" xyz="0 0 ${-l_upper_arm}"/>
+    </xacro:spherical>
+    
+    <link name="right_forearm">
+        <visual>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_forearm/2}"/>
+        <geometry>
+            <cylinder length="${l_forearm}" radius="${r_forearm}"/>
+        </geometry>
+        <material name="orange"/>
+        </visual>
+        <collision>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_forearm/2}"/>
+        <geometry>
+            <cylinder length="${l_forearm}" radius="${r_forearm}"/>
+        </geometry>
+        </collision>
+        <inertial>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_forearm/2}"/>
+        <mass value="${m_forearm}"/>
+        <inertia
+            ixx="${m_forearm*(3*pow(r_forearm,2)+pow(l_forearm,2))/12}" ixy="0.0" ixz="0.0"
+            iyy="${m_forearm*(3*pow(r_forearm,2)+pow(l_forearm,2))/12}" iyz="0.0"
+            izz="${m_forearm*pow(r_upper_arm,2)/2}"/>
+        </inertial>
+    </link>
+
     
 
 </xacro:macro>
