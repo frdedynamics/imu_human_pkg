@@ -9,6 +9,7 @@ import sys, random
 from sensor_msgs.msg import JointState
 
 from Classes.gui import Ui_MainWindow
+import Classes.xacro_creator as xacro_creator
 
 import roslaunch, rospy
 import os
@@ -73,12 +74,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.textEdit.insertPlainText("Calibrating")
         self.textEdit.moveCursor(QTextCursor.End)
 
+        xacro_creator.create_yaml(self.pkg_path, self.l_upper_trunk.text(), self.l_upper_arm.text(), self.l_forearm.text(), self.l_hand.text())
+
         rospy.init_node('imu_human_gui', anonymous=False)
         uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
         roslaunch.configure_logging(uuid)
         self.launch = roslaunch.parent.ROSLaunchParent(uuid, [self.pkg_path+"/launch/human.launch"])
         self.launch.start()
-        self.sub_joint_states = rospy.Subscriber("/joint_states", JointState, self.cb_joint_states)
+        # self.sub_joint_states = rospy.Subscriber("/joint_states", JointState, self.cb_joint_states)
         rospy.loginfo("started")
 
     def connect_robot_clicked(self):

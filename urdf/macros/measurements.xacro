@@ -1,16 +1,18 @@
 <?xml version="1.0"?>
 <robot name="human" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:property name="human_params" value="${load_yaml('$(find imu_human_pkg)/config/human.yaml')}"/>
+
   <xacro:property name="l_neck" value="0.053" />
   <xacro:property name="head" value="0.212-${l_neck}" />
   <!-- <xacro:property name="l_upper_trunk" value="0.410" /> -->
-  <xacro:property name="l_upper_trunk" value="0.510" />
+  <xacro:property name="l_upper_trunk" value="${human_params['l_upper_trunk']}" />
   <!-- <xacro:property name="l_lower_trunk" value="0.135" /> -->
   <xacro:property name="l_lower_trunk" value="0.235" />
   <!-- <xacro:property name="l_upper_arm" value="0.65" /> -->
-  <xacro:property name="l_upper_arm" value="0.5" />
-  <xacro:property name="l_forearm" value="0.299" />
-  <xacro:property name="l_hand" value="0.203" />
+  <xacro:property name="l_upper_arm" value="${human_params['l_upper_arm']}" />
+  <xacro:property name="l_forearm" value="${human_params['l_forearm']}" />
+  <xacro:property name="l_hand" value="${human_params['l_hand']}" />
   <xacro:property name="l_thigh" value="0.449" />
   <xacro:property name="l_shank" value="0.429" />
   <xacro:property name="l_foot" value="${w_foot*4}" />
