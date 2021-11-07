@@ -10,9 +10,17 @@ from sensor_msgs.msg import JointState
 
 from Classes.gui import Ui_MainWindow
 import Classes.xacro_creator as xacro_creator
+from Classes.sensors import Ui_Dialog as SensorsDialog
 
 import roslaunch, rospy
 import os
+
+
+class SensorTool(QDialog, SensorsDialog):
+    def __init__(self, parent=None):
+        super(SensorTool, self).__init__(parent)
+        self.setupUi(self)
+
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -50,6 +58,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_start_controllers.clicked.connect(self.start_controllers_clicked)
         self.pushButton_teleoperate.clicked.connect(self.teleoperate_clicked)
         self.pushButton_colift.clicked.connect(self.colift_clicked)
+
+        self.actionCustom_Sensor_Topics.triggered.connect(self.open_sensors_dialog)
     
     def real_robot_selected(self):
         self.textEdit.setText("Real robot selected")
@@ -82,7 +92,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.launch = roslaunch.parent.ROSLaunchParent(uuid, [self.pkg_path+"/launch/human.launch"])
         self.launch.start()
         # self.sub_joint_states = rospy.Subscriber("/joint_states", JointState, self.cb_joint_states)
-        rospy.loginfo("started")
+        rospy.loginfo("Human calibrated")
 
     def connect_robot_clicked(self):
         # "TODO"
@@ -102,6 +112,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def colift_clicked(self):
         pass
+
+    def open_sensors_dialog(self):
+        print("here")
+        self.SensorsTool = SensorTool(self)
+        self.setWindowTitle("Sensors")
+        self.setCentralWidget(self.SensorsTool)
+        self.show()
 
     def closeEvent(self, event):
         event.ignore()
