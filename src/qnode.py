@@ -65,6 +65,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_connect_robot.setEnabled(True)
         self.groupBox_human.setDisabled(True)
         self.groupBox_robots.setDisabled(True)
+        self.textEdit.moveCursor(QTextCursor.End)
+        self.textEdit.insertPlainText("Calibrating")
+        self.textEdit.moveCursor(QTextCursor.End)
+        command = 'ls'
+        p = os.popen(command)
+        output = p.read()
+        self.textEdit.insertPlainText(output)
 
     def connect_robot_clicked(self):
         # "TODO"
