@@ -19,11 +19,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle("IMU based HRC")
         self.setWindowIcon(QIcon('../config/hvlLogo.png'))  # Only for icon on toolbar
-
-        image = QtGui.QPixmap()
-        image.load('../config/hvlLogo.png')
-        image = image.scaled(self.width(), self.height())
-
+        
 
 stylesheet = """
     MainWindow {
