@@ -94,22 +94,12 @@
   </transmission>
 
 
-  <!-- <transmission name="left_elbow_y_trans">
+  <transmission name="left_elbow_y_trans">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="left_elbow_y">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
     <actuator name="left_elbow_y_motor">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="left_elbow_x_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="left_elbow_x">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="left_elbow_x_motor">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
@@ -122,7 +112,28 @@
     <actuator name="left_elbow_z_motor">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
-  </transmission> -->
+  </transmission>
+
+
+  <transmission name="right_elbow_y_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_elbow_y">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_elbow_y_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="right_elbow_z_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_elbow_z">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_elbow_z_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
 
 
 

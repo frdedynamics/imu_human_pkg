@@ -50,20 +50,25 @@
     joint: right_shoulder_z
     pid: {p: 10.0, i: 3.0, d: 1.0}
 
-  # left_elbow_y_position_controller:
-  #   type: position_controllers/JointPositionController
-  #   joint: left_elbow_y
-  #   pid: {p: 10.0, i: 3.0, d: 1.0}
+  left_elbow_y_position_controller:
+    type: position_controllers/JointPositionController
+    joint: left_elbow_y
+    pid: {p: 10.0, i: 3.0, d: 1.0}
 
-  # left_elbow_x_position_controller:
-  #   type: position_controllers/JointPositionController
-  #   joint: left_elbow_x
-  #   pid: {p: 10.0, i: 3.0, d: 1.0}
+  left_elbow_z_position_controller:
+    type: position_controllers/JointPositionController
+    joint: left_elbow_z
+    pid: {p: 10.0, i: 3.0, d: 1.0}
 
-  # left_elbow_z_position_controller:
-  #   type: position_controllers/JointPositionController
-  #   joint: left_elbow_z
-  #   pid: {p: 10.0, i: 3.0, d: 1.0}
+  right_elbow_y_position_controller:
+    type: position_controllers/JointPositionController
+    joint: right_elbow_y
+    pid: {p: 10.0, i: 3.0, d: 1.0}
+
+  right_elbow_z_position_controller:
+    type: position_controllers/JointPositionController
+    joint: right_elbow_z
+    pid: {p: 10.0, i: 3.0, d: 1.0}
 
 
   gazebo_ros_control/pid_gains:
@@ -76,9 +81,10 @@
     right_shoulder_y: {p: 10.0, i: 3.0, d: 1.0}
     right_shoulder_x: {p: 10.0, i: 3.0, d: 1.0}
     right_shoulder_z: {p: 10.0, i: 3.0, d: 1.0}
-    # left_elbow_y: {p: 10.0, i: 3.0, d: 1.0}
-    # left_elbow_x: {p: 10.0, i: 3.0, d: 1.0}
-    # left_elbow_z: {p: 10.0, i: 3.0, d: 1.0}
+    left_elbow_y: {p: 10.0, i: 3.0, d: 1.0}
+    left_elbow_z: {p: 10.0, i: 3.0, d: 1.0}
+    right_elbow_y: {p: 10.0, i: 3.0, d: 1.0}
+    right_elbow_z: {p: 10.0, i: 3.0, d: 1.0}
 
 
     
