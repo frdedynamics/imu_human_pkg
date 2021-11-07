@@ -21,8 +21,8 @@
   <xacro:property name="r_upper_arm" value="${l_upper_arm/3}" />
   <xacro:property name="r_forearm" value="${l_forearm/3}" />
   <xacro:property name="w_hand" value="${l_hand/3}" />
-  <xacro:property name="r_thigh" value="${l_thigh/3}" />
-  <xacro:property name="r_shank" value="${l_shank/3}" />
+  <xacro:property name="r_thigh" value="${l_thigh/4}" />
+  <xacro:property name="r_shank" value="${l_shank/5}" />
   <xacro:property name="w_foot" value="${l_foot/3}" />
 
   <xacro:property name="cm_head" value="0.361" />

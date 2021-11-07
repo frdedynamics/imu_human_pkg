@@ -15,25 +15,25 @@
     <parent link="world"/>
     <child link="base_link"/>
     <!-- <origin rpy="0.0 0.0 0.0" xyz="0 0 ${l_foot+l_shank+l_thigh+l_lower_trunk}"/> -->
-    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
   </joint>
 
   <link name="base_link">
     <visual>
-    <origin rpy="0.0 0.0 0.0" xyz="0 0 ${l_foot+l_shank+l_thigh+l_lower_trunk}"/>
+    <origin rpy="0 0 0" xyz="0 0 ${thickness+l_shank+l_thigh+l_lower_trunk/2}"/>
       <geometry>
         <sphere radius="${r_base_link}"/>
       </geometry>
       <material name="white"/>
     </visual>
     <collision>
-    <origin rpy="0.0 0.0 0.0" xyz="0 0 ${l_foot+l_shank+l_thigh+l_lower_trunk}"/>
+    <origin rpy="0 0 0" xyz="0 0 ${thickness+l_shank+l_thigh+l_lower_trunk/2}"/>
       <geometry>
         <sphere radius="${r_base_link}"/>
       </geometry>
     </collision>
     <inertial>
-    <origin rpy="0.0 0.0 0.0" xyz="0 0 ${l_foot+l_shank+l_thigh+l_lower_trunk}"/>
+    <origin rpy="0 0 0" xyz="0 0 ${thickness+l_shank+l_thigh+l_lower_trunk/2}"/>
       <mass value="${m_base_link}"/>
       <inertia
         ixx="${2*m_base_link*pow(r_base_link,2)/5}" ixy="0.0" ixz="0.0"
@@ -43,7 +43,7 @@
   </link>
 
   <joint name="base_to_lower_trunk" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0 ${l_foot+l_shank+l_thigh+l_lower_trunk}"/>
+    <origin rpy="0 0 0" xyz="0 0 ${thickness+l_shank+l_thigh+l_lower_trunk/2}"/>
     <parent link="base_link"/>
     <child link="lower_trunk"/>
   </joint>
@@ -57,13 +57,13 @@
       <material name="white"/>
     </visual>
     <collision>
-    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <cylinder length="${l_lower_trunk}" radius="${r_lower_trunk}"/>
       </geometry>
     </collision>
     <inertial>
-    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="${m_lower_trunk}"/>
       <inertia
         ixx="${m_lower_trunk*(3*pow(r_lower_trunk,2)+pow(l_lower_trunk,2))/12}" ixy="0.0" ixz="0.0"
@@ -87,13 +87,13 @@
       <material name="white"/>
     </visual>
     <collision>
-    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 ${-l_thigh/2}"/>
       <geometry>
         <cylinder length="${l_thigh}" radius="${r_thigh}"/>
       </geometry>
     </collision>
     <inertial>
-    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 ${-l_thigh/2}"/>
       <mass value="${m_thigh}"/>
       <inertia
         ixx="${m_thigh*(3*pow(r_thigh,2)+pow(l_thigh,2))/12}" ixy="0.0" ixz="0.0"
@@ -117,18 +117,48 @@
       <material name="white"/>
     </visual>
     <collision>
-    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 ${-l_thigh/2}"/>
       <geometry>
         <cylinder length="${l_thigh}" radius="${r_thigh}"/>
       </geometry>
     </collision>
     <inertial>
-    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 ${-l_thigh/2}"/>
       <mass value="${m_thigh}"/>
       <inertia
         ixx="${m_thigh*(3*pow(r_thigh,2)+pow(l_thigh,2))/12}" ixy="0.0" ixz="0.0"
         iyy="${m_thigh*(3*pow(r_thigh,2)+pow(l_thigh,2))/12}" iyz="0.0"
         izz="${m_thigh*pow(r_thigh,2)/2}"/>
+    </inertial>
+  </link>
+
+  <joint name="left_thight_to_shank" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 ${-l_thigh}"/>
+    <parent link="left_thigh"/>
+    <child link="left_shank"/>
+  </joint>
+
+  <link name="left_shank">
+    <visual>
+    <origin rpy="0 0 0" xyz="0 0 ${-l_shank/2}"/>
+      <geometry>
+        <cylinder length="${l_shank}" radius="${r_shank}"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
+      <geometry>
+        <cylinder length="${l_shank}" radius="${r_shank}"/>
+      </geometry>
+    </collision>
+    <inertial>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 ${-l_shank/2}"/>
+      <mass value="${m_shank}"/>
+      <inertia
+        ixx="${m_shank*(3*pow(r_shank,2)+pow(l_shank,2))/12}" ixy="0.0" ixz="0.0"
+        iyy="${m_shank*(3*pow(r_shank,2)+pow(l_shank,2))/12}" iyz="0.0"
+        izz="${m_shank*pow(r_shank,2)/2}"/>
     </inertial>
   </link>
 
