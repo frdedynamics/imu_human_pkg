@@ -1,6 +1,98 @@
 <?xml version="1.0"?>
 <robot name="human" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <transmission name="base_to_upper_trunk_y_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_upper_trunk_y">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="base_to_upper_trunk_y_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="base_to_upper_trunk_x_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_upper_trunk_x">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="base_to_upper_trunk_x_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="base_to_upper_trunk_z_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_upper_trunk_z">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="base_to_upper_trunk_z_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="left_shoulder_y_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_shoulder_y">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_shoulder_y_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="left_shoulder_x_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_shoulder_x">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_shoulder_x_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="left_shoulder_z_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_shoulder_z">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_shoulder_z_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="right_shoulder_y_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_shoulder_y">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_shoulder_y_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="right_shoulder_x_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_shoulder_x">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_shoulder_x_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="right_shoulder_z_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_shoulder_z">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_shoulder_z_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
   <!-- <transmission name="joint_1_1_tran1">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="joint_1_x">
