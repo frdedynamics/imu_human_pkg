@@ -90,11 +90,18 @@ Some necessary dependencies are already installed with `rosdep install imu_human
 ## Useful publications
 
 ### HME with IMU
+- [Survey of Motion Tracking Methods Based on Inertial Sensors: A Focus on Upper Limb Human Motion](https://www.mdpi.com/1424-8220/17/6/1257)
+- [Using Inertial Sensors for Position and Orientation Estimation](https://arxiv.org/pdf/1704.06053.pdf)
+- [Xsens MVN : Full 6DOF Human Motion Tracking Using Miniature Inertial Sensors](http://human.kyst.com.tw/upload/pdfs120702543998066.pdf)
+
 
 ### IMU and HRC
+
+- [Inertial Human Motion Estimation for Physical Human-Robot Interaction Using an Interaction Velocity Update to Reduce Drift](https://hvlopen.brage.unit.no/hvlopen-xmlui/handle/11250/2583544)
 
 ### Miscellaneous
 - [Deciding the default human body measurements](http://www.oandplibrary.org/al/pdf/1964_01_044.pdf)
 - [Offline human model in Gazebo](https://iopscience.iop.org/article/10.1088/1757-899X/825/1/012006/pdf)
 - [How we decide to move - Internal models in the cerebellum](https://www.sciencedirect.com/science/article/pii/S1364661398012212)
+- [Are cameras better than IMUs? - Comparison of RGB-D and IMU-based gesture recognition for human-robot interaction in remanufacturing](https://link.springer.com/article/10.1007/s00170-021-08125-9)
 
