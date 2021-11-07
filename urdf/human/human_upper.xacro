@@ -164,6 +164,71 @@
             izz="${2*m_forearm*pow(r_forearm,2)/5}"/>
         </inertial> -->
     </link>
+
+    <joint name="joint_neck" type="fixed">
+        <origin rpy="0 0 0" xyz="0 0 ${l_upper_trunk}"/>
+        <parent link="upper_trunk"/>
+        <child link="neck"/>
+    </joint>
+    
+    <link name="neck">
+        <visual>
+        <origin rpy="0 0 0" xyz="0 0 ${l_neck/2}"/>
+        <geometry>
+            <cylinder length="${l_neck}" radius="${r_neck}"/>
+        </geometry>
+        <material name="orange"/>
+        </visual>
+        <collision>
+        <origin rpy="0 0 0" xyz="0 0 ${l_neck/2}"/>
+        <geometry>
+            <cylinder length="${l_neck}" radius="${r_neck}"/>
+        </geometry>
+        </collision>
+        <inertial>
+        <origin rpy="0 0 0" xyz="0 0 ${l_neck/2}"/>
+        <mass value="${m_neck}"/>
+        <inertia
+            ixx="${m_neck*(3*pow(r_neck,2)+pow(l_neck,2))/12}" ixy="0.0" ixz="0.0"
+            iyy="${m_neck*(3*pow(r_neck,2)+pow(l_neck,2))/12}" iyz="0.0"
+            izz="${m_neck*pow(r_upper_arm,2)/2}"/>
+        </inertial>
+        <!-- <inertia
+            ixx="${2*m_neck*pow(r_neck,2)/5}" ixy="0.0" ixz="0.0"
+            iyy="${2*m_neck*pow(r_neck,2)/5}" iyz="0.0"
+            izz="${2*m_neck*pow(r_neck,2)/5}"/>
+        </inertial> -->
+    </link>
+
+    <joint name="joint_head" type="fixed">
+        <origin rpy="0 0 0" xyz="0 0 ${l_neck}"/>
+        <parent link="neck"/>
+        <child link="head"/>
+    </joint>
+    
+    <link name="head">
+        <visual>
+        <origin rpy="0 0 0" xyz="0 0 ${r_head}"/>
+        <geometry>
+            <sphere radius="${r_head}"/>
+        </geometry>
+        <material name="blue"/>
+        </visual>
+        <collision>
+        <origin rpy="0 0 0" xyz="0 0 ${r_head}"/>
+        <geometry>
+            <sphere radius="${r_head}"/>
+        </geometry>
+        </collision>
+        <inertial>
+        <origin rpy="0 0 0" xyz="0 0 ${r_head}"/>
+        <mass value="${m_head}"/>
+        <inertia
+            ixx="${2*m_head*pow(r_head,2)/5}" ixy="0.0" ixz="0.0"
+            iyy="${2*m_head*pow(r_head,2)/5}" iyz="0.0"
+            izz="${2*m_head*pow(r_head,2)/5}"/>
+        </inertial>
+    </link>
 </xacro:macro>
 
 </robot>

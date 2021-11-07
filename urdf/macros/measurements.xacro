@@ -2,7 +2,7 @@
 <robot name="human" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:property name="l_neck" value="0.053" />
-  <xacro:property name="head" value="0.212-${neck}" />
+  <xacro:property name="head" value="0.212-${l_neck}" />
   <!-- <xacro:property name="l_upper_trunk" value="0.410" /> -->
   <xacro:property name="l_upper_trunk" value="0.510" />
   <!-- <xacro:property name="l_lower_trunk" value="0.135" /> -->
@@ -18,7 +18,7 @@
   <xacro:property name="thickness" value="0.02" />
 
   <xacro:property name="r_neck" value="${l_neck/5}" />
-  <xacro:property name="r_head" value="${head/2}" />
+  <xacro:property name="r_head" value="0.15" />
   <xacro:property name="r_upper_trunk" value="${l_upper_trunk/1.5}" />
   <xacro:property name="r_lower_trunk" value="${l_lower_trunk*1.25}" />
   <xacro:property name="r_upper_arm" value="${l_upper_arm/6}" />
