@@ -170,7 +170,7 @@
       <string>Robot IP:</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox">
+    <widget class="QComboBox" name="comboBox_robot_name">
      <property name="geometry">
       <rect>
        <x>140</x>
