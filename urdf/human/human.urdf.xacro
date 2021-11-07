@@ -73,7 +73,7 @@
   </link>
 
   <joint name="lower_trunk_to_left_thigh" type="fixed">
-    <origin rpy="0 0 0" xyz="0 ${r_lower_trunk} ${-l_lower_trunk/2}"/>
+    <origin rpy="0 0 0" xyz="0 ${-r_lower_trunk} ${-l_lower_trunk/2}"/>
     <parent link="lower_trunk"/>
     <child link="left_thigh"/>
   </joint>
@@ -102,7 +102,37 @@
     </inertial>
   </link>
 
-  
+  <joint name="lower_trunk_to_right_thigh" type="fixed">
+    <origin rpy="0 0 0" xyz="0 ${r_lower_trunk} ${-l_lower_trunk/2}"/>
+    <parent link="lower_trunk"/>
+    <child link="right_thigh"/>
+  </joint>
+
+  <link name="right_thigh">
+    <visual>
+    <origin rpy="0 0 0" xyz="0 0 ${-l_thigh/2}"/>
+      <geometry>
+        <cylinder length="${l_thigh}" radius="${r_thigh}"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <collision>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="${l_thigh}" radius="${r_thigh}"/>
+      </geometry>
+    </collision>
+    <inertial>
+    <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+      <mass value="${m_thigh}"/>
+      <inertia
+        ixx="${m_thigh*(3*pow(r_thigh,2)+pow(l_thigh,2))/12}" ixy="0.0" ixz="0.0"
+        iyy="${m_thigh*(3*pow(r_thigh,2)+pow(l_thigh,2))/12}" iyz="0.0"
+        izz="${m_thigh*pow(r_thigh,2)/2}"/>
+    </inertial>
+  </link>
+
+
 
   <!-- <xacro:spherical name="base_to_lower_trunk" parent="base_link" child="lower_trunk">
     <origin rpy="0.0 0.0 0.0" xyz="0 0 1"/>
