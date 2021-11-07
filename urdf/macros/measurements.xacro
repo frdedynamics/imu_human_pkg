@@ -18,8 +18,8 @@
   <xacro:property name="r_head" value="${head/2}" />
   <xacro:property name="r_upper_trunk" value="${l_upper_trunk/2}" />
   <xacro:property name="r_lower_trunk" value="${l_lower_trunk*1.25}" />
-  <xacro:property name="r_upper_arm" value="${l_upper_arm/3}" />
-  <xacro:property name="r_forearm" value="${l_forearm/3}" />
+  <xacro:property name="r_upper_arm" value="${l_upper_arm/6}" />
+  <xacro:property name="r_forearm" value="${l_forearm/7}" />
   <xacro:property name="w_hand" value="${l_hand/3}" />
   <xacro:property name="r_thigh" value="${l_thigh/5}" />
   <xacro:property name="r_shank" value="${l_shank/6}" />

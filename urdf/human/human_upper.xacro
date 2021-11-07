@@ -5,7 +5,7 @@
     <xacro:macro name="human_upper">
 
     <xacro:spherical name="base_to_upper_trunk" parent="base_link" child="upper_trunk">
-        <origin rpy="0.0 0.0 0.0" xyz="0 0 ${thickness+l_shank+l_thigh+l_lower_trunk}"/>
+        <origin rpy="0 0 0" xyz="0 0 ${thickness+l_shank+l_thigh+l_lower_trunk}"/>
     </xacro:spherical>
     
     <link name="upper_trunk">
@@ -32,50 +32,36 @@
         </inertial>
     </link>
 
+    <xacro:spherical name="left_shoulder" parent="upper_trunk" child="left_upper_arm">
+        <origin rpy="0 0 0" xyz="0 ${-r_upper_trunk} ${l_upper_trunk}"/>
+    </xacro:spherical>
+    
+    <link name="left_upper_arm">
+        <visual>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_upper_arm/2}"/>
+        <geometry>
+            <cylinder length="${l_upper_arm}" radius="${r_upper_arm}"/>
+        </geometry>
+        <material name="blue"/>
+        </visual>
+        <collision>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_upper_arm/2}"/>
+        <geometry>
+            <cylinder length="${l_upper_arm}" radius="${r_upper_arm}"/>
+        </geometry>
+        </collision>
+        <inertial>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_upper_arm/2}"/>
+        <mass value="${m_upper_arm}"/>
+        <inertia
+            ixx="${m_upper_arm*(3*pow(r_upper_arm,2)+pow(l_upper_arm,2))/12}" ixy="0.0" ixz="0.0"
+            iyy="${m_upper_arm*(3*pow(r_upper_arm,2)+pow(l_upper_arm,2))/12}" iyz="0.0"
+            izz="${m_upper_arm*pow(r_upper_arm,2)/2}"/>
+        </inertial>
+    </link>
+
     
 
 </xacro:macro>
 
 </robot>
-
-  <!-- <xacro:spherical name="base_to_lower_trunk" parent="base_link" child="lower_trunk">
-    <origin rpy="0.0 0.0 0.0" xyz="0 0 1"/>
-  </xacro:spherical> -->
-
-  <!-- <joint name="joint_1" type="revolute">
-    <origin xyz="0 0 ${radius}" rpy="0 0 0" />
-    <axis xyz="0 1 0"/>
-    <parent link="base_link"/>
-    <child link="link_01"/>
-    <limit effort="1" lower="-1.57079632679" upper="1.57079632679" velocity="1"/>
-  </joint> -->
-
-
-
-  <!--<xacro:cylindrical_part name="link_02" density="1" cm="1" length="5" radius="2">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-  </xacro:cylindrical_part>-->
-
-  <!-- <link name="link_01">
-      <visual>
-        <origin xyz="0 0 ${2*radius}" rpy="0 0 0" />
-        <geometry>
-          <cylinder length="${l_upper_arm}" radius="${w_upper_arm}"/>
-        </geometry>
-        <material name="blue" />
-      </visual>
-      <collision>
-        <origin xyz="0 0 ${2*radius}" rpy="0 0 0" />
-        <geometry>
-          <cylinder length="${l_upper_arm}" radius="${w_upper_arm}"/>
-        </geometry>
-      </collision>
-      <inertial>
-        <origin xyz="0 0 ${2*radius}" rpy="0 0 0" />
-        <mass value="${mass}"/>
-        <inertia
-          ixx="${mass*(3*pow(w_upper_arm,2)+pow(l_upper_arm,2))/12}" ixy="0.0" ixz="0.0"
-          iyy="${mass*(3*pow(w_upper_arm,2)+pow(l_upper_arm,2))/12}" iyz="0.0"
-          izz="${mass*pow(w_upper_arm,2)/2}"/>
-      </inertial>
-    </link> -->
