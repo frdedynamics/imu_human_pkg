@@ -99,6 +99,8 @@
       <param name="link_name" value="$(arg arm_id)_link0" />
     </node>
 
+    <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_panda" args="5.0 0 0 0 0 0 world panda_link0" />
+
   </group>
 
   <!-- Human -->
@@ -117,7 +119,7 @@
     </node>
 
     <!-- Show in Rviz   -->
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find imu_human_pkg)/config/config.rviz"/> 
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find imu_human_pkg)/config/config_with_panda.rviz"/> 
 
     <!-- Publish joint state -->
     <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
