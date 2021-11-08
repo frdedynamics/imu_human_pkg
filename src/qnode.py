@@ -62,14 +62,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.actionCustom_Sensor_Topics.triggered.connect(self.open_sensors_dialog)
         self.actionStart_Xsens.triggered.connect(self.start_xsens)
+
+        # Start the main node
+        command = 'rospack find imu_human_pkg'
+        p = os.popen(command)
+        self.pkg_path = str(p.read().split())[2:-2]
+        self.uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
+        roslaunch.configure_logging(self.uuid)
+        # rospy.init_node('imu_human_gui', anonymous=False)
     
     def real_robot_selected(self):
-        self.textEdit.setText("Real robot selected")
+        self.textEdit_status.setText("Real robot selected")
         self.comboBox_robot_name.setDisabled(True)
         self.lineEdit_robot_ip.setEnabled(True)
 
     def simulation_selected(self):
-        self.textEdit.setText("Simulation Selected")
+        self.textEdit_status.setText("Simulation Selected")
         self.lineEdit_robot_ip.setDisabled(True)
         self.comboBox_robot_name.setEnabled(True)
 
@@ -82,17 +90,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_connect_robot.setEnabled(True)
         self.groupBox_human.setDisabled(True)
         self.groupBox_robots.setDisabled(True)
-        self.textEdit.moveCursor(QTextCursor.End)
-        self.textEdit.insertPlainText("Calibrating")
-        self.textEdit.moveCursor(QTextCursor.End)
+        self.textEdit_status.moveCursor(QTextCursor.End)
+        self.textEdit_status.insertPlainText("Calibrating")
+        self.textEdit_status.moveCursor(QTextCursor.End)
 
         xacro_creator.create_human_yaml(self.pkg_path, self.l_upper_trunk.text(), self.l_upper_arm.text(), self.l_forearm.text(), self.l_hand.text())
 
-        # rospy.init_node('imu_human_gui', anonymous=False)
-        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
-        roslaunch.configure_logging(uuid)
-        self.launch = roslaunch.parent.ROSLaunchParent(uuid, [self.pkg_path+"/launch/human.launch"])
-        self.launch.start()
+        
+        self.launch_human = roslaunch.parent.ROSLaunchParent(self.uuid, [self.pkg_path+"/launch/human.launch"])
+        self.launch_human.start()
         # self.sub_joint_states = rospy.Subscriber("/joint_states", JointState, self.cb_joint_states)
         rospy.loginfo("Human calibrated")
 
@@ -116,16 +122,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         pass
 
     def start_xsens(self):
-        # Get package path
-        command = 'rospack find imu_human_pkg'
-        p = os.popen(command)
-        self.pkg_path = str(p.read().split())[2:-2]
-
-        rospy.init_node('imu_human_gui', anonymous=False)
-        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
-        roslaunch.configure_logging(uuid)
-        self.launch = roslaunch.parent.ROSLaunchParent(uuid, [self.pkg_path+"/launch/start_xsens.launch"])
-        self.launch.start()
+        self.launch_xsens = roslaunch.parent.ROSLaunchParent(self.uuid, [self.pkg_path+"/launch/start_xsens.launch"])
+        self.launch_xsens.start()
         # self.sub_joint_states = rospy.Subscriber("/joint_states", JointState, self.cb_joint_states)
         rospy.loginfo("Xsens node started")
 
@@ -167,7 +165,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def closeEvent(self, event):
         event.ignore()
         print("Killing all nodes. Please wait!")
-        self.textEdit.insertPlainText("Killing all nodes. Please wait!")  # Why not working?
+        self.textEdit_status.insertPlainText("Killing all nodes. Please wait!")  # Why not working?
         try:
             self.launch.shutdown()
             p = os.popen("killall -9 gzserver gzclient")
