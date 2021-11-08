@@ -101,6 +101,34 @@
 
   </group>
 
-  <node  pkg="rviz" type="rviz" output="screen" name="rviz" args="-d $(find franka_gazebo)/config/franka_sim_description_with_marker.rviz" if="$(arg rviz)"/>
+  <!-- Human -->
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find imu_human_pkg)/config/human_control.yaml" command="load"/>
+  <arg name="human_params" default="$(find imu_human_pkg)/config/human.yaml"/>
+
+  <group ns = "human">
+    <!-- Load human model to parameter server -->
+    <param name="human_description" command="$(find xacro)/xacro '$(find imu_human_pkg)/urdf/human/human.urdf.xacro' human_params:=$(arg human_params)"/>
+
+    <!-- Combine joint values -->
+    <node name="human_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+      <remap from="robot_description" to="human_description" />
+      <remap from="joint_states" to="human_joint_states" />
+    </node>
+
+    <!-- Show in Rviz   -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find imu_human_pkg)/config/config.rviz"/> 
+
+    <!-- Publish joint state -->
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+      <remap from="joint_states" to="human_joint_states" />
+      <remap from="robot_description" to="human_description" />
+    </node>
+
+    <!-- Spawn human in Gazebo -->
+    <node name="human_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"  args="-urdf -param human_description -model human -x 2.0"/>
+  </group>
+
+  <!-- <node  pkg="rviz" type="rviz" output="screen" name="rviz" args="-d $(find franka_gazebo)/config/franka_sim_description_with_marker.rviz" if="$(arg rviz)"/> -->
 
 </launch>
