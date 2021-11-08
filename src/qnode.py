@@ -61,6 +61,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_colift.clicked.connect(self.colift_clicked)
 
         self.actionCustom_Sensor_Topics.triggered.connect(self.open_sensors_dialog)
+        self.actionStart_Xsens.triggered.connect(self.start_xsens)
     
     def real_robot_selected(self):
         self.textEdit.setText("Real robot selected")
@@ -73,10 +74,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.comboBox_robot_name.setEnabled(True)
 
     def calibrate_human_clicked(self):
-        # Get package path
-        command = 'rospack find imu_human_pkg'
-        p = os.popen(command)
-        self.pkg_path = str(p.read().split())[2:-2]
+        # # Get package path
+        # command = 'rospack find imu_human_pkg'
+        # p = os.popen(command)
+        # self.pkg_path = str(p.read().split())[2:-2]
 
         self.pushButton_connect_robot.setEnabled(True)
         self.groupBox_human.setDisabled(True)
@@ -87,7 +88,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         xacro_creator.create_human_yaml(self.pkg_path, self.l_upper_trunk.text(), self.l_upper_arm.text(), self.l_forearm.text(), self.l_hand.text())
 
-        rospy.init_node('imu_human_gui', anonymous=False)
+        # rospy.init_node('imu_human_gui', anonymous=False)
         uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
         roslaunch.configure_logging(uuid)
         self.launch = roslaunch.parent.ROSLaunchParent(uuid, [self.pkg_path+"/launch/human.launch"])
@@ -114,6 +115,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def colift_clicked(self):
         pass
 
+    def start_xsens(self):
+        # Get package path
+        command = 'rospack find imu_human_pkg'
+        p = os.popen(command)
+        self.pkg_path = str(p.read().split())[2:-2]
+
+        rospy.init_node('imu_human_gui', anonymous=False)
+        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
+        roslaunch.configure_logging(uuid)
+        self.launch = roslaunch.parent.ROSLaunchParent(uuid, [self.pkg_path+"/launch/start_xsens.launch"])
+        self.launch.start()
+        # self.sub_joint_states = rospy.Subscriber("/joint_states", JointState, self.cb_joint_states)
+        rospy.loginfo("Xsens node started")
+
     def open_sensors_dialog(self):
         self.Dialog = QtWidgets.QDialog()
         self.SensorsTool = SensorTool(self)
@@ -128,6 +143,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SensorsTool.lineEdit_r_upper_arm.setText("sensor_r_shoulder")
         self.SensorsTool.lineEdit_r_forearm.setText("sensor_r_elbow")
         self.SensorsTool.lineEdit_emg.setText("???myo_emg")
+        #TODO start a node with these
 
         self.SensorsTool.buttonBox.accepted.connect(self.sensors_accepted)
         self.SensorsTool.buttonBox.rejected.connect(self.sensors_rejected)

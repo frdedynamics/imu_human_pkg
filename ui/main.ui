@@ -319,7 +319,7 @@
     <property name="title">
      <string>Sensors</string>
     </property>
-    <addaction name="actionChange_xsens_sensors"/>
+    <addaction name="actionStart_Xsens"/>
     <addaction name="actionCustom_Sensor_Topics"/>
    </widget>
    <widget class="QMenu" name="menuLog">
@@ -341,9 +341,9 @@
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionChange_xsens_sensors">
+  <action name="actionStart_Xsens">
    <property name="text">
-    <string>Xsens IMUs</string>
+    <string>Start Xsens</string>
    </property>
   </action>
   <action name="actionLog_preferences">

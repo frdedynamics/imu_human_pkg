@@ -1,0 +1,5 @@
+<launch>
+
+  <node name="xsens_gui" pkg="awindamonitor" type="awindamonitor"/>
+  
+</launch>
