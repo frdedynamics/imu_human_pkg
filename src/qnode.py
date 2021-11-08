@@ -115,10 +115,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def open_sensors_dialog(self):
         print("here")
+        # self.SensorsTool = SensorTool(self)
+        # self.setWindowTitle("Sensors")
+        # self.setCentralWidget(self.SensorsTool)
+        # self.show()
+        Dialog = QtWidgets.QDialog()
         self.SensorsTool = SensorTool(self)
-        self.setWindowTitle("Sensors")
-        self.setCentralWidget(self.SensorsTool)
-        self.show()
+        self.SensorsTool.setupUi(Dialog)
+        Dialog.show()
+        Dialog.exec_()
 
     def closeEvent(self, event):
         event.ignore()
