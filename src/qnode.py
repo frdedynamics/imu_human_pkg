@@ -20,6 +20,7 @@ class SensorTool(QDialog, SensorsDialog):
     def __init__(self, parent=None):
         super(SensorTool, self).__init__(parent)
         self.setupUi(self)
+        
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -114,16 +115,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         pass
 
     def open_sensors_dialog(self):
-        print("here")
-        # self.SensorsTool = SensorTool(self)
-        # self.setWindowTitle("Sensors")
-        # self.setCentralWidget(self.SensorsTool)
-        # self.show()
         Dialog = QtWidgets.QDialog()
         self.SensorsTool = SensorTool(self)
         self.SensorsTool.setupUi(Dialog)
+
+        self.setWindowTitle("Sensors")
+
+        self.SensorsTool.lineEdit_chest.setText("sensor_r_wrist")
+        self.SensorsTool.lineEdit_l_upper_arm.setText("sensor_l_shoulder")
+        self.SensorsTool.lineEdit_l_forearm.setText("sensor_l_elbow")
+        self.SensorsTool.lineEdit_l_hand.setText("sensor_l_wrist")
+        self.SensorsTool.lineEdit_r_upper_arm.setText("sensor_r_shoulder")
+        self.SensorsTool.lineEdit_r_forearm.setText("sensor_r_elbow")
+        self.SensorsTool.lineEdit_emg.setText("???myo_emg")
+
+        self.SensorsTool.buttonBox.accepted.connect(self.sensors_accepted)
+        self.SensorsTool.buttonBox.rejected.connect(self.sensors_rejected)
+
         Dialog.show()
         Dialog.exec_()
+    
+    def sensors_accepted(self):
+        print("OK clicked")
+        # xacro_creator.create_sensor_list_yaml(self.lineEdit_chest.text(), self.lineEdit_l_upper_arm.text(), self.lineEdit_l_forearm.text(), self.lineEdit_l_hand.text(), self.lineEdit_r_upper_arm.text(), self.lineEdit_r_forearm.text(), self.lineEdit_emg.text())
+        # TODO: Check if EMG is optional
+
+    def sensors_rejected(self):
+        print("Cancel clicked")
 
     def closeEvent(self, event):
         event.ignore()
