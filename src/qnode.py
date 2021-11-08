@@ -21,10 +21,13 @@ class SensorTool(QDialog, SensorsDialog):
         super(SensorTool, self).__init__(parent)
         self.setupUi(self)
 
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        return super().closeEvent(a0)
 
-class MainWindow(QMainWindow, Ui_MainWindow):
+
+class MainTool(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
-        super(MainWindow, self).__init__(parent)
+        super(MainTool, self).__init__(parent)
         self.setupUi(self)
         self.setWindowTitle("IMU based HRC")
         self.setWindowIcon(QIcon('../config/hvlLogo.png'))  # Only for icon on toolbar
@@ -50,16 +53,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_colift.setDisabled(True)
         self.pushButton_colift.setToolTip("HRC process starts: IDLE-APPROACH-COLIFT-RELEASE")
 
-        self.radioButton_real_robot.clicked.connect(self.real_robot_selected)
-        self.radioButton_simulation.clicked.connect(self.simulation_selected)
-        self.pushButton_calibrate_human.clicked.connect(self.calibrate_human_clicked)
-        self.pushButton_connect_robot.clicked.connect(self.connect_robot_clicked)
-        self.pushButton_spawn_models.clicked.connect(self.spawn_models_clicked)
-        self.pushButton_start_controllers.clicked.connect(self.start_controllers_clicked)
-        self.pushButton_teleoperate.clicked.connect(self.teleoperate_clicked)
-        self.pushButton_colift.clicked.connect(self.colift_clicked)
 
-        self.actionCustom_Sensor_Topics.triggered.connect(self.open_sensors_dialog)
+class MainWindow(QMainWindow, Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(MainWindow, self).__init__(parent)
+        self.setupUi(self)
+        self.startMainTool()
+
+    def startMainTool(self):
+        self.MainTool = MainTool(self)
+        self.MainTool.radioButton_real_robot.clicked.connect(self.real_robot_selected)
+        self.MainTool.radioButton_simulation.clicked.connect(self.simulation_selected)
+        self.MainTool.pushButton_calibrate_human.clicked.connect(self.calibrate_human_clicked)
+        self.MainTool.pushButton_connect_robot.clicked.connect(self.connect_robot_clicked)
+        self.MainTool.pushButton_spawn_models.clicked.connect(self.spawn_models_clicked)
+        self.MainTool.pushButton_start_controllers.clicked.connect(self.start_controllers_clicked)
+        self.MainTool.pushButton_teleoperate.clicked.connect(self.teleoperate_clicked)
+        self.MainTool.pushButton_colift.clicked.connect(self.colift_clicked)
+        self.MainTool.actionCustom_Sensor_Topics.triggered.connect(self.startSensorTool)
     
     def real_robot_selected(self):
         self.textEdit.setText("Real robot selected")
@@ -84,7 +95,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.textEdit.insertPlainText("Calibrating")
         self.textEdit.moveCursor(QTextCursor.End)
 
-        xacro_creator.create_yaml(self.pkg_path, self.l_upper_trunk.text(), self.l_upper_arm.text(), self.l_forearm.text(), self.l_hand.text())
+        xacro_creator.create_human_yaml(self.pkg_path, self.l_upper_trunk.text(), self.l_upper_arm.text(), self.l_forearm.text(), self.l_hand.text())
 
         rospy.init_node('imu_human_gui', anonymous=False)
         uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
@@ -113,12 +124,34 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def colift_clicked(self):
         pass
 
-    def open_sensors_dialog(self):
-        print("here")
+
+    def startSensorTool(self):
         self.SensorsTool = SensorTool(self)
         self.setWindowTitle("Sensors")
         self.setCentralWidget(self.SensorsTool)
+
+        self.SensorsTool.lineEdit_chest.setText("sensor_r_wrist")
+        self.SensorsTool.lineEdit_l_upper_arm.setText("sensor_l_shoulder")
+        self.SensorsTool.lineEdit_l_forearm.setText("sensor_l_elbow")
+        self.SensorsTool.lineEdit_l_hand.setText("sensor_l_wrist")
+        self.SensorsTool.lineEdit_r_upper_arm.setText("sensor_r_shoulder")
+        self.SensorsTool.lineEdit_r_forearm.setText("sensor_r_elbow")
+        self.SensorsTool.lineEdit_emg.setText("???myo_emg")
+
+        self.SensorsTool.buttonBox.accepted.connect(self.sensors_accepted)
+        self.buttonBox.rejected.connect(self.sensors_rejected)
+
         self.show()
+
+    def sensors_accepted(self):
+        print("OK clicked")
+        # xacro_creator.create_sensor_list_yaml(self.lineEdit_chest.text(), self.lineEdit_l_upper_arm.text(), self.lineEdit_l_forearm.text(), self.lineEdit_l_hand.text(), self.lineEdit_r_upper_arm.text(), self.lineEdit_r_forearm.text(), self.lineEdit_emg.text())
+        # TODO: Check if EMG is optional
+        self.startMainTool()
+
+    def sensors_rejected(self):
+        print("Cancel clicked")
+        
 
     def closeEvent(self, event):
         event.ignore()
