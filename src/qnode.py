@@ -85,7 +85,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.textEdit.insertPlainText("Calibrating")
         self.textEdit.moveCursor(QTextCursor.End)
 
-        xacro_creator.create_yaml(self.pkg_path, self.l_upper_trunk.text(), self.l_upper_arm.text(), self.l_forearm.text(), self.l_hand.text())
+        xacro_creator.create_human_yaml(self.pkg_path, self.l_upper_trunk.text(), self.l_upper_arm.text(), self.l_forearm.text(), self.l_hand.text())
 
         rospy.init_node('imu_human_gui', anonymous=False)
         uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
@@ -115,9 +115,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         pass
 
     def open_sensors_dialog(self):
-        Dialog = QtWidgets.QDialog()
+        self.Dialog = QtWidgets.QDialog()
         self.SensorsTool = SensorTool(self)
-        self.SensorsTool.setupUi(Dialog)
+        self.SensorsTool.setupUi(self.Dialog)
 
         self.setWindowTitle("Sensors")
 
@@ -132,16 +132,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SensorsTool.buttonBox.accepted.connect(self.sensors_accepted)
         self.SensorsTool.buttonBox.rejected.connect(self.sensors_rejected)
 
-        Dialog.show()
-        Dialog.exec_()
+        self.Dialog.show()
+        self.Dialog.exec_()
     
     def sensors_accepted(self):
         print("OK clicked")
-        # xacro_creator.create_sensor_list_yaml(self.lineEdit_chest.text(), self.lineEdit_l_upper_arm.text(), self.lineEdit_l_forearm.text(), self.lineEdit_l_hand.text(), self.lineEdit_r_upper_arm.text(), self.lineEdit_r_forearm.text(), self.lineEdit_emg.text())
+        # Get package path (Double coded. Fix later #TODO)
+        command = 'rospack find imu_human_pkg'
+        p = os.popen(command)
+        pkg_path = str(p.read().split())[2:-2]
+        xacro_creator.create_sensors_yaml(pkg_path, self.SensorsTool.lineEdit_chest.text(), self.SensorsTool.lineEdit_l_upper_arm.text(), self.SensorsTool.lineEdit_l_forearm.text(), self.SensorsTool.lineEdit_l_hand.text(), self.SensorsTool.lineEdit_r_upper_arm.text(), self.SensorsTool.lineEdit_r_forearm.text(), self.SensorsTool.lineEdit_emg.text())
         # TODO: Check if EMG is optional
 
     def sensors_rejected(self):
         print("Cancel clicked")
+        self.Dialog.close()
 
     def closeEvent(self, event):
         event.ignore()

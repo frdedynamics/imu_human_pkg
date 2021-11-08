@@ -1,0 +1,7 @@
+chest: sensor_r_wrist
+l_upper_arm: sensor_l_shoulder
+l_forearm: sensor_l_elbow
+l_hand: sensor_l_wrist
+r_upper_arm: sensor_r_shoulder
+r_forearm: sensor_r_elbow
+emg: ???myo_emg
