@@ -4,9 +4,9 @@
   <!-- Gazebo & GUI Configuration -->
   <arg name="gazebo"      default="true"  doc="Should the gazebo simulation be launched? Use false in case if you want to include this file and launch gazebo yourself" />
   <arg name="headless"    default="false" doc="Should the gazebo GUI be launched?" />
-  <arg name="paused"      default="false" doc="Should the simulation directly be stopped at 0s?" />
+  <arg name="paused"      default="true" doc="Should the simulation directly be stopped at 0s?" />
   <arg name="world"       default="$(find imu_human_pkg)/example/panda/worlds/stone.sdf" doc="Filename to a SDF World for gazebo to use" />
-  <arg name="rviz"        default="true" doc="Should RVIz be launched?" />
+  <arg name="rviz"        default="false" doc="Should RVIz be launched?" />
 
   <!-- Robot Customization -->
   <arg name="arm_id"      default="panda" doc="Name of the panda robot to spawn" />
@@ -129,6 +129,6 @@
     <node name="human_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"  args="-urdf -param human_description -model human -x 2.0"/>
   </group>
 
-  <!-- <node  pkg="rviz" type="rviz" output="screen" name="rviz" args="-d $(find franka_gazebo)/config/franka_sim_description_with_marker.rviz" if="$(arg rviz)"/> -->
+  <node  pkg="rviz" type="rviz" output="screen" name="rviz" args="-d $(find franka_gazebo)/config/franka_sim_description_with_marker.rviz" if="$(arg rviz)"/>
 
 </launch>
