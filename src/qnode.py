@@ -11,57 +11,67 @@ from sensor_msgs.msg import JointState
 from Classes.gui import Ui_MainWindow
 import Classes.xacro_creator as xacro_creator
 from Classes.sensors import Ui_Dialog as SensorsDialog
+from Classes.main_tool import Ui_Form as MainWidget
 
 import roslaunch, rospy
 import os
 
+
+class MainTool(QWidget, MainWidget):
+    def __init__(self, parent=None):
+        super(MainTool, self).__init__(parent)
+        self.setupUi(self)
 
 class SensorTool(QDialog, SensorsDialog):
     def __init__(self, parent=None):
         super(SensorTool, self).__init__(parent)
         self.setupUi(self)
 
-    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
-        return super().closeEvent(a0)
+    # def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+    #     return super().closeEvent(a0)
 
 
-class MainTool(QMainWindow, Ui_MainWindow):
-    def __init__(self, parent=None):
-        super(MainTool, self).__init__(parent)
-        self.setupUi(self)
-        self.setWindowTitle("IMU based HRC")
-        self.setWindowIcon(QIcon('../config/hvlLogo.png'))  # Only for icon on toolbar
+# class MainTool(QMainWindow, Ui_MainWindow):
+#     def __init__(self, parent=None):
+#         super(MainTool, self).__init__(parent)
+#         self.setupUi(self)
+#         self.setWindowIcon(QIcon('../config/hvlLogo.png'))  # Only for icon on toolbar
+#         print("here")
+        
 
-        self.l_upper_trunk.setText("0.510")
-        self.l_upper_arm.setText("0.500")
-        self.l_forearm.setText("0.299")
-        self.l_hand.setText("0.203")
-
-        self.radioButton_simulation.setChecked(True)
-        self.comboBox_robot_name.addItems(['Panda', 'UR5e', 'KUKA iiwa'])
-        self.lineEdit_robot_ip.setDisabled(True)  
-
-        self.pushButton_calibrate_human.setToolTip("Set the human in N-pose\nCalibration will be completed\nin 3 seconds.")
-        self.pushButton_connect_robot.setDisabled(True)
-        self.pushButton_connect_robot.setToolTip("Simulation: Necessary models are uploaded to parameter server.\nReal robot: Real-time data exchange is set up.")
-        self.pushButton_spawn_models.setDisabled(True)
-        self.pushButton_spawn_models.setToolTip("Simulation-only: Human and robot models are spawn in Gazebo")
-        self.pushButton_start_controllers.setDisabled(True)
-        self.pushButton_spawn_models.setToolTip("Simulation-only: Human and robot controllers are started")
-        self.pushButton_teleoperate.setDisabled(True)
-        self.pushButton_teleoperate.setToolTip("Left hand orientation is mapped robot wrist joints\nRight hand respective position is mapped end-effector position")
-        self.pushButton_colift.setDisabled(True)
-        self.pushButton_colift.setToolTip("HRC process starts: IDLE-APPROACH-COLIFT-RELEASE")
-
-
-class MainWindow(QMainWindow, Ui_MainWindow):
+class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-        self.setupUi(self)
+        self.resize(800, 600)
         self.startMainTool()
 
     def startMainTool(self):
         self.MainTool = MainTool(self)
+        self.setWindowTitle("IMU based HRC")
+        self.setCentralWidget(self.MainTool)
+
+        self.MainTool.l_upper_trunk.setText("0.510")
+        self.MainTool.l_upper_arm.setText("0.500")
+        self.MainTool.l_forearm.setText("0.299")
+        self.MainTool.l_hand.setText("0.203")
+
+        self.MainTool.radioButton_simulation.setChecked(True)
+        self.MainTool.comboBox_robot_name.addItems(['Panda', 'UR5e', 'KUKA iiwa'])
+        self.MainTool.lineEdit_robot_ip.setDisabled(True)  
+
+        self.MainTool.pushButton_calibrate_human.setToolTip("Set the human in N-pose\nCalibration will be completed\nin 3 seconds.")
+        self.MainTool.pushButton_connect_robot.setDisabled(True)
+        self.MainTool.pushButton_connect_robot.setToolTip("Simulation: Necessary models are uploaded to parameter server.\nReal robot: Real-time data exchange is set up.")
+        self.MainTool.pushButton_spawn_models.setDisabled(True)
+        self.MainTool.pushButton_spawn_models.setToolTip("Simulation-only: Human and robot models are spawn in Gazebo")
+        self.MainTool.pushButton_start_controllers.setDisabled(True)
+        self.MainTool.pushButton_spawn_models.setToolTip("Simulation-only: Human and robot controllers are started")
+        self.MainTool.pushButton_teleoperate.setDisabled(True)
+        self.MainTool.pushButton_teleoperate.setToolTip("Left hand orientation is mapped robot wrist joints\nRight hand respective position is mapped end-effector position")
+        self.MainTool.pushButton_colift.setDisabled(True)
+        self.MainTool.pushButton_colift.setToolTip("HRC process starts: IDLE-APPROACH-COLIFT-RELEASE")
+
+
         self.MainTool.radioButton_real_robot.clicked.connect(self.real_robot_selected)
         self.MainTool.radioButton_simulation.clicked.connect(self.simulation_selected)
         self.MainTool.pushButton_calibrate_human.clicked.connect(self.calibrate_human_clicked)
@@ -70,17 +80,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.MainTool.pushButton_start_controllers.clicked.connect(self.start_controllers_clicked)
         self.MainTool.pushButton_teleoperate.clicked.connect(self.teleoperate_clicked)
         self.MainTool.pushButton_colift.clicked.connect(self.colift_clicked)
-        self.MainTool.actionCustom_Sensor_Topics.triggered.connect(self.startSensorTool)
+        # self.actionCustom_Sensor_Topics.triggered.connect(self.startSensorTool)
+        self.show()
     
     def real_robot_selected(self):
-        self.textEdit.setText("Real robot selected")
-        self.comboBox_robot_name.setDisabled(True)
-        self.lineEdit_robot_ip.setEnabled(True)
+        self.MainTool.textEdit.setText("Real robot selected")
+        self.MainTool.comboBox_robot_name.setDisabled(True)
+        self.MainTool.lineEdit_robot_ip.setEnabled(True)
 
     def simulation_selected(self):
-        self.textEdit.setText("Simulation Selected")
-        self.lineEdit_robot_ip.setDisabled(True)
-        self.comboBox_robot_name.setEnabled(True)
+        self.MainTool.textEdit.setText("Simulation Selected")
+        self.MainTool.lineEdit_robot_ip.setDisabled(True)
+        self.MainTool.comboBox_robot_name.setEnabled(True)
 
     def calibrate_human_clicked(self):
         # Get package path
@@ -88,14 +99,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         p = os.popen(command)
         self.pkg_path = str(p.read().split())[2:-2]
 
-        self.pushButton_connect_robot.setEnabled(True)
-        self.groupBox_human.setDisabled(True)
-        self.groupBox_robots.setDisabled(True)
-        self.textEdit.moveCursor(QTextCursor.End)
-        self.textEdit.insertPlainText("Calibrating")
-        self.textEdit.moveCursor(QTextCursor.End)
+        self.MainTool.pushButton_connect_robot.setEnabled(True)
+        self.MainTool.groupBox_human.setDisabled(True)
+        self.MainTool.groupBox_robots.setDisabled(True)
+        self.MainTool.textEdit.moveCursor(QTextCursor.End)
+        self.MainTool.textEdit.insertPlainText("Calibrating")
+        self.MainTool.textEdit.moveCursor(QTextCursor.End)
 
-        xacro_creator.create_human_yaml(self.pkg_path, self.l_upper_trunk.text(), self.l_upper_arm.text(), self.l_forearm.text(), self.l_hand.text())
+        xacro_creator.create_human_yaml(self.pkg_path, self.MainTool.l_upper_trunk.text(), self.MainTool.l_upper_arm.text(), self.MainTool.l_forearm.text(), self.MainTool.l_hand.text())
 
         rospy.init_node('imu_human_gui', anonymous=False)
         uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
@@ -107,16 +118,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def connect_robot_clicked(self):
         # "TODO"
-        self.pushButton_spawn_models.setEnabled(True)
+        self.MainTool.pushButton_spawn_models.setEnabled(True)
 
     def spawn_models_clicked(self):
         # "TODO"
-        self.pushButton_start_controllers.setEnabled(True)
+        self.MainTool.pushButton_start_controllers.setEnabled(True)
 
     def start_controllers_clicked(self):
         # "TODO"
-        self.pushButton_teleoperate.setEnabled(True)
-        self.pushButton_colift.setEnabled(True)
+        self.MainTool.pushButton_teleoperate.setEnabled(True)
+        self.MainTool.pushButton_colift.setEnabled(True)
 
     def teleoperate_clicked(self):
         pass
@@ -139,7 +150,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SensorsTool.lineEdit_emg.setText("???myo_emg")
 
         self.SensorsTool.buttonBox.accepted.connect(self.sensors_accepted)
-        self.buttonBox.rejected.connect(self.sensors_rejected)
+        self.SensorsTool.buttonBox.rejected.connect(self.sensors_rejected)
 
         self.show()
 
@@ -156,7 +167,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def closeEvent(self, event):
         event.ignore()
         print("Killing all nodes. Please wait!")
-        self.textEdit.insertPlainText("Killing all nodes. Please wait!")  # Why not working?
+        # self.MainTool.textEdit.insertPlainText("Killing all nodes. Please wait!")  # Why not working?
         try:
             self.launch.shutdown()
             p = os.popen("killall -9 gzserver gzclient")
@@ -183,5 +194,5 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     app.setStyleSheet(stylesheet)
     w = MainWindow()
-    w.show()
+    # w.show()
     sys.exit(app.exec_())
