@@ -77,6 +77,10 @@ The package contains several folders and the descriptions are given there:
 
 Then start ROS Master with `roscore` and start the GUI with `rosrun imu_human_pkg main_ui.py`.
 
+## Run
+- Change directory to where the main scrip is: `roscd imu_human_pkg/src`
+- Start the script: `./qnode.py` or `python3 qnode.py`
+
 ### Dependencies
 Some necessary dependencies are already installed with `rosdep install imu_human_pkg` command. In addition to those, you need to have 
 - [**awindamonitor** for sensors](git clone https://github.com/Raffa87/xsense-awinda.git)
@@ -97,6 +101,7 @@ Some necessary dependencies are already installed with `rosdep install imu_human
 
 ### IMU and HRC
 
+- [Human-Robot Cooperative Lifting Using IMUs and Human Gestures](https://link.springer.com/chapter/10.1007%2F978-3-030-89177-0_9)
 - [Inertial Human Motion Estimation for Physical Human-Robot Interaction Using an Interaction Velocity Update to Reduce Drift](https://hvlopen.brage.unit.no/hvlopen-xmlui/handle/11250/2583544)
 
 ### Miscellaneous
