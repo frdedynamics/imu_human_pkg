@@ -17,7 +17,7 @@ from tf.transformations import quaternion_matrix as q2m
 from tf.transformations import euler_from_quaternion as q2e
 from tf.transformations import euler_from_matrix as m2e
 
-sys.path.append('/home/gizem/catkin_ws/src/my_human_pkg/src/Classes')
+sys.path.append('/home/gizem/catkin_ws/src/imu_human_pkg/src/Classes')
 from . import Kinematics_with_Quaternions as kinematic
 
 _CALIBRATION_TH = 20
