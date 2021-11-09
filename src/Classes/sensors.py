@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(432, 385)
+        Dialog.resize(848, 385)
         self.groupBox_imu = QtWidgets.QGroupBox(Dialog)
         self.groupBox_imu.setGeometry(QtCore.QRect(20, 0, 381, 221))
         self.groupBox_imu.setObjectName("groupBox_imu")
@@ -67,6 +67,13 @@ class Ui_Dialog(object):
         self.buttonBox.setGeometry(QtCore.QRect(130, 320, 166, 25))
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
+        self.label = QtWidgets.QLabel(Dialog)
+        self.label.setGeometry(QtCore.QRect(430, 20, 391, 271))
+        self.label.setText("")
+        self.label.setPixmap(QtGui.QPixmap("fig/small_imu_placement50.png"))
+        self.label.setScaledContents(False)
+        self.label.setWordWrap(False)
+        self.label.setObjectName("label")
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)

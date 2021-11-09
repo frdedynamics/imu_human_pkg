@@ -132,7 +132,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SensorsTool = SensorTool(self)
         self.SensorsTool.setupUi(self.Dialog)
 
-        self.setWindowTitle("Sensors")
+        self.Dialog.setWindowTitle("Sensors")
+
+
+        self.SensorsTool.label.setPixmap(QtGui.QPixmap(self.pkg_path+"/ui/fig/small_imu_placement50.png"))
 
         self.SensorsTool.lineEdit_chest.setText("sensor_r_wrist")
         self.SensorsTool.lineEdit_l_upper_arm.setText("sensor_l_shoulder")
