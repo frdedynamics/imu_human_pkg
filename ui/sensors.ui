@@ -202,6 +202,19 @@
      <string>EMG:</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="checkBox_emg">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>0</y>
+      <width>21</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string> </string>
+    </property>
+   </widget>
   </widget>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">

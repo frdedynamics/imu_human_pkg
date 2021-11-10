@@ -72,17 +72,25 @@ class IMUsubscriber:
         self.runflag = False
         print("Created")
 
+    def load_sensor_topic_params(self):
+        self.sensor_c_topic = rospy.get_param("chest")
+        self.sensor_ls_topic = rospy.get_param("l_upper_arm")
+        self.sensor_le_topic = rospy.get_param("l_forearm")
+        self.sensor_lw_topic = rospy.get_param("l_hand")
+        self.sensor_rs_topic = rospy.get_param("r_upper_arm")
+        self.sensor_re_topic = rospy.get_param("r_forearm")
+
 
     def init_subscribers_and_publishers(self):
         self.pub = rospy.Publisher('/joint_states_human', JointState, queue_size=1)
         self.pub_lw_ori = rospy.Publisher('/lw_ori', Vector3, queue_size=1)
         self.pub_human_ori = rospy.Publisher('/human_ori', Quaternion, queue_size=1)
-        self.sub_imu_c = rospy.Subscriber('/sensor_r_wrist', Imu, self.cb_imu_chest)
-        self.sub_imu_ls = rospy.Subscriber('/sensor_l_shoulder', Imu, self.cb_imu_ls)
-        self.sub_imu_le = rospy.Subscriber('/sensor_l_elbow', Imu, self.cb_imu_le)
-        self.sub_imu_lw = rospy.Subscriber('/sensor_l_wrist', Imu, self.cb_imu_lw)
-        self.sub_imu_rs = rospy.Subscriber('/sensor_r_shoulder', Imu, self.cb_imu_rs)
-        self.sub_imu_re = rospy.Subscriber('/sensor_r_elbow', Imu, self.cb_imu_re)
+        self.sub_imu_c = rospy.Subscriber(self.sensor_c_topic, Imu, self.cb_imu_chest)
+        self.sub_imu_ls = rospy.Subscriber(self.sensor_ls_topic, Imu, self.cb_imu_ls)
+        self.sub_imu_le = rospy.Subscriber(self.sensor_le_topic, Imu, self.cb_imu_le)
+        self.sub_imu_lw = rospy.Subscriber(self.sensor_lw_topic, Imu, self.cb_imu_lw)
+        self.sub_imu_rs = rospy.Subscriber(self.sensor_rs_topic, Imu, self.cb_imu_rs)
+        self.sub_imu_re = rospy.Subscriber(self.sensor_re_topic, Imu, self.cb_imu_re)
         self.log_start_time = rospy.get_time()
         self.runflag = True
         _ROSTIME_START = rospy.get_time()

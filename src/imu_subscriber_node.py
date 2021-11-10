@@ -7,6 +7,7 @@ from geometry_msgs.msg import Vector3
 
 if __name__ == "__main__": 
 	IMU = IMUsubscriber(rate=100, start_node=True)
+	IMU.load_sensor_topic_params()
 	IMU.init_subscribers_and_publishers()
 	while not rospy.is_shutdown():
 		IMU.update()

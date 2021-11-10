@@ -63,6 +63,9 @@ class Ui_Dialog(object):
         self.label_8 = QtWidgets.QLabel(self.groupBox_emg)
         self.label_8.setGeometry(QtCore.QRect(10, 30, 111, 17))
         self.label_8.setObjectName("label_8")
+        self.checkBox_emg = QtWidgets.QCheckBox(self.groupBox_emg)
+        self.checkBox_emg.setGeometry(QtCore.QRect(150, 0, 21, 23))
+        self.checkBox_emg.setObjectName("checkBox_emg")
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
         self.buttonBox.setGeometry(QtCore.QRect(130, 320, 166, 25))
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
@@ -90,6 +93,7 @@ class Ui_Dialog(object):
         self.label_7.setText(_translate("Dialog", "Right Forearm:"))
         self.groupBox_emg.setTitle(_translate("Dialog", "EMG Topic (Optional)"))
         self.label_8.setText(_translate("Dialog", "EMG:"))
+        self.checkBox_emg.setText(_translate("Dialog", " "))
 
 
 if __name__ == "__main__":
