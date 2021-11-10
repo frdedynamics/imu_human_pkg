@@ -23,6 +23,10 @@
   <rosparam file="$(find imu_human_pkg)/config/human_control.yaml" command="load"/>
   <arg name="human_params" default="$(find imu_human_pkg)/config/human.yaml"/>
 
+  <!-- Load sensor topics from YAML file to parameter server -->
+  <rosparam file="$(find imu_human_pkg)/config/sensors.yaml" command="load"/>
+  <node name="imu_subscriber" pkg="imu_human_pkg" type="imu_subscriber_node.py" output="screen"/>
+
   <group ns = "human">
     <!-- Load human model to parameter server -->
     <param name="human_description" command="$(find xacro)/xacro '$(find imu_human_pkg)/urdf/human/human.urdf.xacro' human_params:=$(arg human_params)"/>
