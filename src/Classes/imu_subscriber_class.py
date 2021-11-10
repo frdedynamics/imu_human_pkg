@@ -120,9 +120,9 @@ class IMUsubscriber:
         self.acc_chest = self.chest_measurement.linear_acceleration
         self.gyro_chest = self.chest_measurement.angular_velocity
         self.chest_angles = q2e(kinematic.q_tf_convert(self.q_chest), axes='sxyz')
-        self.human_joint_imu.position[0] = self.chest_angles[1]  # pitch
-        self.human_joint_imu.position[1] = self.chest_angles[2]  # yaw
-        self.human_joint_imu.position[2] = self.chest_angles[0]  # roll
+        self.human_joint_imu.position[0] = self.chest_angles[1]
+        self.human_joint_imu.position[1] = self.chest_angles[2]
+        self.human_joint_imu.position[2] = self.chest_angles[0]
 
 
     def cb_imu_ls(self, msg):
@@ -136,9 +136,9 @@ class IMUsubscriber:
         # l_q_shoulder_sensorframe = kinematic.q_multiply(kinematic.q_invert(self.q_chest), self.l_q_shoulder)
         # self.ls_angles = q2e(kinematic.q_tf_convert(l_q_shoulder_sensorframe), axes='sxyz')
         # Update joint angles
-        self.human_joint_imu.position[5] = - self.ls_angles[0]  # pitch
-        self.human_joint_imu.position[3] = - self.ls_angles[2]  # yaw
-        self.human_joint_imu.position[4] = self.ls_angles[1]  # roll
+        self.human_joint_imu.position[3] = self.ls_angles[2]  
+        self.human_joint_imu.position[4] = - self.ls_angles[1] 
+        self.human_joint_imu.position[5] = - self.ls_angles[0] 
 
     
     def cb_imu_le(self, msg):
