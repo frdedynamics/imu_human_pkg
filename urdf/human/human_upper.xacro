@@ -230,15 +230,11 @@
         </inertial>
     </link>
 
-    <!-- <joint name="right_forearm_to_hand" type="fixed">
+    <joint name="right_forearm_to_hand" type="fixed">
         <origin rpy="0 0 0" xyz="0 0 ${-l_forearm}"/>
         <parent link="right_forearm"/>
         <child link="right_hand"/>
-    </joint> -->
-
-    <xacro:spherical name="right_wrist" parent="right_forearm" child="right_hand" x="1" y="1" z="1">
-        <origin rpy="0 0 0" xyz="0 0 ${-l_forearm}"/>
-    </xacro:spherical>
+    </joint>
 
     <link name="right_hand">
         <visual>
@@ -264,11 +260,15 @@
         </inertial>
     </link>
 
-    <joint name="left_forearm_to_hand" type="fixed">
+    <!-- <joint name="left_forearm_to_hand" type="fixed">
         <origin rpy="0 0 0" xyz="0 0 ${-l_forearm}"/>
         <parent link="left_forearm"/>
         <child link="left_hand"/>
-    </joint>
+    </joint> -->
+
+    <xacro:spherical name="left_wrist" parent="left_forearm" child="left_hand" x="1" y="1" z="1">
+        <origin rpy="0 0 0" xyz="0 0 ${-l_forearm}"/>
+    </xacro:spherical>
 
     <link name="left_hand">
         <visual>
