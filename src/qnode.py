@@ -149,10 +149,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.SensorsTool.buttonBox.accepted.connect(self.sensors_accepted)
         self.SensorsTool.buttonBox.rejected.connect(self.sensors_rejected)
-
         self.SensorsTool.checkBox_emg.stateChanged.connect(self.state_changed)
     
-
         self.Dialog.show()
         self.Dialog.exec_()
     

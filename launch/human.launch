@@ -2,23 +2,6 @@
 
 <launch>
 
-  <!-- Start Gazebo -->
-  <arg name="world" default="empty"/> 
-  <arg name="paused" default="true"/>
-  <arg name="use_sim_time" default="true"/>
-  <arg name="gui" default="true"/>
-  <arg name="headless" default="false"/>
-  <arg name="debug" default="false"/>
-  
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find imu_human_pkg)/worlds/custom.world"/>
-    <arg name="paused" value="$(arg paused)"/>
-    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
-    <arg name="gui" value="$(arg gui)"/>
-    <arg name="headless" value="$(arg headless)"/>
-    <arg name="debug" value="$(arg debug)"/>
-  </include>
-
   <!-- Load joint controller configurations from YAML file to parameter server -->
   <rosparam file="$(find imu_human_pkg)/config/human_control.yaml" command="load"/>
   <arg name="human_params" default="$(find imu_human_pkg)/config/human.yaml"/>
@@ -26,6 +9,9 @@
   <!-- Load sensor topics from YAML file to parameter server -->
   <rosparam file="$(find imu_human_pkg)/config/sensors.yaml" command="load"/>
   <node name="imu_subscriber" pkg="imu_human_pkg" type="imu_subscriber_node.py" output="screen"/>
+
+  <!-- Start spine-to-wrist tf. Creates upper-body pose -->
+  <node name="spine_to_wrist_tf" pkg="imu_human_pkg" type="spine_to_wrist_tf.py" />
 
   <group ns = "human">
     <!-- Load human model to parameter server -->
@@ -46,8 +32,6 @@
       <remap from="robot_description" to="human_description" />
     </node>
 
-    <!-- Spawn human in Gazebo -->
-    <node name="human_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"  args="-urdf -param human_description -model human"/>
   </group>
 
 </launch>

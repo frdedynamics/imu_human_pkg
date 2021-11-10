@@ -25,27 +25,27 @@ from Classes.imu_subscriber_class import IMUsubscriber
 import Classes.Kinematics_with_Quaternions as kinematic
 
 
-# EE_POSE = Odometry()
-# WRIST_POSE = Odometry()
-# GOAL_POSE = Pose()
-# t = TransformStamped()
+EE_POSE = Odometry()
+WRIST_POSE = Odometry()
+GOAL_POSE = Pose()
+t = TransformStamped()
 
-# IMU = IMUsubscriber()
-# #TODO: initiate human model
+IMU = IMUsubscriber()
+#TODO: initiate human model
 
 
-# def movegroup_init():
-# 	"""
-# 	Initializes the manipulator and end-effector groups
-# 	@returns Initialized groups
-# 	"""
-# 	moveit_commander.roscpp_initialize(sys.argv)
-# 	robot = moveit_commander.RobotCommander()
+def movegroup_init():
+	"""
+	Initializes the manipulator and end-effector groups
+	@returns Initialized groups
+	"""
+	moveit_commander.roscpp_initialize(sys.argv)
+	robot = moveit_commander.RobotCommander()
 
-# 	arm_group = moveit_commander.MoveGroupCommander("manipulator")
-# 	arm_group.set_named_target("home")
-# 	plan_arm = arm_group.go()  
-# 	return arm_group
+	arm_group = moveit_commander.MoveGroupCommander("manipulator")
+	arm_group.set_named_target("home")
+	plan_arm = arm_group.go()  
+	return arm_group
 
     
 # def task_space_control(arm_group, *argv):
