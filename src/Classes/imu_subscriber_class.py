@@ -141,6 +141,22 @@ class IMUsubscriber:
         self.human_joint_imu.position[5] = - self.ls_angles[0] 
 
     
+    def cb_imu_rs(self, msg):
+        self.rs_measurement = msg
+        while self.calibration_flag < _CALIBRATION_TH:
+            self.r_q_shoulder_init = kinematic.q_invert(self.rs_measurement.orientation)
+        self.r_q_shoulder = kinematic.q_multiply(self.r_q_shoulder_init, self.rs_measurement.orientation)
+        self.rs_angles = q2e(kinematic.q_tf_convert(self.r_q_shoulder), axes='sxyz')
+        self.acc_rs = self.rs_measurement.linear_acceleration
+        self.gyro_rs = self.rs_measurement.angular_velocity
+        # r_q_shoulder_sensorframe = kinematic.q_multiply(kinematic.q_invert(self.r_q_chest), self.r_q_shoulder)
+        # self.rs_angles = q2e(kinematic.q_tf_convert(r_q_shoulder_sensorframe), axes='sxyz')
+        # Update joint angles
+        self.human_joint_imu.position[6] = - self.rs_angles[2]  # pitch
+        self.human_joint_imu.position[7] = - self.rs_angles[1]  # yaw
+        self.human_joint_imu.position[8] = self.rs_angles[0]  # roll
+
+    
     def cb_imu_le(self, msg):
         self.le_measurement = msg
         while self.calibration_flag < _CALIBRATION_TH:
@@ -151,9 +167,9 @@ class IMUsubscriber:
         self.acc_le = self.le_measurement.linear_acceleration
         self.gyro_le = self.le_measurement.angular_velocity
         # Update joint angles
-        self.human_joint_imu.position[6] = -self.le_angles[2]  
-        self.human_joint_imu.position[8] = self.le_angles[0]  
-        # self.human_joint_imu.position[5] = self.le_angles[2]  
+        # self.human_joint_imu.position[6] = -self.le_angles[2]  
+        # self.human_joint_imu.position[8] = self.le_angles[0]  
+        # # self.human_joint_imu.position[5] = self.le_angles[2]  
     
     def cb_imu_lw(self, msg):
         self.lw_measurement = msg
@@ -166,28 +182,13 @@ class IMUsubscriber:
         self.acc_lw = self.lw_measurement.linear_acceleration
         self.gyro_lw = self.lw_measurement.angular_velocity
         # Update joint angles
-        self.human_joint_imu.position[15] = -self.lw_angles[1]  # pitch
-        self.human_joint_imu.position[16] = self.lw_angles[2]  # yaw
-        self.human_joint_imu.position[17] = self.lw_angles[0]  # roll
+        # self.human_joint_imu.position[15] = -self.lw_angles[1]  # pitch
+        # self.human_joint_imu.position[16] = self.lw_angles[2]  # yaw
+        # self.human_joint_imu.position[17] = self.lw_angles[0]  # roll
         self.motion_wrist_ori.x = self.lw_angles[0]
         self.motion_wrist_ori.y = self.lw_angles[1]
         self.motion_wrist_ori.z = self.lw_angles[2]
 
-    
-    def cb_imu_rs(self, msg):
-        self.rs_measurement = msg
-        while self.calibration_flag < _CALIBRATION_TH:
-            self.r_q_shoulder_init = kinematic.q_invert(self.rs_measurement.orientation)
-        self.r_q_shoulder = kinematic.q_multiply(self.r_q_shoulder_init, self.rs_measurement.orientation)
-        self.rs_angles = q2e(kinematic.q_tf_convert(self.r_q_shoulder), axes='sxyz')
-        self.acc_rs = self.rs_measurement.linear_acceleration
-        self.gyro_rs = self.rs_measurement.angular_velocity
-        # r_q_shoulder_sensorframe = kinematic.q_multiply(kinematic.q_invert(self.r_q_chest), self.r_q_shoulder)
-        # self.rs_angles = q2e(kinematic.q_tf_convert(r_q_shoulder_sensorframe), axes='sxyz')
-        # Update joint angles
-        self.human_joint_imu.position[11] = - self.rs_angles[0]  # pitch
-        self.human_joint_imu.position[9] = self.rs_angles[2]  # yaw
-        self.human_joint_imu.position[10] = self.rs_angles[1]  # roll
 
     
     def cb_imu_re(self, msg):
@@ -200,6 +201,6 @@ class IMUsubscriber:
         self.acc_re = self.re_measurement.linear_acceleration
         self.gyro_re = self.re_measurement.angular_velocity
         # Update joint angles
-        self.human_joint_imu.position[12] = self.re_angles[2]  # pitch
-        self.human_joint_imu.position[14] = - self.re_angles[0]  # yaw
-        # self.human_joint_imu.position[11] = self.re_angles[2]  # roll
+        # self.human_joint_imu.position[12] = self.re_angles[2]  # pitch
+        # self.human_joint_imu.position[14] = - self.re_angles[0]  # yaw
+        # # self.human_joint_imu.position[11] = self.re_angles[2]  # roll
