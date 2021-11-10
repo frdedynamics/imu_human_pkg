@@ -182,9 +182,9 @@ class IMUsubscriber:
         self.acc_re = self.re_measurement.linear_acceleration
         self.gyro_re = self.re_measurement.angular_velocity
         # Update joint angles
-        self.human_joint_imu.position[12] = - self.re_angles[2]  # pitch
-        # self.human_joint_imu.position[13] = - self.re_angles[1]  # yaw
-        self.human_joint_imu.position[14] = self.re_angles[0]  # roll
+        self.human_joint_imu.position[12] = - self.re_angles[2]
+        # self.human_joint_imu.position[13] = - self.re_angles[1]
+        self.human_joint_imu.position[14] = self.re_angles[0]
 
     
     def cb_imu_lw(self, msg):
@@ -198,9 +198,9 @@ class IMUsubscriber:
         self.acc_lw = self.lw_measurement.linear_acceleration
         self.gyro_lw = self.lw_measurement.angular_velocity
         # Update joint angles
-        self.human_joint_imu.position[15] = self.lw_angles[2]  # pitch
-        self.human_joint_imu.position[16] = - self.lw_angles[1]  # yaw
-        self.human_joint_imu.position[17] = - self.lw_angles[0]  # roll
+        self.human_joint_imu.position[15] = self.lw_angles[2]
+        self.human_joint_imu.position[16] = self.lw_angles[1]
+        self.human_joint_imu.position[17] = - self.lw_angles[0]
         self.motion_wrist_ori.x = self.lw_angles[0]
         self.motion_wrist_ori.y = self.lw_angles[1]
         self.motion_wrist_ori.z = self.lw_angles[2]

@@ -42,9 +42,10 @@ def movegroup_init():
 	moveit_commander.roscpp_initialize(sys.argv)
 	robot = moveit_commander.RobotCommander()
 
-	arm_group = moveit_commander.MoveGroupCommander("manipulator")
+	arm_group = moveit_commander.MoveGroupCommander("arm")
 	arm_group.set_named_target("home")
 	plan_arm = arm_group.go()  
+	arm_group.execute(plan_arm, wait=True)
 	return arm_group
 
     
@@ -215,8 +216,7 @@ def movegroup_init():
 
 if __name__ == '__main__': 
     # main()
-    print("here")
-
+	movegroup_init()
 
 
 

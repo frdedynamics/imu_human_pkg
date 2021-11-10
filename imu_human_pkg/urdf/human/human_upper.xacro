@@ -238,20 +238,20 @@
 
     <link name="right_hand">
         <visual>
-        <origin rpy="0 ${pi/2} 0" xyz="${r_forearm/2} 0 ${-thickness/2}"/>
+        <origin rpy="${-pi/2} ${pi/2} 0" xyz="0 0 ${-l_hand/2}"/>
         <geometry>
             <box size="${l_hand} ${w_hand} ${thickness}"/>
         </geometry>
         <material name="white"/>
         </visual>
         <collision>
-        <origin rpy="0 ${pi/2} 0" xyz="0 0 ${-thickness/2}"/>
+        <origin rpy="${-pi/2} ${pi/2} 0" xyz="0 0 ${-l_hand/2}"/>
         <geometry>
             <box size="${l_hand} ${w_hand} ${thickness}"/>
         </geometry>
         </collision>
         <inertial>
-        <origin rpy="0 ${pi/2} 0" xyz="0 0 ${-l_forearm/2}"/>
+        <origin rpy="${-pi/2} ${pi/2} 0" xyz="0 0 ${-l_hand/2}"/>
         <mass value="${m_hand}"/>
         <inertia
             ixx="${m_hand*(pow(thickness,2) + pow(w_hand,2))/12}" ixy="0.0" ixz="0.0"
@@ -272,20 +272,20 @@
 
     <link name="left_hand">
         <visual>
-        <origin rpy="0 ${pi/2} 0" xyz="${r_forearm/2} 0 ${-thickness/2}"/>
+        <origin rpy="${pi/2} ${pi/2} 0" xyz="0 0 ${-l_hand/2}"/>
         <geometry>
             <box size="${l_hand} ${w_hand} ${thickness}"/>
         </geometry>
         <material name="white"/>
         </visual>
         <collision>
-        <origin rpy="0 ${pi/2} 0" xyz="0 0 ${-thickness/2}"/>
+        <origin rpy="${pi/2} ${pi/2} 0" xyz="0 0 ${-l_hand/2}"/>
         <geometry>
             <box size="${l_hand} ${w_hand} ${thickness}"/>
         </geometry>
         </collision>
         <inertial>
-        <origin rpy="0 ${pi/2} 0" xyz="0 0 ${-l_forearm/2}"/>
+        <origin rpy="${pi/2} ${pi/2} 0" xyz="0 0 ${-l_hand/2}"/>
         <mass value="${m_hand}"/>
         <inertia
             ixx="${m_hand*(pow(thickness,2) + pow(w_hand,2))/12}" ixy="0.0" ixz="0.0"
