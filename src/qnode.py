@@ -143,14 +143,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SensorsTool.lineEdit_l_hand.setText("sensor_l_wrist")
         self.SensorsTool.lineEdit_r_upper_arm.setText("sensor_r_shoulder")
         self.SensorsTool.lineEdit_r_forearm.setText("sensor_r_elbow")
-        self.SensorsTool.lineEdit_emg.setText("???myo_emg")
+        self.SensorsTool.lineEdit_emg.setText("myo_emg")
+        self.SensorsTool.groupBox_emg.setDisabled(True)
         #TODO start a node with these
 
         self.SensorsTool.buttonBox.accepted.connect(self.sensors_accepted)
         self.SensorsTool.buttonBox.rejected.connect(self.sensors_rejected)
 
+        self.SensorsTool.checkBox_emg.stateChanged.connect(self.state_changed)
+    
+
         self.Dialog.show()
         self.Dialog.exec_()
+    
+    def state_changed(self, int):
+        if self.SensorsTool.checkBox_emg.isChecked():
+            print("EMG active!")
+            self.SensorsTool.groupBox_emg.setEnabled(True)
+        else:
+            print("EMG deactive!")
+            self.SensorsTool.groupBox_emg.setDisabled(True)
     
     def sensors_accepted(self):
         print("OK clicked")

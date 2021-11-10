@@ -55,17 +55,14 @@ class Ui_Dialog(object):
         self.lineEdit_r_upper_arm.setGeometry(QtCore.QRect(160, 150, 201, 25))
         self.lineEdit_r_upper_arm.setObjectName("lineEdit_r_upper_arm")
         self.groupBox_emg = QtWidgets.QGroupBox(Dialog)
-        self.groupBox_emg.setGeometry(QtCore.QRect(20, 230, 381, 61))
+        self.groupBox_emg.setGeometry(QtCore.QRect(70, 230, 331, 61))
         self.groupBox_emg.setObjectName("groupBox_emg")
         self.lineEdit_emg = QtWidgets.QLineEdit(self.groupBox_emg)
-        self.lineEdit_emg.setGeometry(QtCore.QRect(160, 30, 201, 25))
+        self.lineEdit_emg.setGeometry(QtCore.QRect(160, 30, 161, 25))
         self.lineEdit_emg.setObjectName("lineEdit_emg")
         self.label_8 = QtWidgets.QLabel(self.groupBox_emg)
         self.label_8.setGeometry(QtCore.QRect(10, 30, 111, 17))
         self.label_8.setObjectName("label_8")
-        self.checkBox_emg = QtWidgets.QCheckBox(self.groupBox_emg)
-        self.checkBox_emg.setGeometry(QtCore.QRect(150, 0, 21, 23))
-        self.checkBox_emg.setObjectName("checkBox_emg")
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
         self.buttonBox.setGeometry(QtCore.QRect(130, 320, 166, 25))
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
@@ -77,6 +74,10 @@ class Ui_Dialog(object):
         self.label.setScaledContents(False)
         self.label.setWordWrap(False)
         self.label.setObjectName("label")
+        self.checkBox_emg = QtWidgets.QCheckBox(Dialog)
+        self.checkBox_emg.setGeometry(QtCore.QRect(40, 250, 21, 31))
+        self.checkBox_emg.setText("")
+        self.checkBox_emg.setObjectName("checkBox_emg")
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -93,7 +94,6 @@ class Ui_Dialog(object):
         self.label_7.setText(_translate("Dialog", "Right Forearm:"))
         self.groupBox_emg.setTitle(_translate("Dialog", "EMG Topic (Optional)"))
         self.label_8.setText(_translate("Dialog", "EMG:"))
-        self.checkBox_emg.setText(_translate("Dialog", " "))
 
 
 if __name__ == "__main__":
