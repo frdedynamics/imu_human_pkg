@@ -88,6 +88,8 @@ Some necessary dependencies are already installed with `rosdep install imu_human
 - [If you want to control ROS-i supported simulated robot models in Gazebo](https://moveit.ros.org/robots/)
   - For example (in the paper referred): [Franka Emika Panda in Gazebo controlled by Moveit](https://github.com/frankaemika/franka_ros)
 
+**Note:** The necessary packages are included in "additional" folder. If there is any conflictions, you can remove the whole folder and manually download them. I just try to make everything so plug-and-play for the first version of the package. The packages in that folder are mainly developed my some other precious developers but partly changed by me to include additional features or fit into the `imu_human_pkg` without any additional settings.
+
 
 ## Useful open-source links
 
