@@ -27,10 +27,10 @@
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find imu_human_pkg)/config/config.rviz"/> 
 
     <!-- Publish joint state -->
-    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+    <!-- <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
       <remap from="joint_states" to="human_joint_states" />
       <remap from="robot_description" to="human_description" />
-    </node>
+    </node> -->
 
   </group>
 

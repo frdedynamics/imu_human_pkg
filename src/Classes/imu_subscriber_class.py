@@ -62,10 +62,16 @@ class IMUsubscriber:
         self.gyro_re = Vector3()
 
         self.human_joint_imu = JointState()
-        self.human_joint_imu.name = [ 'spine_0', 'spine_1', 'spine_2',
-                                      'left_shoulder_0', 'left_shoulder_1', 'left_shoulder_2', 'left_elbow_0', 'left_elbow_1', 'left_elbow_2',
-                                      'right_shoulder_0', 'right_shoulder_1', 'right_shoulder_2', 'right_elbow_0', 'right_elbow_1', 'right_elbow_2',
-                                      'left_wrist_0', 'left_wrist_1', 'left_wrist_2']
+        # self.human_joint_imu.name = [ 'spine_0', 'spine_1', 'spine_2',
+        #                               'left_shoulder_0', 'left_shoulder_1', 'left_shoulder_2', 'left_elbow_0', 'left_elbow_1', 'left_elbow_2',
+        #                               'right_shoulder_0', 'right_shoulder_1', 'right_shoulder_2', 'right_elbow_0', 'right_elbow_1', 'right_elbow_2',
+        #                               'left_wrist_0', 'left_wrist_1', 'left_wrist_2']
+        self.human_joint_imu.name = [ 'base_to_upper_trunk_y', 'base_to_upper_trunk_x', 'base_to_upper_trunk_z',
+                                      'left_shoulder_y', 'left_shoulder_x', 'left_shoulder_z', 
+                                      'right_shoulder_y', 'right_shoulder_x', 'right_shoulder_z', 
+                                      'left_elbow_y', 'left_elbow_x', 'left_elbow_z',
+                                      'right_elbow_y', 'right_elbow_x', 'right_elbow_z',
+                                      'left_wrist_y', 'left_wrist_x', 'left_wrist_z']
         self.human_joint_imu.position = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         self.motion_wrist_ori = Vector3()
         self.calibration_flag = 0
@@ -82,7 +88,7 @@ class IMUsubscriber:
 
 
     def init_subscribers_and_publishers(self):
-        self.pub = rospy.Publisher('/joint_states_human', JointState, queue_size=1)
+        self.pub = rospy.Publisher('/human/human_joint_states', JointState, queue_size=1)
         self.pub_lw_ori = rospy.Publisher('/lw_ori', Vector3, queue_size=1)
         self.pub_human_ori = rospy.Publisher('/human_ori', Quaternion, queue_size=1)
         self.sub_imu_c = rospy.Subscriber(self.sensor_c_topic, Imu, self.cb_imu_chest)
@@ -114,8 +120,8 @@ class IMUsubscriber:
         self.acc_chest = self.chest_measurement.linear_acceleration
         self.gyro_chest = self.chest_measurement.angular_velocity
         self.chest_angles = q2e(kinematic.q_tf_convert(self.q_chest), axes='sxyz')
-        self.human_joint_imu.position[0] = self.chest_angles[2]  # pitch
-        self.human_joint_imu.position[1] = - self.chest_angles[1]  # yaw
+        self.human_joint_imu.position[0] = self.chest_angles[1]  # pitch
+        self.human_joint_imu.position[1] = self.chest_angles[2]  # yaw
         self.human_joint_imu.position[2] = self.chest_angles[0]  # roll
 
 
