@@ -32,42 +32,8 @@
         </inertial>
     </link>
 
-    <xacro:spherical name="left_shoulder" parent="upper_trunk" child="left_upper_arm" x="1" y="1" z="1">
+    <xacro:spherical name="right_shoulder" parent="upper_trunk" child="right_upper_arm" x="1" y="1" z="1">
         <origin rpy="0 0 0" xyz="0 ${-r_upper_trunk} ${l_upper_trunk}"/>
-    </xacro:spherical>
-    
-    <link name="left_upper_arm">
-        <visual>
-        <origin rpy="0 0 0" xyz="0 0 ${-l_upper_arm/2}"/>
-        <geometry>
-            <cylinder length="${l_upper_arm}" radius="${r_upper_arm}"/>
-        </geometry>
-        <material name="blue"/>
-        </visual>
-        <collision>
-        <origin rpy="0 0 0" xyz="0 0 ${-l_upper_arm/2}"/>
-        <geometry>
-            <cylinder length="${l_upper_arm}" radius="${r_upper_arm}"/>
-        </geometry>
-        </collision>
-        <inertial>
-        <origin rpy="0 0 0" xyz="0 0 ${-l_upper_arm/2}"/>
-        <mass value="${m_upper_arm}"/>
-        <inertia
-            ixx="${m_upper_arm*(3*pow(r_upper_arm,2)+pow(l_upper_arm,2))/12}" ixy="0.0" ixz="0.0"
-            iyy="${m_upper_arm*(3*pow(r_upper_arm,2)+pow(l_upper_arm,2))/12}" iyz="0.0"
-            izz="${m_upper_arm*pow(r_upper_arm,2)/2}"/>
-        </inertial>
-        <!-- <inertia
-            ixx="${2*m_upper_arm*pow(r_upper_arm,2)/5}" ixy="0.0" ixz="0.0"
-            iyy="${2*m_upper_arm*pow(r_upper_arm,2)/5}" iyz="0.0"
-            izz="${2*m_upper_arm*pow(r_upper_arm,2)/5}"/>
-        </inertial> -->
-
-    </link>
-
-    <xacro:spherical name="right_shoulder" parent="upper_trunk" child="right_upper_arm" x="-1" y="1" z="-1">
-        <origin rpy="0 0 0" xyz="0 ${r_upper_trunk} ${l_upper_trunk}"/>
     </xacro:spherical>
     
     <link name="right_upper_arm">
@@ -97,13 +63,47 @@
             iyy="${2*m_upper_arm*pow(r_upper_arm,2)/5}" iyz="0.0"
             izz="${2*m_upper_arm*pow(r_upper_arm,2)/5}"/>
         </inertial> -->
+
     </link>
 
-    <xacro:spherical name="left_elbow" parent="left_upper_arm" child="left_forearm" x="fixed" y="1" z="1">
+    <xacro:spherical name="left_shoulder" parent="upper_trunk" child="left_upper_arm" x="-1" y="1" z="-1">
+        <origin rpy="0 0 0" xyz="0 ${r_upper_trunk} ${l_upper_trunk}"/>
+    </xacro:spherical>
+    
+    <link name="left_upper_arm">
+        <visual>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_upper_arm/2}"/>
+        <geometry>
+            <cylinder length="${l_upper_arm}" radius="${r_upper_arm}"/>
+        </geometry>
+        <material name="blue"/>
+        </visual>
+        <collision>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_upper_arm/2}"/>
+        <geometry>
+            <cylinder length="${l_upper_arm}" radius="${r_upper_arm}"/>
+        </geometry>
+        </collision>
+        <inertial>
+        <origin rpy="0 0 0" xyz="0 0 ${-l_upper_arm/2}"/>
+        <mass value="${m_upper_arm}"/>
+        <inertia
+            ixx="${m_upper_arm*(3*pow(r_upper_arm,2)+pow(l_upper_arm,2))/12}" ixy="0.0" ixz="0.0"
+            iyy="${m_upper_arm*(3*pow(r_upper_arm,2)+pow(l_upper_arm,2))/12}" iyz="0.0"
+            izz="${m_upper_arm*pow(r_upper_arm,2)/2}"/>
+        </inertial>
+        <!-- <inertia
+            ixx="${2*m_upper_arm*pow(r_upper_arm,2)/5}" ixy="0.0" ixz="0.0"
+            iyy="${2*m_upper_arm*pow(r_upper_arm,2)/5}" iyz="0.0"
+            izz="${2*m_upper_arm*pow(r_upper_arm,2)/5}"/>
+        </inertial> -->
+    </link>
+
+    <xacro:spherical name="right_elbow" parent="right_upper_arm" child="right_forearm" x="fixed" y="1" z="1">
         <origin rpy="0 0 0" xyz="0 0 ${-l_upper_arm}"/>
     </xacro:spherical>
     
-    <link name="left_forearm">
+    <link name="right_forearm">
         <visual>
         <origin rpy="0 0 0" xyz="0 0 ${-l_forearm/2}"/>
         <geometry>
@@ -132,11 +132,11 @@
         </inertial> -->
     </link>
 
-    <xacro:spherical name="right_elbow" parent="right_upper_arm" child="right_forearm" x="fixed" y="1" z="-1">
+    <xacro:spherical name="left_elbow" parent="left_upper_arm" child="left_forearm" x="fixed" y="1" z="-1">
         <origin rpy="0 0 0" xyz="0 0 ${-l_upper_arm}"/>
     </xacro:spherical>
     
-    <link name="right_forearm">
+    <link name="left_forearm">
         <visual>
         <origin rpy="0 0 0" xyz="0 0 ${-l_forearm/2}"/>
         <geometry>
@@ -230,17 +230,17 @@
         </inertial>
     </link>
 
-    <!-- <joint name="left_forearm_to_hand" type="fixed">
+    <!-- <joint name="right_forearm_to_hand" type="fixed">
         <origin rpy="0 0 0" xyz="0 0 ${-l_forearm}"/>
-        <parent link="left_forearm"/>
-        <child link="left_hand"/>
+        <parent link="right_forearm"/>
+        <child link="right_hand"/>
     </joint> -->
 
-    <xacro:spherical name="left_wrist" parent="left_forearm" child="left_hand" x="1" y="1" z="1">
+    <xacro:spherical name="right_wrist" parent="right_forearm" child="right_hand" x="1" y="1" z="1">
         <origin rpy="0 0 0" xyz="0 0 ${-l_forearm}"/>
     </xacro:spherical>
 
-    <link name="left_hand">
+    <link name="right_hand">
         <visual>
         <origin rpy="0 ${pi/2} 0" xyz="${r_forearm/2} 0 ${-thickness/2}"/>
         <geometry>
@@ -264,13 +264,13 @@
         </inertial>
     </link>
 
-    <joint name="right_forearm_to_hand" type="fixed">
+    <joint name="left_forearm_to_hand" type="fixed">
         <origin rpy="0 0 0" xyz="0 0 ${-l_forearm}"/>
-        <parent link="right_forearm"/>
-        <child link="right_hand"/>
+        <parent link="left_forearm"/>
+        <child link="left_hand"/>
     </joint>
 
-    <link name="right_hand">
+    <link name="left_hand">
         <visual>
         <origin rpy="0 ${pi/2} 0" xyz="${r_forearm/2} 0 ${-thickness/2}"/>
         <geometry>
