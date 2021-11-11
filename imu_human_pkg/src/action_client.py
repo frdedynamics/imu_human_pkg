@@ -2,7 +2,7 @@
 
 import rospy
 import actionlib
-from arm_motion_controller_py3.msg import handCalibrationAction, handCalibrationGoal
+from imu_human_pkg.msg import handCalibrationAction, handCalibrationGoal
 
 def feedback_cb(msg):
  print('Feedback received:', msg)

@@ -2,7 +2,7 @@
 
 import rospy
 import actionlib
-from arm_motion_controller_py3.msg import handCalibrationAction, handCalibrationFeedback, handCalibrationResult
+from imu_human_pkg.msg import handCalibrationAction, handCalibrationFeedback, handCalibrationResult
 
 import numpy as np
 

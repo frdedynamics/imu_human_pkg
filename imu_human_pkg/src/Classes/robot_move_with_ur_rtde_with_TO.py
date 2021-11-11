@@ -11,7 +11,7 @@ from math import radians as d2r
 import numpy as np
 
 import actionlib
-from arm_motion_controller_py3.msg import handCalibrationAction, handCalibrationGoal
+from imu_human_pkg.msg import handCalibrationAction, handCalibrationGoal
 
 from geometry_msgs.msg import Pose, Point, Quaternion, Vector3
 from sensor_msgs.msg import JointState

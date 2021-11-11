@@ -18,7 +18,7 @@ from datetime import datetime
 
 # OUTPUT_FOLDER = "../Output"  # take it as a rosparam
 # OUTPUT_FOLDER = "/home/gizem/Documents/Gitkraken/arm-paper/DataOutput"  # take it as a rosparam
-OUTPUT_FOLDER = "/home/gizem/catkin_ws/src/arm_motion_controller_py3/logging/Data/Output"  # take it as a rosparam
+OUTPUT_FOLDER = "/home/gizem/catkin_ws/src/imu_human_pkg/imu_human_pkg/log/Data/Output"  # take it as a rosparam
 OUTPUT_FILENAME_PREFIX = "HRI"
 
 
