@@ -38,9 +38,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.radioButton_simulation.setChecked(True)
         self.comboBox_robot_name.addItems(['Panda', 'UR5e', 'KUKA iiwa'])
         self.lineEdit_robot_ip.setDisabled(True)  
+        self.simulated_flag = True
 
         self.pushButton_calibrate_human.setToolTip("Set the human in N-pose\nCalibration will be completed\nin 3 seconds.")
-        self.pushButton_connect_robot.setDisabled(True)
+        self.pushButton_connect_robot.setDisabled(False)
         self.pushButton_connect_robot.setToolTip("Simulation: Necessary models are uploaded to parameter server.\nReal robot: Real-time data exchange is set up.")
         self.pushButton_spawn_models.setDisabled(True)
         self.pushButton_spawn_models.setToolTip("Simulation-only: Human and robot models are spawn in Gazebo")
@@ -75,11 +76,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.textEdit_status.setText("Real robot selected")
         self.comboBox_robot_name.setDisabled(True)
         self.lineEdit_robot_ip.setEnabled(True)
+        self.simulated_flag = False
 
     def simulation_selected(self):
         self.textEdit_status.setText("Simulation Selected")
         self.lineEdit_robot_ip.setDisabled(True)
         self.comboBox_robot_name.setEnabled(True)
+        self.simulated_flag = True
 
     def calibrate_human_clicked(self):
         # # Get package path
@@ -104,6 +107,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def connect_robot_clicked(self):
         # "TODO"
+        print(self.simulated_flag)
+        if self.simulated_flag == True:
+            self.robot_name = self.comboBox_robot_name.currentText()
+            print(self.robot_name)
+            sys.exit()
+        elif self.simulated_flag == False:
+            print("real robot selected")
+        else:
+            print("Something went wrong: Robot selection")
+
         self.pushButton_spawn_models.setEnabled(True)
 
     def spawn_models_clicked(self):
