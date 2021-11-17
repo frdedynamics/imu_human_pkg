@@ -87,14 +87,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.simulated_flag = True
 
     def calibrate_human_clicked(self):
-
-        try:
-            self.emg_flag = self.SensorsTool.emg_flag
-        except AttributeError:
-            print("Sensors not set. Taking default")
-        print(self.emg_flag)
-        sys.exit()
-
         self.pushButton_connect_robot.setEnabled(True)
         self.groupBox_human.setDisabled(True)
         self.groupBox_robots.setDisabled(True)
@@ -103,10 +95,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.textEdit_status.moveCursor(QTextCursor.End)
 
         xacro_creator.create_human_yaml(self.pkg_path, self.l_upper_trunk.text(), self.l_upper_arm.text(), self.l_forearm.text(), self.l_hand.text())
-
+        try:
+            self.emg_flag = self.SensorsTool.emg_flag
+        except AttributeError:
+            print("Sensors not set. Taking default")
         
-        self.launch_human = roslaunch.parent.ROSLaunchParent(self.uuid, [self.pkg_path+"/launch/human.launch"])
-        self.launch_human.start()
+        if self.emg_flag:
+            self.launch_human = roslaunch.parent.ROSLaunchParent(self.uuid, [self.pkg_path+"/launch/human_with_myo.launch"])
+            self.launch_human.start()
+            # Start another node
+            node_emg_to_gripper = roslaunch.core.Node("imu_human_pkg", "emg_to_gripper.py",)
+            self.launch_human.launch(node_emg_to_gripper)
+            node_map_robotiq_to_topic_bool = roslaunch.core.Node("imu_human_pkg", "map_robotiq_to_topic_bool.py",)
+            self.launch_human.launch(node_map_robotiq_to_topic_bool)
+        else:
+            self.launch_human = roslaunch.parent.ROSLaunchParent(self.uuid, [self.pkg_path+"/launch/human.launch"])
+            self.launch_human.start()
         
         # self.sub_joint_states = rospy.Subscriber("/joint_states", JointState, self.cb_joint_states)
         rospy.loginfo("Human calibrated")
@@ -139,12 +143,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 launch_ur5e_gazebo = roslaunch.parent.ROSLaunchParent(self.uuid, [ur_gazebo_pkg_path+"/launch/ur5e.launch"])
                 launch_ur5e_gazebo.start()
             elif self.robot_name == "Panda":
-                # command = 'rospack find franka_gazebo'
-                # p = os.popen(command)
-                # ur_gazebo_pkg_path = str(p.read().split())[2:-2]
-
-                # launch_panda_gazebo = roslaunch.parent.ROSLaunchParent(self.uuid, [ur_gazebo_pkg_path+"/launch/panda.launch"])
-                # launch_panda_gazebo.start()
                 self.launch_panda = roslaunch.parent.ROSLaunchParent(self.uuid, [self.pkg_path+"/example/panda/launch/human_panda.launch"])
                 self.launch_panda.start()
             
@@ -155,6 +153,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             elif self.robot_name == "Panda":
                 print("Real Panda has not implemented yet. Starting simulation")
+                # command = 'rospack find franka_gazebo'
+                # p = os.popen(command)
+                # ur_gazebo_pkg_path = str(p.read().split())[2:-2]
+
+                # launch_panda_gazebo = roslaunch.parent.ROSLaunchParent(self.uuid, [ur_gazebo_pkg_path+"/launch/panda.launch"])
+                # launch_panda_gazebo.start()
                 self.simulated_flag = True
                 self.launch_panda = roslaunch.parent.ROSLaunchParent(self.uuid, [self.pkg_path+"/example/panda/launch/human_panda.launch"])
                 self.launch_panda.start()
@@ -200,7 +204,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SensorsTool.lineEdit_l_hand.setText("sensor_l_wrist")
         self.SensorsTool.lineEdit_r_upper_arm.setText("sensor_r_shoulder")
         self.SensorsTool.lineEdit_r_forearm.setText("sensor_r_elbow")
-        self.SensorsTool.lineEdit_emg.setText("myo_emg")
+        self.SensorsTool.lineEdit_emg.setText("myo_raw/myo_emg")
         self.SensorsTool.groupBox_emg.setDisabled(True)
         #TODO start a node with these
 
@@ -215,9 +219,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.SensorsTool.checkBox_emg.isChecked():
             print("EMG active!")
             self.SensorsTool.groupBox_emg.setEnabled(True)
+            self.SensorsTool.emg_flag = True
         else:
             print("EMG deactive!")
             self.SensorsTool.groupBox_emg.setDisabled(True)
+            self.SensorsTool.emg_flag = False
     
     def sensors_accepted(self):
         print("OK clicked")
@@ -226,7 +232,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         p = os.popen(command)
         pkg_path = str(p.read().split())[2:-2]
         xacro_creator.create_sensors_yaml(pkg_path, self.SensorsTool.lineEdit_chest.text(), self.SensorsTool.lineEdit_l_upper_arm.text(), self.SensorsTool.lineEdit_l_forearm.text(), self.SensorsTool.lineEdit_l_hand.text(), self.SensorsTool.lineEdit_r_upper_arm.text(), self.SensorsTool.lineEdit_r_forearm.text(), self.SensorsTool.lineEdit_emg.text())
-        # TODO: Check if EMG is optional
+        self.Dialog.close()
 
     def sensors_rejected(self):
         print("Cancel clicked")
