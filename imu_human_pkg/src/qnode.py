@@ -150,6 +150,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             print("real robot selected")
             if self.robot_name == "Ur5e":
                 print("RUN URTDE here")
+                self.launch_real_ur = roslaunch.parent.ROSLaunchParent(self.uuid, [self.pkg_path+"/launch/ur5e_real.launch"])
+                self.launch_real_ur.start()
+                # TODO: make sure that initial pose movement is implemented here.
 
             elif self.robot_name == "Panda":
                 print("Real Panda has not implemented yet. Starting simulation")

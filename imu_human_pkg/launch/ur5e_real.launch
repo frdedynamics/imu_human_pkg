@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+    <node name="robot_move_node" pkg="imu_human_pkg" type="robot_move_node.py" output="screen"/> 
+</launch>
+
