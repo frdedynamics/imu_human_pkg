@@ -13,13 +13,14 @@ import Classes.xacro_creator as xacro_creator
 from Classes.sensors import Ui_Dialog as SensorsDialog
 
 import roslaunch, rospy
-import os
+import os, time
 
 
 class SensorTool(QDialog, SensorsDialog):
     def __init__(self, parent=None):
         super(SensorTool, self).__init__(parent)
         self.setupUi(self)
+        self.emg_flag = True
         
 
 
@@ -39,14 +40,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.comboBox_robot_name.addItems(['Panda', 'UR5e', 'KUKA iiwa'])
         self.lineEdit_robot_ip.setDisabled(True)  
         self.simulated_flag = True
+        self.emg_flag = False
 
         self.pushButton_calibrate_human.setToolTip("Set the human in N-pose\nCalibration will be completed\nin 3 seconds.")
-        self.pushButton_connect_robot.setDisabled(False)
-        self.pushButton_connect_robot.setToolTip("Simulation: Necessary models are uploaded to parameter server.\nReal robot: Real-time data exchange is set up.")
-        self.pushButton_spawn_models.setDisabled(True)
-        self.pushButton_spawn_models.setToolTip("Simulation-only: Human and robot models are spawn in Gazebo")
-        self.pushButton_start_controllers.setDisabled(True)
-        self.pushButton_spawn_models.setToolTip("Simulation-only: Human and robot controllers are started")
+        self.pushButton_connect_robot.setDisabled(True)
+        self.pushButton_connect_robot.setToolTip("Simulation: Necessary models are uploaded to parameter server.\nHuman and robot is spawn in Gazebe.\nReal robot: Real-time data exchange is set up.")
+        self.pushButton_robot_move_home.setDisabled(True)
+        self.pushButton_robot_move_home.setToolTip("Human and robot models are spawn in Gazebo")
+        self.pushButton_map_poses.setDisabled(True)
+        self.pushButton_map_poses.setToolTip("Human and robot initial poses are mapped")
         self.pushButton_teleoperate.setDisabled(True)
         self.pushButton_teleoperate.setToolTip("Left hand orientation is mapped robot wrist joints\nRight hand respective position is mapped end-effector position")
         self.pushButton_colift.setDisabled(True)
@@ -56,8 +58,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.radioButton_simulation.clicked.connect(self.simulation_selected)
         self.pushButton_calibrate_human.clicked.connect(self.calibrate_human_clicked)
         self.pushButton_connect_robot.clicked.connect(self.connect_robot_clicked)
-        self.pushButton_spawn_models.clicked.connect(self.spawn_models_clicked)
-        self.pushButton_start_controllers.clicked.connect(self.start_controllers_clicked)
+        self.pushButton_robot_move_home.clicked.connect(self.robot_move_home_clicked)
+        self.pushButton_map_poses.clicked.connect(self.map_human_robot_poses_clicked)
         self.pushButton_teleoperate.clicked.connect(self.teleoperate_clicked)
         self.pushButton_colift.clicked.connect(self.colift_clicked)
 
@@ -85,10 +87,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.simulated_flag = True
 
     def calibrate_human_clicked(self):
-        # # Get package path
-        # command = 'rospack find imu_human_pkg'
-        # p = os.popen(command)
-        # self.pkg_path = str(p.read().split())[2:-2]
+
+        try:
+            self.emg_flag = self.SensorsTool.emg_flag
+        except AttributeError:
+            print("Sensors not set. Taking default")
+        print(self.emg_flag)
+        sys.exit()
 
         self.pushButton_connect_robot.setEnabled(True)
         self.groupBox_human.setDisabled(True)
@@ -102,28 +107,67 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
         self.launch_human = roslaunch.parent.ROSLaunchParent(self.uuid, [self.pkg_path+"/launch/human.launch"])
         self.launch_human.start()
+        
         # self.sub_joint_states = rospy.Subscriber("/joint_states", JointState, self.cb_joint_states)
         rospy.loginfo("Human calibrated")
 
+        #     def connect_robot_clicked(self):
+        # # "TODO"
+        # self.robot_name = self.comboBox_robot_name.currentText()
+        # print(self.robot_name)
+        # print(self.simulated_flag)
+        # if self.simulated_flag == True:
+        #     print("simulated robot selected")
+        #     self.launch_panda = roslaunch.parent.ROSLaunchParent(self.uuid, [self.pkg_path+"/example/panda/launch/human_panda.launch"])
+        #     self.launch_panda.start()
+        # elif self.simulated_flag == False:
+        #     print("real robot selected")
+        # else:
+        #     print("Something went wrong: Robot selection")
+
+        # self.pushButton_spawn_models.setEnabled(True)
+
+
     def connect_robot_clicked(self):
-        # "TODO"
+        self.robot_name = self.comboBox_robot_name.currentText()
         print(self.simulated_flag)
         if self.simulated_flag == True:
-            self.robot_name = self.comboBox_robot_name.currentText()
-            print(self.robot_name)
-            sys.exit()
+            if self.robot_name == "Ur5e":
+                command = 'rospack find ur_e_gazebo'
+                p = os.popen(command)
+                ur_gazebo_pkg_path = str(p.read().split())[2:-2]
+                launch_ur5e_gazebo = roslaunch.parent.ROSLaunchParent(self.uuid, [ur_gazebo_pkg_path+"/launch/ur5e.launch"])
+                launch_ur5e_gazebo.start()
+            elif self.robot_name == "Panda":
+                # command = 'rospack find franka_gazebo'
+                # p = os.popen(command)
+                # ur_gazebo_pkg_path = str(p.read().split())[2:-2]
+
+                # launch_panda_gazebo = roslaunch.parent.ROSLaunchParent(self.uuid, [ur_gazebo_pkg_path+"/launch/panda.launch"])
+                # launch_panda_gazebo.start()
+                self.launch_panda = roslaunch.parent.ROSLaunchParent(self.uuid, [self.pkg_path+"/example/panda/launch/human_panda.launch"])
+                self.launch_panda.start()
+            
         elif self.simulated_flag == False:
             print("real robot selected")
+            if self.robot_name == "Ur5e":
+                print("RUN URTDE here")
+
+            elif self.robot_name == "Panda":
+                print("Real Panda has not implemented yet. Starting simulation")
+                self.simulated_flag = True
+                self.launch_panda = roslaunch.parent.ROSLaunchParent(self.uuid, [self.pkg_path+"/example/panda/launch/human_panda.launch"])
+                self.launch_panda.start()
         else:
             print("Something went wrong: Robot selection")
 
-        self.pushButton_spawn_models.setEnabled(True)
+        self.pushButton_robot_move_home.setEnabled(True)
 
-    def spawn_models_clicked(self):
+    def robot_move_home_clicked(self):
         # "TODO"
-        self.pushButton_start_controllers.setEnabled(True)
+        self.pushButton_map_poses.setEnabled(True)
 
-    def start_controllers_clicked(self):
+    def map_human_robot_poses_clicked(self):
         # "TODO"
         self.pushButton_teleoperate.setEnabled(True)
         self.pushButton_colift.setEnabled(True)

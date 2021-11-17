@@ -8,32 +8,35 @@
   <node pkg="ros_myo" name="myo_raw" type="myo-rawNode.py" args="$(arg port)" output="screen"/>
   <node pkg="arm_motion_controller_py3" name="world_to_myo_tf_publisher" type="world_to_myo.py"/>
 
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find imu_human_pkg)/config/human_control.yaml" command="load"/>
+  <arg name="human_params" default="$(find imu_human_pkg)/config/human.yaml"/>
 
-  <!-- <param name="human_description" command="$(find xacro)/xacro '$(find arm_motion_controller_py3)/urdf/human/chest_included.xacro'"/> -->
-  <param name="human_description" command="$(find xacro)/xacro '$(find arm_motion_controller_py3)/urdf/human/chest_included_npose.xacro'"/>
-
-  <!-- Combine joint values -->
-  <node name="human_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
-    <remap from="robot_description" to="human_description" />
-    <remap from="joint_states" to="/joint_states_human" />
-  </node>
-
-  <!-- Show in Rviz   -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find arm_motion_controller_py3)/launch/config/config_with_myo.rviz"/> 
-
-
-  <!-- publish joint state
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-    <param name="use_gui" value="True"/>
-    <remap from="joint_states" to="/joint_states_human" />
-  </node>-->
-
-  <!-- Start IMU subscriber node (after awindamonitor started) -->
-  <node name="imu_subscriber_node" type="imu_subscriber_node.py" pkg="arm_motion_controller_py3" />
-  
+  <!-- Load sensor topics from YAML file to parameter server -->
+  <rosparam file="$(find imu_human_pkg)/config/sensors.yaml" command="load"/>
+  <node name="imu_subscriber" pkg="imu_human_pkg" type="imu_subscriber_node.py" output="screen"/>
 
   <!-- Start spine-to-wrist tf. Creates upper-body pose -->
-  <node name="spine_to_wrist_tf" type="spine_to_wrist_tf.py" pkg="arm_motion_controller_py3" />
+  <node name="spine_to_wrist_tf" pkg="imu_human_pkg" type="spine_to_wrist_tf.py" />
+
+  <group ns = "human">
+    <!-- Load human model to parameter server -->
+    <param name="human_description" command="$(find xacro)/xacro '$(find imu_human_pkg)/urdf/human/human.urdf.xacro' human_params:=$(arg human_params)"/>
+
+    <!-- Combine joint values -->
+    <node name="human_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+      <remap from="robot_description" to="human_description" />
+      <remap from="joint_states" to="human_joint_states" />
+    </node>
+
+    <!-- Show in Rviz   -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find imu_human_pkg)/config/config.rviz"/> 
+
+    <!-- Publish joint state -->
+    <!-- <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+      <remap from="joint_states" to="human_joint_states" />
+      <remap from="robot_description" to="human_description" />
+    </node> -->
 
 
 </launch>

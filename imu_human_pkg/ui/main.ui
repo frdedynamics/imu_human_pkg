@@ -219,9 +219,9 @@
     <widget class="QPushButton" name="pushButton_calibrate_human">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>10</x>
        <y>50</y>
-       <width>131</width>
+       <width>181</width>
        <height>25</height>
       </rect>
      </property>
@@ -232,9 +232,9 @@
     <widget class="QPushButton" name="pushButton_connect_robot">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>10</x>
        <y>90</y>
-       <width>131</width>
+       <width>181</width>
        <height>25</height>
       </rect>
      </property>
@@ -278,30 +278,30 @@
       </rect>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_spawn_models">
+    <widget class="QPushButton" name="pushButton_robot_move_home">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>10</x>
        <y>130</y>
-       <width>131</width>
+       <width>181</width>
        <height>25</height>
       </rect>
      </property>
      <property name="text">
-      <string>Spawn Models</string>
+      <string>Robot Move Home</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_start_controllers">
+    <widget class="QPushButton" name="pushButton_map_poses">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>10</x>
        <y>170</y>
-       <width>131</width>
+       <width>181</width>
        <height>25</height>
       </rect>
      </property>
      <property name="text">
-      <string>Start Controllers</string>
+      <string>Map Human-Robot Poses</string>
      </property>
     </widget>
    </widget>
