@@ -1,0 +1,4 @@
+[submodule "additional/ros_robotiq_urcap_control"]
+	url = https://github.com/frdedynamics/ros_robotiq_urcap_control.git
+[submodule "additional/ur5e_gizem_moveit_config"]
+	url = https://github.com/frdedynamics/ur5e_gizem_moveit_config.git
