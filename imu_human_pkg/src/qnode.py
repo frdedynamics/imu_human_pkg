@@ -46,7 +46,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_connect_robot.setDisabled(True)
         self.pushButton_connect_robot.setToolTip("Simulation: Necessary models are uploaded to parameter server.\nHuman and robot is spawn in Gazebe.\nReal robot: Real-time data exchange is set up.")
         self.pushButton_robot_move_home.setDisabled(True)
-        self.pushButton_robot_move_home.setToolTip("Human and robot models are spawn in Gazebo")
+        self.pushButton_robot_move_home.setToolTip("ONLY SIMULATION: move robot to home in Moveit")
         self.pushButton_map_poses.setDisabled(True)
         self.pushButton_map_poses.setToolTip("Human and robot initial poses are mapped")
         self.pushButton_teleoperate.setDisabled(True)
@@ -168,11 +168,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             print("Something went wrong: Robot selection")
 
-        self.pushButton_robot_move_home.setEnabled(True)
+        if self.simulated_flag:
+            self.pushButton_robot_move_home.setEnabled(True)
+        else:
+            self.pushButton_map_poses.setEnabled(True)
 
     def robot_move_home_clicked(self):
         # "TODO"
+        print("Start Moveit launch here")
+        print("Start move-node here")
         self.pushButton_map_poses.setEnabled(True)
+        sys.exit()
 
     def map_human_robot_poses_clicked(self):
         # "TODO"
