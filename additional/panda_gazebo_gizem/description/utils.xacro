@@ -8,7 +8,7 @@
   <!-- joint - Name of the panda joint to simulate                -->
   <!-- transmission - type of the transmission of the joint       -->
   <!-- ========================================================== -->
-  <xacro:macro name="gazebo-joint" params="joint transmission:=hardware_interface/EffortJointInterface">
+  <xacro:macro name="gazebo-joint" params="joint transmission:=hardware_interface/PositionJointInterface">
     <gazebo reference="${joint}">
       <!-- Needed for ODE to output external wrenches on joints -->
       <provideFeedback>true</provideFeedback>
@@ -20,7 +20,8 @@
         <hardwareInterface>${transmission}</hardwareInterface>
       </joint>
       <actuator name="${joint}_motor">
-        <hardwareInterface>${transmission}</hardwareInterface>
+        <!-- <hardwareInterface>${transmission}</hardwareInterface> -->
+        <mechanicalReduction>1</mechanicalReduction>
       </actuator>
     </transmission>
   </xacro:macro>
@@ -59,6 +60,27 @@
   <!-- ========================================================== -->
   <xacro:macro name="transmission-franka-state" params="arm_id:=panda">
     <transmission name="${arm_id}_franka_state">
+      <type>franka_hw/FrankaStateInterface</type>
+      <joint name="${arm_id}_joint1"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></joint>
+      <joint name="${arm_id}_joint2"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></joint>
+      <joint name="${arm_id}_joint3"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></joint>
+      <joint name="${arm_id}_joint4"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></joint>
+      <joint name="${arm_id}_joint5"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></joint>
+      <joint name="${arm_id}_joint6"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></joint>
+      <joint name="${arm_id}_joint7"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></joint>
+
+      <actuator name="${arm_id}_motor1"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></actuator>
+      <actuator name="${arm_id}_motor2"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></actuator>
+      <actuator name="${arm_id}_motor3"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></actuator>
+      <actuator name="${arm_id}_motor4"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></actuator>
+      <actuator name="${arm_id}_motor5"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></actuator>
+      <actuator name="${arm_id}_motor6"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></actuator>
+      <actuator name="${arm_id}_motor7"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></actuator>
+    </transmission>
+  </xacro:macro>
+
+  <xacro:macro name="transmission-gizem-state" params="arm_id:=panda">
+    <transmission name="${arm_id}_gizem_state">
       <type>franka_hw/FrankaStateInterface</type>
       <joint name="${arm_id}_joint1"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></joint>
       <joint name="${arm_id}_joint2"><hardwareInterface>franka_hw/FrankaStateInterface</hardwareInterface></joint>

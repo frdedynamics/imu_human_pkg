@@ -24,8 +24,8 @@
     <xacro:arg name="rpy" default="0 0 0" />
 
     <!-- Create a simulatable URDF -->
-    <xacro:include filename="$(find franka_description)/robots/utils.xacro" />
-    <xacro:include filename="$(find franka_description)/robots/panda_gazebo.xacro" />
+    <xacro:include filename="$(find panda_gazebo_gizem)/description/utils.xacro" />
+    <xacro:include filename="$(find panda_gazebo_gizem)/description/panda_gazebo.xacro" />
 
     <xacro:panda_arm arm_id="${arm_id}" />
 
@@ -52,17 +52,17 @@
     <xacro:gazebo-joint joint="${arm_id}_joint6" transmission="hardware_interface/EffortJointInterface" />
     <xacro:gazebo-joint joint="${arm_id}_joint7" transmission="hardware_interface/EffortJointInterface" />
 
-    <xacro:transmission-franka-state arm_id="${arm_id}" />
+    <!-- <xacro:transmission-franka-state arm_id="${arm_id}" />
     <xacro:transmission-franka-model arm_id="${arm_id}"
        root="${arm_id}_joint1"
        tip="${arm_id}_joint8"
-     />
+     /> -->
 
     <gazebo>
       <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
         <robotNamespace>${arm_id}</robotNamespace>
         <controlPeriod>0.001</controlPeriod>
-        <robotSimType>franka_gazebo/FrankaHWSim</robotSimType>
+        <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
       </plugin>
       <self_collide>true</self_collide>
     </gazebo>
