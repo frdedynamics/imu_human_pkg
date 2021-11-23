@@ -32,7 +32,7 @@
         <inertia ixx="0.00315" ixy="8.2904E-07" ixz="0.00015"
                                iyy="0.00388"    iyz="8.2299E-06"
                                                 izz="0.004285" />
-      </inertial>
+      </inertial> 
     </link>
 
     <link name="${arm_id}_link1">
