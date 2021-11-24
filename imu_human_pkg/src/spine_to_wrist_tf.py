@@ -15,7 +15,8 @@ wrist_right_pose = Pose()
 elbow_left_pose = Pose()
 elbow_right_pose = Pose()
 
-ref = 'human/spine_0'
+# ref = 'human/spine_0'
+ref = 'human_base_link'
 
 
 if __name__ == '__main__':
@@ -33,10 +34,10 @@ if __name__ == '__main__':
 
     while not rospy.is_shutdown():
         try:
-            trans_wrist_left = tfBuffer.lookup_transform(ref, 'human/left_wrist', rospy.Time())
-            trans_wrist_right = tfBuffer.lookup_transform(ref, 'human/right_wrist', rospy.Time())
-            trans_elbow_left = tfBuffer.lookup_transform(ref, 'human/left_elbow', rospy.Time())
-            trans_elbow_right = tfBuffer.lookup_transform(ref, 'human/right_elbow', rospy.Time())
+            trans_wrist_left = tfBuffer.lookup_transform(ref, 'left_forearm', rospy.Time())
+            trans_wrist_right = tfBuffer.lookup_transform(ref, 'right_forearm', rospy.Time())
+            trans_elbow_left = tfBuffer.lookup_transform(ref, 'left_upper_arm', rospy.Time())
+            trans_elbow_right = tfBuffer.lookup_transform(ref, 'right_upper_arm', rospy.Time())
 
             ## To take TF w.r.t. chest:
             # trans_wrist_left = tfBuffer.lookup_transform('human/shoulder_center', 'human/left_wrist', rospy.Time())
@@ -51,6 +52,7 @@ if __name__ == '__main__':
         wrist_left_pose.orientation = trans_wrist_left.transform.rotation
         wrist_right_pose.position = trans_wrist_right.transform.translation
         wrist_right_pose.orientation = trans_wrist_right.transform.rotation
+        print(wrist_left_pose)
         pub_left.publish(wrist_left_pose)
         pub_right.publish(wrist_right_pose)
 
