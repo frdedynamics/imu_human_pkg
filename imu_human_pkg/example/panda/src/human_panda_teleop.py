@@ -50,7 +50,7 @@ def movegroup_init():
 	rospy.init_node('moveit_move')
 	print("hands_calibrate node started")
 	arm_group = moveit_commander.MoveGroupCommander("arm")
-	arm_group.set_named_target("home")
+	arm_group.set_named_target("wristDown")
 	plan_arm = arm_group.go()  
 	# arm_group.execute(plan_arm, wait=True)  -- For some reason throws an error and no need
 
@@ -93,7 +93,7 @@ def cartesian_control_with_IMU(arm_group, robot_init, hand_pose, *argv):
 	
 	(plan, fraction) = arm_group.compute_cartesian_path(
                                    waypoints,   # waypoints to follow
-                                   0.001,        # eef_step
+                                   0.1,        # eef_step
                                    0.0)         # jump_threshold
 
 	arm_group.execute(plan, wait=True)

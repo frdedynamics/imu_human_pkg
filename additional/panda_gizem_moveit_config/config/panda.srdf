@@ -31,6 +31,15 @@
         <joint name="panda_joint6" value="1.5655"/>
         <joint name="panda_joint7" value="0"/>
     </group_state>
+    <group_state name="gazeboInitial" group="arm">
+        <joint name="panda_joint1" value="0"/>
+        <joint name="panda_joint2" value="0"/>
+        <joint name="panda_joint3" value="0"/>
+        <joint name="panda_joint4" value="-1.5707"/>
+        <joint name="panda_joint5" value="0"/>
+        <joint name="panda_joint6" value="1.5707"/>
+        <joint name="panda_joint7" value="0.7853"/>
+    </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="gripper" parent_link="panda_link8" group="arm"/>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->

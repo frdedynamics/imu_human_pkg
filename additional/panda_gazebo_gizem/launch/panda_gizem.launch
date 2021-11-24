@@ -31,6 +31,7 @@
                 -J $(arg arm_id)_joint7 0.785398163397"
        />
 
+
   <include file="$(find gazebo_ros)/launch/empty_world.launch" if="$(arg gazebo)">
     <arg name="world_name" value="$(arg world)"/>
     <arg name="paused" value="true"/>
