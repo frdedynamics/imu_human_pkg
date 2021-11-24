@@ -16,11 +16,11 @@
     <!-- <origin xyz="0 0 0" rpy="0 0 ${pi/2}" /> -->
     <origin xyz="0 0 0" rpy="0 0 0" />
     <parent link="world"/>
-    <child link="base_link"/>
+    <child link="human_base_link"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
   </joint>
 
-  <link name="base_link">
+  <link name="human_base_link">
     <visual>
     <origin rpy="0 0 0" xyz="0 0 ${thickness+l_shank+l_thigh+l_lower_trunk/2}"/>
       <geometry>

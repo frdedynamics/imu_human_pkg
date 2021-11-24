@@ -6,7 +6,7 @@
     
     <joint name="base_to_lower_trunk" type="fixed">
         <origin rpy="0 0 0" xyz="0 0 ${thickness+l_shank+l_thigh+l_lower_trunk/2}"/>
-        <parent link="base_link"/>
+        <parent link="human_base_link"/>
         <child link="lower_trunk"/>
     </joint>
 

@@ -4,7 +4,7 @@
 
     <xacro:macro name="human_upper">
 
-    <xacro:spherical name="base_to_upper_trunk" parent="base_link" child="upper_trunk" x="1" y="-1" z="1">
+    <xacro:spherical name="base_to_upper_trunk" parent="human_base_link" child="upper_trunk" x="1" y="-1" z="1">
         <origin rpy="0 0 0" xyz="0 0 ${thickness+l_shank+l_thigh+l_lower_trunk}"/>
     </xacro:spherical>
     
