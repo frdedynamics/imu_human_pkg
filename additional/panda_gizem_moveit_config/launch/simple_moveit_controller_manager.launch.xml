@@ -1,4 +1,6 @@
 <launch>
+  <arg name="execution_type" value="$(arg execution_type)" />
+  <arg name="fake_execution_type" value="$(arg fake_execution_type)" />
   <!-- Define the MoveIt controller manager plugin to use for trajectory execution -->
   <param name="moveit_controller_manager" value="moveit_simple_controller_manager/MoveItSimpleControllerManager" />
 
