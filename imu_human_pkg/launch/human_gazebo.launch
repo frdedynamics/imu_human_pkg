@@ -11,7 +11,8 @@
   <arg name="debug" default="false"/>
   
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find imu_human_pkg)/worlds/custom.world"/>
+    <!-- <arg name="world_name" value="$(find imu_human_pkg)/worlds/custom.world"/> -->
+    <arg name="world_name" value="$(find imu_human_pkg)/example/worlds/stone_world.world"/>
     <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="gui" value="$(arg gui)"/>
@@ -20,8 +21,8 @@
   </include>
 
 
-  <!-- Spawn human in Gazebo -->
-  <node name="human_spawn" pkg="gazebo_ros" type="spawn_model" ns="human" output="screen"  args="-urdf -param human_description -model human"/>
+  <!-- Spawn human in Gazebo 
+  <node name="human_spawn" pkg="gazebo_ros" type="spawn_model" ns="human" output="screen"  args="-urdf -param human_description -model human"/>-->
 
 </launch>
 
