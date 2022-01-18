@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <model name="red_plate">
+  <model name="gray_stone">
     <static>true</static>
     <link name="link">
       <collision name="body_collision">
         <geometry>
           <box>
-            <size>0.3 0.15 0.02</size>
+            <size>0.07 0.07 0.15</size>
           </box>
         </geometry>
       </collision>
@@ -14,15 +14,9 @@
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <box>
-            <size>0.3 0.15 0.02</size>
+            <size>0.07 0.07 0.15</size>
           </box>
         </geometry>
-        <material> <!-- stone material -->
-          <ambient>1 0 0 1</ambient>
-          <diffuse>1 0 0 1</diffuse>
-          <specular>0 0 0 0</specular>
-          <emissive>0 0 0 1</emissive>
-        </material> <!-- End wheel material -->
       </visual>
     </link>
   </model>

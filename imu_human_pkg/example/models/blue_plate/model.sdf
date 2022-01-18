@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <model name="red_plate">
+  <model name="blue_plate">
     <static>true</static>
     <link name="link">
       <collision name="body_collision">
@@ -18,8 +18,8 @@
           </box>
         </geometry>
         <material> <!-- stone material -->
-          <ambient>1 0 0 1</ambient>
-          <diffuse>1 0 0 1</diffuse>
+          <ambient>0 0 1 1</ambient>
+          <diffuse>0 0 1 1</diffuse>
           <specular>0 0 0 0</specular>
           <emissive>0 0 0 1</emissive>
         </material> <!-- End wheel material -->
