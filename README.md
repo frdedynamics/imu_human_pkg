@@ -101,7 +101,7 @@ Then start ROS Master with `roscore` and start the GUI with `rosrun imu_human_pk
 - Create a human model and calibrate in N-pose: `roslaunch imu_human_pkg human.launch`
 - Start human controllers: `roslaunch imu_human_pkg human_controller.launch`
 - Connect to the real robot or start gazebo simulation (PS: files rename in progress): `real_ur5e.launch`, `gazebo_ur5e.launch`, `real_panda.launch`(In progress), `gazebo_panda.launch` and wait until the robot is at initial pose. Or you can just start human in the Gazebo environment: `roslaunch imu_human_pkg human_gazebo.launch`
-- Move human to initial pose and map robot-human initial poses: `rosrun imu_human_pkg wrist_to_robot_2arms.py`
+- Move human to initial pose and map robot-human initial poses: `rosrun imu_human_pkg wrist_to_robot_2arms.py`(soon to be deprecated, you may want to use `hands_calibrate.py` instead)
 - Start TO or HRC: `to_ur5e.py`, `hrc_ur5e.py`, `to_panda.py`
 
 ### Dependencies
