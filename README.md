@@ -92,6 +92,8 @@ Some necessary dependencies are already installed with `rosdep install imu_human
 
 
 ## Useful open-source links
+- To connect a new robot and control it on RViz with MoveIT (examples on Panda): [Official Moveit tutorials might be useful](https://ros-planning.github.io/moveit_tutorials/)
+- To connect MoveIT and Gazebo simulated robot (example on UR5): [Tutorial and video answer from TheConstructsim](https://www.theconstructsim.com/control-gazebo-simulated-robot-moveit-video-answer/)
 
 ## Useful publications
 
