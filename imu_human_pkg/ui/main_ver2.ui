@@ -210,7 +210,7 @@
       <x>70</x>
       <y>320</y>
       <width>641</width>
-      <height>221</height>
+      <height>211</height>
      </rect>
     </property>
     <property name="title">
@@ -220,7 +220,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>30</y>
+       <y>50</y>
        <width>181</width>
        <height>25</height>
       </rect>
@@ -229,131 +229,79 @@
       <string>Calibrate Human</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_human_robot_init">
+    <widget class="QPushButton" name="pushButton_connect_robot">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>70</y>
+       <y>90</y>
        <width>181</width>
        <height>25</height>
       </rect>
      </property>
      <property name="text">
-      <string>Human-Robot Initiate</string>
+      <string>Connect to Robot</string>
      </property>
     </widget>
-    <widget class="QTextEdit" name="textEdit_status">
+    <widget class="QPushButton" name="pushButton_teleoperate">
      <property name="geometry">
       <rect>
-       <x>220</x>
-       <y>60</y>
-       <width>401</width>
-       <height>111</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_human_active">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>110</y>
-       <width>181</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Human Activate</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_robot_active">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>150</y>
-       <width>181</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Robot Activate</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_debug">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>180</y>
-       <width>67</width>
+       <x>260</x>
+       <y>50</y>
+       <width>131</width>
        <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Debug:</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_emg_reset">
-     <property name="geometry">
-      <rect>
-       <x>220</x>
-       <y>180</y>
-       <width>89</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>EMG Reset</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_stop">
-     <property name="geometry">
-      <rect>
-       <x>360</x>
-       <y>180</y>
-       <width>89</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>STOP</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_kill_all">
-     <property name="geometry">
-      <rect>
-       <x>510</x>
-       <y>180</y>
-       <width>89</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Kill all</string>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="radioButton_teleop">
-     <property name="geometry">
-      <rect>
-       <x>250</x>
-       <y>30</y>
-       <width>112</width>
-       <height>23</height>
       </rect>
      </property>
      <property name="text">
       <string>Teleoperate</string>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton_colift">
+    <widget class="QPushButton" name="pushButton_colift">
      <property name="geometry">
       <rect>
-       <x>440</x>
-       <y>30</y>
-       <width>112</width>
-       <height>23</height>
+       <x>450</x>
+       <y>50</y>
+       <width>131</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
       <string>Colift</string>
+     </property>
+    </widget>
+    <widget class="QTextEdit" name="textEdit_status">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>90</y>
+       <width>401</width>
+       <height>101</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_robot_move_home">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>130</y>
+       <width>181</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Robot Move Home</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_map_poses">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>170</y>
+       <width>181</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Map Human-Robot Poses</string>
      </property>
     </widget>
    </widget>

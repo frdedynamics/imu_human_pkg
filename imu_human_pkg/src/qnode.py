@@ -37,22 +37,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.l_hand.setText("0.203")
 
         self.radioButton_simulation.setChecked(True)
-        self.comboBox_robot_name.addItems(['Panda', 'UR5e', 'KUKA iiwa'])
+        self.comboBox_robot_name.addItems(['Panda', 'UR5e'])
         self.lineEdit_robot_ip.setDisabled(True)  
         self.simulated_flag = True
         self.emg_flag = False
 
         self.pushButton_calibrate_human.setToolTip("Set the human in N-pose\nCalibration will be completed\nin 3 seconds.")
-        self.pushButton_connect_robot.setDisabled(True)
-        self.pushButton_connect_robot.setToolTip("Simulation: Necessary models are uploaded to parameter server.\nHuman and robot is spawn in Gazebe.\nReal robot: Real-time data exchange is set up.")
+        self.pushButton_human_robot_init.setDisabled(True)
+        self.pushButton_human_robot_init.setToolTip("Simulation: Necessary models are uploaded to parameter server.\nHuman and robot is spawn in Gazebe.\nReal robot: Real-time data exchange is set up.")
         self.pushButton_robot_move_home.setDisabled(True)
         self.pushButton_robot_move_home.setToolTip("ONLY SIMULATION: move robot to home in Moveit")
         self.pushButton_map_poses.setDisabled(True)
         self.pushButton_map_poses.setToolTip("Human and robot initial poses are mapped")
-        self.pushButton_teleoperate.setDisabled(True)
-        self.pushButton_teleoperate.setToolTip("Left hand orientation is mapped robot wrist joints\nRight hand respective position is mapped end-effector position")
-        self.pushButton_colift.setDisabled(True)
-        self.pushButton_colift.setToolTip("HRC process starts: IDLE-APPROACH-COLIFT-RELEASE")
+        # self.pushButton_teleoperate.setDisabled(True)
+        # self.pushButton_teleoperate.setToolTip("Left hand orientation is mapped robot wrist joints\nRight hand respective position is mapped end-effector position")
+        # self.pushButton_colift.setDisabled(True)
+        # self.pushButton_colift.setToolTip("HRC process starts: IDLE-APPROACH-COLIFT-RELEASE")
 
         self.radioButton_real_robot.clicked.connect(self.real_robot_selected)
         self.radioButton_simulation.clicked.connect(self.simulation_selected)
@@ -60,8 +60,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_connect_robot.clicked.connect(self.connect_robot_clicked)
         self.pushButton_robot_move_home.clicked.connect(self.robot_move_home_clicked)
         self.pushButton_map_poses.clicked.connect(self.map_human_robot_poses_clicked)
-        self.pushButton_teleoperate.clicked.connect(self.teleoperate_clicked)
-        self.pushButton_colift.clicked.connect(self.colift_clicked)
+        # self.pushButton_teleoperate.clicked.connect(self.teleoperate_clicked)
+        # self.pushButton_colift.clicked.connect(self.colift_clicked)
 
         self.actionCustom_Sensor_Topics.triggered.connect(self.open_sensors_dialog)
         self.actionStart_Xsens.triggered.connect(self.start_xsens)

@@ -22,7 +22,7 @@
 
 
   <!-- Spawn human in Gazebo -->
-  <node name="human_spawn" pkg="gazebo_ros" type="spawn_model" ns="human" output="screen"  args="-urdf -param human_description -model human -y 2 -Y -1.57085"/>
+  <node name="human_spawn" pkg="gazebo_ros" type="spawn_model" ns="human" output="screen"  args="-urdf -param human_description -model human -y 2.5 -Y -1.57085"/>
 
 </launch>
 
