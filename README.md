@@ -1,25 +1,25 @@
 # IMU_HUMAN_PKG
 
-This package aims to exploit human movements reliably to be used in HRC (Human-Robot Collaboration) applications. Tracking and estimating human motions, human modelling, human-robot simulations and real-time real world human-robot applications are main subjects.
+This package aims to exploit human movements reliably to be used in HRC (Human-Robot Collaboration) applications. Tracking and estimating human motions, human modelling, human-robot simulations and real-time real-world human-robot applications are the main subjects.
 
-NOTE: The package is still under development. For any issues please contact the author (gizem.ates@hvl.no) or open an issue. Please welcome to contribute to fix any bugs.
+NOTE: The package is still under development. For any issues please contact the author (gizem.ates@hvl.no) or open an issue. Please welcome to contribute to fixing any bugs.
 
 
 ## Motivation
 
-Human body has a lot of information hidden in movements. Just imagine how much you can achive with your mouse, 3 buttons and 2 directional information. Now think about how many gestures, postures and a sequence of these may broaden the possibility of using the human body as a commander (even better, as a collaborative friend to a robot in a harmony of the robot movements as well). The main challenge is to capture and analyse human body motion reliably.
+The human body has a lot of information hidden in movements. Just imagine how much you can achieve with your mouse, 3 buttons and 2 directional information. Now think about how many gestures, postures and a sequence of these may broaden the possibility of using the human body as a commander (even better, as a collaborative friend to a robot in a harmony of the robot movements as well). The main challenge is to capture and analyse human body motion reliably.
 
-Imagine that you are carrying a table with a friend. For some odd reason neither you or your friend can talk to each other. You don't know which table to carry, or you may even don't know where to place it either. The only thing then to use is the *body language*. You can show which table to be carried, you can push and pull during carrying to direct your friend, you can lift or drop the table from one side and the person on the other side would understand when to pick and when to place.  In this example, we talked as if only one person is *leading* the other one is *following* but let me give an even more edgy example. One of you might know which table to carry (since s/he knows the environment) and the other one might know where to place (since s/he knows the task). In such a scenario, you need to change *role*s smoothly. Remember! You are still not allowed to talk.
+Imagine that you are carrying a table with a friend. For some odd reason, neither you nor your friend can talk to each other. You don't know which table to carry, or you may even don't know where to place it either. The only thing to use is the *body language*. You can show which table to be carried, you can push and pull during carrying to direct your friend, you can lift or drop the table from one side and the person on the other side would understand when to pick and when to place.  In this example, we talked as if only one person is *leading* the other one is *following* but let me give an even more edgy example. One of you might know which table to carry (since s/he knows the environment) and the other one might know where to place (since s/he knows the task). In such a scenario, you need to change *role*s smoothly. Remember! You are still not allowed to talk.
 
-Now, replace the scenarios above with a robot and human couple instead of a pair of human couple. Would it change? What to do nothing to be change from the human side? If the robot would *understand* the human friend's movements *as if it was a human* then nothing would have changed on the human side.
+Now, replace the scenarios above with a robot and human couple instead of a pair of the human couple. Would it change? What to do nothing to be changed from the human side? If the robot would *understand* the human friend's movements *as if it was a human* then nothing would have changed on the human side.
 
-Exactly in this point this research comes to the table. Using human body measurements during motion, process them properly and send them to the robot in its language and on top, to achieve it safely/accurately/precisely to be used in real industrial HRC applications, then mission is well accomplished!
+Exactly at this point, this research comes to the table. Using human body measurements during motion, process them properly and send them to the robot in its language and on top, to achieve it safely/accurately/precisely to be used in real industrial HRC applications, then mission is well accomplished!
 
 
 ### Why not cameras?
-In this package only IMU (Inertial Measurement Systems) are used. One may wonder "as a human, I am using my eyes at most. Wouldn't be more natural to use cameras instead? After all, vision systems rocks these days". Well, yes and no.
+In this package, only IMUs (Inertial Measurement Systems) are used. One may wonder "as a human, I am using my eyes at most. Wouldn't be more natural to use cameras instead? After all, vision systems rocks these days". Well, yes and no.
 
-In HMA (human motion analysis), there are two main categories using visual-based and non-visual-based motion tracking systems(*). Visual-based systems are those which takes RGB and/or depth information of the human body by directly seeing it. Non-visual-based tracking systems do not need to see the human but by simply wearing or attaching the sensory system allow the motion data to be captured and sent to a station or a PC with a wire or wirelessly. In an ideal environment visual based systems perform outstanding. The human motion capture capability can reach up to 60 fps with a regular camera, over 1000 fps with a slow-mo camera, over 100 Hz with a laser scanner. With a Vicon system using 6 cameras and several markers attached on the body, you can get even sub-millimeter accuracy from your motion capture system. However, how much you need to invest on it? How effectively you can use your system in varous conditions. In a perfectly stable lighting conditions, you may get a perfect tracking system but what if some shadows occurs every now and then? Or worse, what happens there is an occlusion on the camera or an obstacle in between your camera and yourself? All these issues can be overcome by using IMUs from non-visual-based motion tracking systems family. Nonetheless, they have some issues still especially when it comes to process acceleration/velocity level data to get position level.
+In HMA (human motion analysis), there are two main categories using visual-based and non-visual-based motion tracking systems(*). Visual-based systems are those which takes RGB and/or depth information of the human body by directly seeing it. Non-visual-based tracking systems do not need to see the human but simply wearing or attaching the sensory system allow the motion data to be captured and sent to a station or a PC with a wire or wirelessly. In an ideal environment, visual-based systems perform outstandingly. The human motion capture capability can reach up to 60 fps with a regular camera, over 1000 fps with a slow-mo camera, over 100 Hz with a laser scanner. With a Vicon system using 6 cameras and several markers attached to the body, you can get even sub-millimetre accuracy from your motion capture system. However, how much do you need to invest in it? How effectively you can use your system in various conditions. In perfectly stable lighting conditions, you may get a perfect tracking system but what if some shadows occur every now and then? Or worse, what happens there is an occlusion on the camera or an obstacle in between your camera and yourself? All these issues can be overcome by using IMUs from the non-visual-based motion tracking systems family. Nonetheless, they have some issues still especially when it comes to processing acceleration/velocity level data to get position level.
 
 
 
@@ -28,7 +28,7 @@ In HMA (human motion analysis), there are two main categories using visual-based
 ### Isn't it already there?
 This is also yes and no.
 
-We encounter some impressive public videos of robots are moving with humans, human motions are used in animation movies over a decade, robots are dancing etc. There are some systems which solves some problems but not all. If you dig enough t, you may find that the fancy videos we see are mostly the best snap of the system over several trials. It can even seem fancier than actually what is underlying. Therefore in 2021 we haven't surrounded robotic friends around us yet. It requires lots of research still. If you search in the academic literature, you can find many publications addressing these issues.
+We encounter some impressive public videos of robots are moving with humans, human motions being used in animation movies for over a decade, robots are dancing etc. Some systems solve some problems but not all. If you dig enough t, you may find that the fancy videos we see are mostly the best snap of the system over several trials. It can even seem fancier than actually what is underlying. Therefore in 2021, we haven't surrounded robotic friends yet. It requires lots of research still. If you search in the academic literature, you can find many publications addressing these issues.
 
 I tried to make a collection of open-source codes and academic publications (some papers require subscription for full access) related to this study. The lists are constantly being updated.
 
@@ -65,7 +65,7 @@ The package contains several folders and the descriptions are given there:
 
 53 directories, 216 files
 
-- /additional: ready to use packages and scripts for Panda and UR5e in Gazebo and Moveit control, EMG sensor, Robotiq gripper real world control, etc.
+- /additional: ready to use packages and scripts for Panda and UR5e in Gazebo and Moveit control, EMG sensor, Robotiq gripper real-world control, etc.
 - /imu_human_pkg/action: custom ROS action/service,
 - /imu_human_pkg/config: configuration files such as sensor names, 
 - /imu_human_pkg/example: necessary scripts for example usages
@@ -98,10 +98,10 @@ Then start ROS Master with `roscore` and start the GUI with `rosrun imu_human_pk
 ### Run via terminal
 - Start ROS master: `roscore`
 - Start IMU publisher: (for my case I use Xsens Awinda) `rosrun awindamonitor awindamonitor`
-- Create human model and calibrate in N-pose: `roslaunch imu_human_pkg human.launch`
+- Create a human model and calibrate in N-pose: `roslaunch imu_human_pkg human.launch`
 - Start human controllers: `roslaunch imu_human_pkg human_controller.launch`
 - Connect to the real robot or start gazebo simulation (PS: files rename in progress): `real_ur5e.launch`, `gazebo_ur5e.launch`, `real_panda.launch`(In progress), `gazebo_panda.launch` and wait until the robot is at initial pose. Or you can just start human in the Gazebo environment: `roslaunch imu_human_pkg human_gazebo.launch`
-- Move human to initial pose and map robot-human inital poses: `rosrun imu_human_pkg wrist_to_robot_2arms.py`
+- Move human to initial pose and map robot-human initial poses: `rosrun imu_human_pkg wrist_to_robot_2arms.py`
 - Start TO or HRC: `to_ur5e.py`, `hrc_ur5e.py`, `to_panda.py`
 
 ### Dependencies
@@ -111,7 +111,7 @@ Some necessary dependencies are already installed with `rosdep install imu_human
 - [If you want to control ROS-i supported simulated robot models in Gazebo](https://moveit.ros.org/robots/)
   - For example (in the paper referred): [Franka Emika Panda in Gazebo controlled by Moveit](https://github.com/frankaemika/franka_ros)
 
-**Note:** The necessary packages are included in "additional" folder. If there is any conflictions, you can remove the whole folder and manually download them. I just try to make everything so plug-and-play for the first version of the package. The packages in that folder are mainly developed my some other precious developers but partly changed by me to include additional features or fit into the `imu_human_pkg` without any additional settings.
+**Note:** The necessary packages are included in the "additional" folder. If there are any conflicts, you can remove the whole folder and manually download them. I just try to make everything so plug-and-play for the first version of the package. The packages in that folder are mainly developed by some other precious developers but partly changed by me to include additional features or fit into the `imu_human_pkg` without any additional settings.
 
 
 ## Useful open-source links
