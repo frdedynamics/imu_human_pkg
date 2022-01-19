@@ -90,8 +90,19 @@ The package contains several folders and the descriptions are given there:
 Then start ROS Master with `roscore` and start the GUI with `rosrun imu_human_pkg main_ui.py`.
 
 ## Run
+
+### Run via GUI
 - Change directory to where the main scrip is: `roscd imu_human_pkg/src`
 - Start the script: `./qnode.py` or `python3 qnode.py`
+
+### Run via terminal
+- Start ROS master: `roscore`
+- Start IMU publisher: (for my case I use Xsens Awinda) `rosrun awindamonitor awindamonitor`
+- Create human model and calibrate in N-pose: `roslaunch imu_human_pkg human.launch`
+- Start human controllers: `roslaunch imu_human_pkg human_controller.launch`
+- Connect to the real robot or start gazebo simulation (PS: files rename in progress): `real_ur5e.launch`, `gazebo_ur5e.launch`, `real_panda.launch`(In progress), `gazebo_panda.launch` and wait until the robot is at initial pose. Or you can just start human in the Gazebo environment: `roslaunch imu_human_pkg human_gazebo.launch`
+- Move human to initial pose and map robot-human inital poses: `rosrun imu_human_pkg wrist_to_robot_2arms.py`
+- Start TO or HRC: `to_ur5e.py`, `hrc_ur5e.py`, `to_panda.py`
 
 ### Dependencies
 Some necessary dependencies are already installed with `rosdep install imu_human_pkg` command. In addition to those, you need to have 
