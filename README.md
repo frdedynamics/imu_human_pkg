@@ -37,33 +37,45 @@ I tried to make a collection of open-source codes and academic publications (som
 The package contains several folders and the descriptions are given there:
 
 
--- TODO:
+-- Updated: 19 January 2022:
 
 ```bash
 .
-├── action
-│   └── handCalibration.action
-├── CMakeLists.txt
-├── example
-├── launch
+├── additional
+│   ├── panda_gazebo_gizem
+│   ├── panda_gizem_moveit_config
+│   ├── ros_robotiq_urcap_control
+│   └── ur5e_gizem_moveit_config
+├── imu_human_pkg
+│   ├── action
+│   ├── config
+│   ├── example
+│   ├── launch
+│   ├── log
+│   │   ├── Data
+│   │   └── data_logger_node.py
+│   ├── src
+│   ├── ui
+│   ├── urdf
+│   └── worlds
 ├── LICENSE.md
-├── log
-├── package.xml
 ├── README.md
-├── src
-├── ui
-└── urdf
 
 ```
 
-7 directories, 5 files
+53 directories, 216 files
 
-- /action: custom ROS action/service.
-- /src: ROS nodes
-- /launch: ROS launch
-- /ui: PyQt5 based graphical user interface scripts
-- /log: some recorded data
-- /config: configuration files such as sensor names, 
+- /additional: ready to use packages and scripts for Panda and UR5e in Gazebo and Moveit control, EMG sensor, Robotiq gripper real world control, etc.
+- /imu_human_pkg/action: custom ROS action/service,
+- /imu_human_pkg/config: configuration files such as sensor names, 
+- /imu_human_pkg/example: necessary scripts for example usages
+- /imu_human_pkg/src: ROS core nodes,
+- /imu_human_pkg/launch: ROS core launch,
+- /imu_human_pkg/log: some recorded data,
+- /imu_human_pkg/src: ROS core nodes,
+- /imu_human_pkg/ui: PyQt5 based graphical user interface scripts,
+- /imu_human_pkg/urdf: human and some other necessary custom models
+- /imu_human_pkg/worlds: custom worlds for Gazebo
 
 
 ## Setup
