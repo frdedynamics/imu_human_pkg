@@ -175,6 +175,7 @@ def q_multiply(q, p):
         q_multiplied.x = q.w*p.x + q.x*p.w + q.y*p.z - q.z*p.y
         q_multiplied.y = q.w*p.y + q.y*p.w - q.x*p.z + q.z*p.x
         q_multiplied.z = q.w*p.z + q.z*p.w + q.x*p.y - q.y*p.x
+        # print(q_magnitude(q_multiplied))
         return q_multiplied
     elif type(q) == np.ndarray:
         # print("type: np.array()")
@@ -238,8 +239,15 @@ def list_to_pose(l):
 
 def q_magnitude(q):
     # q_mag = sqrt((q.w**2 + q.x**2 + q.y**2 + q.z**2))
-    q_mag = sqrt((q[0]**2 + q[1]**2 + q[2]**2 + q[3]**2))
-    return q_mag
+    if type(q) == Quaternion:
+        q_mag = sqrt((q.x**2 + q.y**2 + q.z**2 + q.w**2))
+        return q_mag
+    elif type(q) == np.ndarray:
+        q_mag = sqrt((q[0]**2 + q[1]**2 + q[2]**2 + q[3]**2))
+        return q_mag
+    else:
+        print("unknown dtype")
+        return q
 
 
 def v_magnitude(v):

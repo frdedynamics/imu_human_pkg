@@ -1,8 +1,8 @@
 #! /usr/bin/env python3
 
 """
-(WILL BE DEPRECIATED)
-Subscribes two hand poses and drives the real UR5e robot in real-time.
+Robot Commander
+Subscribes human commands, starts UR-RDTE and drives the real UR5e robot in real-time.
 """
 from os import stat
 import sys, time
@@ -32,10 +32,8 @@ import rtde_receive
 
 
 class RobotCommander:
-	def __init__(self, rate=100, start_node=False, sr=1.5, sl=1.0, so=2.0):
-		"""Initializes the robot commander
-			@params s: motion hand - steering hand scale
-			@params k: target hand pose - robot pose scale"""
+	def __init__(self, rate=100, start_node=False):
+		"""Initializes the robot commander"""
 
 
 		self.rtde_c = RTDEControl("172.31.1.144", RTDEControl.FLAG_USE_EXT_UR_CAP)
@@ -70,30 +68,6 @@ class RobotCommander:
 
 		# print("============ Arm current pose: ", self.rtde_r.getActualTCPPose())
 		self.target_pose = Pose()
-		self.left_hand_pose = Pose()
-		self.hand_grip_strength = Int16()
-		self.right_hand_pose = Pose()
-		self.robot_pose = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-
-		self.elbow_left_height = 0.0
-		self.elbow_right_height = 0.0
-
-		self.hand_init_orientation = Quaternion()
-		self.human_to_robot_init_orientation = Quaternion(0.0, 0.0, 0.707, 0.707)
-		self.sr = sr # WS scaling right hand
-		self.sl = sl # WS scaling left hand 
-		self.so = so # Orientation scaling of left wrist to robot wrist
-
-		self.state = "IDLE"
-		self.role = "HUMAN_LEADING"  # or "ROBOT_LEADING"
-		self.hrc_status = String()
-		self.status = 'TO/idle'
-
-		self.colift_dir = 'up'
-		self.colift_flag = 0
-		self.hrc_hand_calib_flag = False
-		self.hrc_colift_calib_flag = False
-		self.wrist_calib_flag = False
 		self.tcp_ori = Vector3()
 		self.tcp_ori_init = Vector3()
 
@@ -102,46 +76,15 @@ class RobotCommander:
 
 	def init_subscribers_and_publishers(self):
 		self.sub_hand_grip_strength = rospy.Subscriber('/robotiq_grip_gap', Int16, self.cb_hand_grip_strength)
-		self.sub_left_hand_pose = rospy.Subscriber('/left_hand_pose', Pose, self.cb_left_hand_pose)
-		self.sub_right_hand_pose = rospy.Subscriber('/right_hand_pose', Pose, self.cb_right_hand_pose)
-		self.sub_human_ori = rospy.Subscriber('/human_ori', Quaternion, self.cb_human_ori)
-		self.sub_sensor_lw = rospy.Subscriber('/sensor_l_wrist_rpy', Vector3, self.cb_sensor_lw)
-		self.sub_elbow_left = rospy.Subscriber('/elbow_left', Pose, self.cb_elbow_left)
-		self.sub_elbow_right= rospy.Subscriber('/elbow_right', Pose, self.cb_elbow_right)
+		self.sub_hrc_status = rospy.Subscriber('/hrc_status', String, self.cb_hrc_status)
+		self.sub_colift_dir = rospy.Subscriber('/colift_dir', String, self.cb_colift_dir)
+		self.sub_hands_cmd = rospy.Subscriber('/hand_output', Pose, self.cb_hands_cmd)
 
 		self.pub_grip_cmd = rospy.Publisher('/cmd_grip_bool', Bool, queue_size=1)
 		self.pub_tcp_current = rospy.Publisher('/tcp_current', Float32MultiArray, queue_size=1)
-		self.pub_hrc_status = rospy.Publisher('/hrc_status', String, queue_size=1)
-
-
 
 
 	####### Callback methods #######
-
-	def cb_elbow_left(self, msg):
-		self.elbow_left_height = msg.position.z
-
-		
-	def cb_elbow_right(self, msg):
-		self.elbow_right_height = msg.position.z
-
-
-	def cb_sensor_lw(self, msg):
-		""" Subscribes the pure IMU RPY topic to control robot TCP orientation"""
-		if not self.wrist_calib_flag:
-			self.tcp_ori_init.x = msg.x
-			self.tcp_ori_init.y = msg.y
-			self.tcp_ori_init.z = msg.z
-			self.wrist_calib_flag = True
-		self.tcp_ori.x = d2r(msg.x-self.tcp_ori_init.x)
-		self.tcp_ori.z = d2r(msg.y-self.tcp_ori_init.y)
-		self.tcp_ori.y = d2r(msg.z-self.tcp_ori_init.z)  ## This didn't give good results
-
-
-	def cb_human_ori(self, msg):
-		""" Subscribes chest IMU orientation to map human w.r.t the world frame """
-		self.human_to_robot_init_orientation = kinematic.q_multiply(Quaternion(0.0, 0.0, 0.707, 0.707), msg)
-
 
 	def cb_hand_grip_strength(self, msg):
 		""" Subscribes hand grip strength

@@ -1,8 +1,8 @@
 #! /usr/bin/env python3
 
 """
-(WILL BE DEPRECIATED)
-Subscribes two hand poses and drives the real UR5e robot in real-time.
+Human Commander
+Subscribes two hand poses and sends robot pose command.
 """
 from os import stat
 import sys, time
@@ -27,46 +27,17 @@ from tf.transformations import quaternion_about_axis
 
 from . import Kinematics_with_Quaternions as kinematic
 
-from rtde_control import RTDEControlInterface as RTDEControl
-import rtde_receive
 
-
-class RobotCommander:
+class HumanCommander:
 	def __init__(self, rate=100, start_node=False, sr=1.5, sl=1.0, so=2.0):
-		"""Initializes the robot commander
+		"""Initializes the human commander
 			@params s: motion hand - steering hand scale
 			@params k: target hand pose - robot pose scale"""
 
-
-		self.rtde_c = RTDEControl("172.31.1.144", RTDEControl.FLAG_USE_EXT_UR_CAP)
-		self.rtde_r = rtde_receive.RTDEReceiveInterface("172.31.1.144")
-		# self.rtde_c.moveJ(self.home_teleop_joints)
-
-		self.robot_current_TCP = Float32MultiArray()
-		self.home_teleop_approach_joints = [d2r(-157.76), d2r(-82.74), d2r(84.07), 0.0, d2r(36.73), d2r(275.52)]
-		self.home_teleop_joints = [d2r(-81.93), d2r(-47.26), d2r(63.47), d2r(253.82), d2r(-90), d2r(101)]
-		self.home_teleop = [-0.239, 0.738, 0.130, 2.164, -2.279, 0.0]
-		# self.home_teleop = self.rtde_c.getForwardKinematics(self.home_teleop_joints)
-		self.hrc_appr = [-0.247, 0.486, 0.130, 2.222, -2.184, 0.0]
-		self.hrc_appr2_joints = [d2r(-50), d2r(-39.28), d2r(81.15), d2r(-44.89), d2r(133.05), d2r(90)]
-		# self.hrc_appr2 = [-0.491, 0.628, 0.079, 2.443, 2.288, 2.512]
-		self.home_hrc_joints = [d2r(-74), d2r(-54.50), d2r(114.17), d2r(-62.04), d2r(109.24), d2r(90)]
-		self.home_hrc= [-0.239, 0.628, 0.079, 2.443, 2.288, 2.512]
-		# self.home_hrc= self.rtde_c.getForwardKinematics(self.home_hrc_joints)
-		self.release_before = [0.610, 0.661, 0.308, 2.389, 1.842, 2.613]
-		self.release = [0.610, 0.661, 0.099, 2.388, 1.842, 2.613]
-		self.release_after = [0.610, 0.547, 0.099, 2.353, 1.855, 2.614]
-		self.robot_colift_init = []
-
 		if start_node == True:
-			rospy.init_node("robot_move_with_ur_rtde")
+			rospy.init_node("human_commander")
 			self.r = rospy.Rate(rate)
-			print("robot_move_with_ur_rtde Node Created")
-
-
-		# TODO: Fill missing prefedined poses
-		# self.robot_init = self.rtde_r.getActualTCPPose()
-		self.robot_current_TCP = Float32MultiArray()
+			print("Human Commander Node Created")
 
 		# print("============ Arm current pose: ", self.rtde_r.getActualTCPPose())
 		self.target_pose = Pose()
@@ -94,8 +65,6 @@ class RobotCommander:
 		self.hrc_hand_calib_flag = False
 		self.hrc_colift_calib_flag = False
 		self.wrist_calib_flag = False
-		self.tcp_ori = Vector3()
-		self.tcp_ori_init = Vector3()
 
 		self.do_flag = 0
                
@@ -109,9 +78,9 @@ class RobotCommander:
 		self.sub_elbow_left = rospy.Subscriber('/elbow_left', Pose, self.cb_elbow_left)
 		self.sub_elbow_right= rospy.Subscriber('/elbow_right', Pose, self.cb_elbow_right)
 
-		self.pub_grip_cmd = rospy.Publisher('/cmd_grip_bool', Bool, queue_size=1)
-		self.pub_tcp_current = rospy.Publisher('/tcp_current', Float32MultiArray, queue_size=1)
 		self.pub_hrc_status = rospy.Publisher('/hrc_status', String, queue_size=1)
+		self.pub_colift_dir = rospy.Publisher('/colift_dir', String, queue_size=1)
+		self.pub_hands_cmd = rospy.Publisher('/hand_output', String, queue_size=1)
 
 
 
