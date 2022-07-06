@@ -54,7 +54,7 @@ def main():
     rate = rospy.Rate(100)
 
 
-    force_thread = ForceThread(rtde_r=rtde_r, mode=dir_str.data)
+    force_thread = ForceThread(rtde_r=rtde_r, rtde_c=rtde_c, mode=dir_str.data)
     force_thread.join() # this blocks until the process terminates
     
     # time.sleep(2)
@@ -64,9 +64,10 @@ def main():
         while not rospy.is_shutdown():
             if dir_change_flag:
                 print("flag true")
+                rtde_c.forceModeStop()
                 if force_thread.is_alive():
                     Exception("ForceThread still alive")
-                force_thread = ForceThread(rtde_r=rtde_r, mode=dir_str.data)
+                force_thread = ForceThread(rtde_r=rtde_r, rtde_c=rtde_c, mode=dir_str.data)
                 force_thread.join()
                 dir_change_flag = False
                 prev = time.time()
