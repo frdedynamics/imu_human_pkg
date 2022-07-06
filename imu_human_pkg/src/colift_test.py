@@ -8,6 +8,7 @@ import rospy
 from std_msgs.msg import Int64, String
 import subprocess, time
 from multiprocessing import Process, Queue
+import threading
 
 from rtde_control import RTDEControlInterface as RTDEControl
 import rtde_receive
@@ -18,7 +19,7 @@ rtde_r = rtde_receive.RTDEReceiveInterface("172.31.1.144")
 test_count = Int64()
 dir_str = String()
 prev_dir_str = String()
-dir_str.data = 's'
+dir_str.data = 'l'
 prev_dir_str.data = 's'
 dir_change_flag = False
 
@@ -50,14 +51,15 @@ def my_function2(q, f, mode):
 
     if mode =='l':
         wrench = [f, 0.0, 0.0, 0.0, 0.0, 0.0]
-        # rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
+        rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
     elif mode =='r':
         wrench = [-f, 0.0, 0.0, 0.0, 0.0, 0.0]
-        # rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
+        rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
     else:
-        wrench = [-f, 0.0, 0.0, 0.0, 0.0, 0.0]
-        # rtde_c.forceModeStop()
+        wrench = [0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        rtde_c.forceModeStop()
 
+    print("thread here!")
     _curr_force = rtde_r.getActualTCPForce()
     q.put(_curr_force)
     # return _curr_force
@@ -73,14 +75,15 @@ if __name__ == '__main__':
     # Start process once
     queue = Queue()
     prev = time.time()
-    force_proc = Process(target=my_function2, args=(queue, 15, 'l')) # force = 15
+    # force_proc = Process(target=my_function2, args=(queue, 15, dir_str.data)) # force = 15
+    force_thread = threading.Thread(target=my_function2, args=(queue, 15, dir_str.data), daemon=True).start()
     print("process", time.time()-prev)
     prev = time.time()
-    force_proc.daemon = True
-    force_proc.start()
+    # force_proc.daemon = True
+    # force_proc.start()
     print("start", time.time()-prev)
     prev = time.time()
-    force_proc.join() # this blocks until the process terminates
+    # force_thread.join() # this blocks until the process terminates
     print("join", time.time()-prev)
     prev = time.time()
     result = queue.get()
@@ -99,30 +102,16 @@ if __name__ == '__main__':
                 try:
                     # dir_change_flag = False
                     print("killing")
-                    print(Queue.empty())
-                    force_proc.kill()
+                    print(queue.empty())
+                    # force_proc.kill()
                 except AttributeError as e:
                     print("no force process found")
                 prev = time.time()
-                queue = Queue()
-                force_proc = Process(target=my_function2, args=(queue, 15, 'l')) # force = 15
-                print("process", time.time()-prev)
-                prev = time.time()
-                force_proc.daemon = True
-                force_proc.start()
-                print("start", time.time()-prev)
-                prev = time.time()
-                force_proc.join() # this blocks until the process terminates
-                print("join", time.time()-prev)
-                prev = time.time()
-                result = queue.get()
-                print("get", time.time()-prev)
-                prev = time.time()
+                
             rate.sleep()
             print("here")
     except KeyboardInterrupt:
-        print(Queue.empty())
-        force_proc.kill()
+        print(queue.empty())
         rospy.signal_shutdown("KeyboardInterrupt")
         # rtde_c.servoStop()
         raise
