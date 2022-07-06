@@ -48,7 +48,7 @@ if __name__ == '__main__':
     rate = rospy.Rate(10)
 
     # force_proc = subprocess.Popen(["./colift_test_class.py"], stdout=subprocess.PIPE) 
-    force_proc = subprocess.Popen(["python3", "/Subprocess/colift_test_subprocess.py"], stdout=subprocess.PIPE) 
+    force_proc = subprocess.Popen(["python3", "Subprocess/colift_test_subprocess.py", "15", 'l'], stdout=subprocess.PIPE) 
 
     try:
         while not rospy.is_shutdown():
@@ -58,7 +58,7 @@ if __name__ == '__main__':
                 except AttributeError as e:
                     print("no force process found")
                 prev = time.time()
-                force_proc = subprocess.Popen(["python3", "Subprocess/colift_test_subprocess.py"], stdout=subprocess.PIPE) 
+                force_proc = subprocess.Popen(["python3", "Subprocess/colift_test_subprocess.py", "15", 'l'], stdout=subprocess.PIPE) 
                 # force_proc = subprocess.Popen(["./colift_test_class.py"], stdout=subprocess.PIPE) 
                 # force_proc = subprocess.Popen(["./colift_test_class.py"], stdout=subprocess.PIPE) 
                 # force_proc = subprocess.Popen(["python3", "Classes/colift_test_class.py", "15", dir_str.data, rtde_c], stdout=subprocess.PIPE) 
@@ -68,7 +68,7 @@ if __name__ == '__main__':
             rate.sleep()
             print("here")
     except KeyboardInterrupt:
-        
+        force_proc.kill()
         rospy.signal_shutdown("KeyboardInterrupt")
         # rtde_c.servoStop()
         raise

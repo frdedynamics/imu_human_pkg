@@ -7,6 +7,9 @@ This is just a python script -NO ROS- for subprocess to test COLIFT state
 import subprocess
 from sys import argv, stdout
 
+from rtde_control import RTDEControlInterface as RTDEControl
+import rtde_receive
+
 # must be a global function    
 def force_apply(f, mode, rtde_c):
     vector = [0, 0, 0, 0, 0, 0]
@@ -28,5 +31,7 @@ def force_apply(f, mode, rtde_c):
 
 if __name__ == '__main__':
     # force_apply(argv[1], argv[2], argv[3])
-    # print(argv[1], argv[2], argv[3])
-    stdout.write('asd')
+    print(len(argv))
+    print(argv[0], argv[1], argv[2])
+    rtde_c = RTDEControl("172.31.1.144", RTDEControl.FLAG_USE_EXT_UR_CAP)
+rtde_r = rtde_receive.RTDEReceiveInterface("172.31.1.144")
