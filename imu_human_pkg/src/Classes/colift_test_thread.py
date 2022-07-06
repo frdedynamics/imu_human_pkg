@@ -9,12 +9,11 @@ from sys import argv, stdout
 
 
 class ForceThread(threading.Thread):
-    def __init__(self, group=None, deamon=True):
+    def __init__(self, rtde_r, mode, group=None, deamon=True):
         threading.Thread.__init__(self)
         # super(ForceThread, self).__init__(self) ## ERROR: assert group is None, "group argument must be None for now"
-        self._stop_event = threading.Event()
-        # self.rtde_r = kwargs['a']
-        self.mode = 's'
+        self.rtde_r = rtde_r
+        self.mode = mode
         self.start()
         print("thread creates!")
 
