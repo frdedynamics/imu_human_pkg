@@ -7,6 +7,7 @@ This is a node to test COLIFT state
 import rospy
 from std_msgs.msg import Int64, String
 import subprocess, time
+from multiprocessing import Process, Queue
 
 from rtde_control import RTDEControlInterface as RTDEControl
 import rtde_receive
@@ -57,6 +58,9 @@ def my_function2(q, f, mode):
         wrench = [-f, 0.0, 0.0, 0.0, 0.0, 0.0]
         # rtde_c.forceModeStop()
 
+    _curr_force = rtde_r.getActualTCPForce()
+    q.put(_curr_force)
+    # return _curr_force
 
 
 if __name__ == '__main__':
@@ -124,5 +128,6 @@ if __name__ == '__main__':
         raise
 
     print(result)
+
 
 
