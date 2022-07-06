@@ -19,18 +19,18 @@ dir_str = String()
 prev_dir_str = String()
 dir_str.data = 's'
 prev_dir_str.data = 's'
-dir_change_flag = True
+dir_change_flag = False
 
 
 def cb_dir_int(msg):
-    global dir_str, prev_dir_str
+    global dir_str, prev_dir_str, dir_change_flag
     dir_str = msg
     if prev_dir_str.data == dir_str.data:
         dir_change_flag = False
     else:
         dir_change_flag = True
         prev_dir_str = dir_str
-
+        print("dir changed")
 
 
 def update(pub_test_cmd):
@@ -40,6 +40,25 @@ def update(pub_test_cmd):
     print(test_count)
 
 
+def my_function2(q, f, mode):
+    vector = [0, 0, 0, 0, 0, 0]
+    type = 2 
+    selection_vector = [1, 0, 0, 0, 0, 0]
+    # wrench = [-f, 0.0, 0.0, 0.0, 0.0, 0.0]
+    limits = [0.5, 0.3, 0.3, 0.17, 0.17, 0.17]
+
+    if mode =='l':
+        wrench = [f, 0.0, 0.0, 0.0, 0.0, 0.0]
+        # rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
+    elif mode =='r':
+        wrench = [-f, 0.0, 0.0, 0.0, 0.0, 0.0]
+        # rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
+    else:
+        wrench = [-f, 0.0, 0.0, 0.0, 0.0, 0.0]
+        # rtde_c.forceModeStop()
+
+
+
 if __name__ == '__main__':
     rospy.init_node('colift_test')
     print("Colift test node started")
@@ -47,28 +66,63 @@ if __name__ == '__main__':
     sub_dir_cmd = rospy.Subscriber('/dir_str', String, cb_dir_int)
     rate = rospy.Rate(10)
 
-    # force_proc = subprocess.Popen(["./colift_test_class.py"], stdout=subprocess.PIPE) 
-    force_proc = subprocess.Popen(["python3", "Subprocess/colift_test_subprocess.py", "15", 'l'], stdout=subprocess.PIPE) 
+    # Start process once
+    queue = Queue()
+    prev = time.time()
+    force_proc = Process(target=my_function2, args=(queue, 15, 'l')) # force = 15
+    print("process", time.time()-prev)
+    prev = time.time()
+    force_proc.daemon = True
+    force_proc.start()
+    print("start", time.time()-prev)
+    prev = time.time()
+    force_proc.join() # this blocks until the process terminates
+    print("join", time.time()-prev)
+    prev = time.time()
+    result = queue.get()
+    print("get", time.time()-prev)
+    prev = time.time()
+
+
+    # time.sleep(2)
+    # rtde_c.forceModeStop()
 
     try:
         while not rospy.is_shutdown():
+            print("FLAG:", dir_change_flag)
             if dir_change_flag:
+                print("flag true")
                 try:
+                    # dir_change_flag = False
+                    print("killing")
+                    print(Queue.empty())
                     force_proc.kill()
                 except AttributeError as e:
                     print("no force process found")
                 prev = time.time()
-                force_proc = subprocess.Popen(["python3", "Subprocess/colift_test_subprocess.py", "15", 'l'], stdout=subprocess.PIPE) 
-                # force_proc = subprocess.Popen(["./colift_test_class.py"], stdout=subprocess.PIPE) 
-                # force_proc = subprocess.Popen(["./colift_test_class.py"], stdout=subprocess.PIPE) 
-                # force_proc = subprocess.Popen(["python3", "Classes/colift_test_class.py", "15", dir_str.data, rtde_c], stdout=subprocess.PIPE) 
-                out, err = force_proc.communicate()
-                print(out,err)
+                queue = Queue()
+                force_proc = Process(target=my_function2, args=(queue, 15, 'l')) # force = 15
                 print("process", time.time()-prev)
+                prev = time.time()
+                force_proc.daemon = True
+                force_proc.start()
+                print("start", time.time()-prev)
+                prev = time.time()
+                force_proc.join() # this blocks until the process terminates
+                print("join", time.time()-prev)
+                prev = time.time()
+                result = queue.get()
+                print("get", time.time()-prev)
+                prev = time.time()
             rate.sleep()
             print("here")
     except KeyboardInterrupt:
+        print(Queue.empty())
         force_proc.kill()
         rospy.signal_shutdown("KeyboardInterrupt")
         # rtde_c.servoStop()
         raise
+
+    print(result)
+
+
