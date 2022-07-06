@@ -9,6 +9,7 @@ from std_msgs.msg import Int64, String
 import subprocess, time
 from multiprocessing import Process, Queue
 import threading
+from Classes.colift_test_thread import ForceThread
 
 from rtde_control import RTDEControlInterface as RTDEControl
 import rtde_receive
@@ -42,29 +43,6 @@ def update(pub_test_cmd):
     print(test_count)
 
 
-def my_function2(q, f, mode):
-    vector = [0, 0, 0, 0, 0, 0]
-    type = 2 
-    selection_vector = [1, 0, 0, 0, 0, 0]
-    # wrench = [-f, 0.0, 0.0, 0.0, 0.0, 0.0]
-    limits = [0.5, 0.3, 0.3, 0.17, 0.17, 0.17]
-
-    if mode =='l':
-        wrench = [f, 0.0, 0.0, 0.0, 0.0, 0.0]
-        rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
-    elif mode =='r':
-        wrench = [-f, 0.0, 0.0, 0.0, 0.0, 0.0]
-        rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
-    else:
-        wrench = [0, 0.0, 0.0, 0.0, 0.0, 0.0]
-        rtde_c.forceModeStop()
-
-    print("thread here!")
-    _curr_force = rtde_r.getActualTCPForce()
-    q.put(_curr_force)
-    # return _curr_force
-
-
 if __name__ == '__main__':
     rospy.init_node('colift_test')
     print("Colift test node started")
@@ -75,20 +53,20 @@ if __name__ == '__main__':
     # Start process once
     queue = Queue()
     prev = time.time()
-    # force_proc = Process(target=my_function2, args=(queue, 15, dir_str.data)) # force = 15
-    force_thread = threading.Thread(target=my_function2, args=(queue, 15, dir_str.data), daemon=True).start()
+    # force_thread = threading.Thread(target=my_function2, args=(queue, 15, dir_str.data), daemon=True).start()
+    force_thread = ForceThread()
     print("process", time.time()-prev)
     prev = time.time()
     # force_proc.daemon = True
     # force_proc.start()
     print("start", time.time()-prev)
     prev = time.time()
-    # force_thread.join() # this blocks until the process terminates
+    force_thread.join() # this blocks until the process terminates
     print("join", time.time()-prev)
     prev = time.time()
-    result = queue.get()
-    print("get", time.time()-prev)
-    prev = time.time()
+    # result = queue.get()
+    # print("get", time.time()-prev)
+    # prev = time.time()
 
 
     # time.sleep(2)
@@ -100,9 +78,10 @@ if __name__ == '__main__':
             if dir_change_flag:
                 print("flag true")
                 try:
+                    print(force_thread.isAlive())
                     # dir_change_flag = False
-                    print("killing")
-                    print(queue.empty())
+                    # print("killing")
+                    # print(queue.empty())
                     # force_proc.kill()
                 except AttributeError as e:
                     print("no force process found")
