@@ -4,6 +4,7 @@
 This is a node to test COLIFT state
 """
 
+from logging import raiseExceptions
 import rospy
 from std_msgs.msg import Int64, String
 import subprocess, time
@@ -29,7 +30,8 @@ def cb_dir_int(msg):
     global dir_str, prev_dir_str, dir_change_flag
     dir_str = msg
     if prev_dir_str.data == dir_str.data:
-        dir_change_flag = False
+        # dir_change_flag = False
+        pass
     else:
         dir_change_flag = True
         prev_dir_str = dir_str
@@ -43,59 +45,43 @@ def update(pub_test_cmd):
     print(test_count)
 
 
-if __name__ == '__main__':
+def main():
+    global dir_change_flag
     rospy.init_node('colift_test')
     print("Colift test node started")
     pub_test_cmd = rospy.Publisher('/test_in', Int64, queue_size=1)
     sub_dir_cmd = rospy.Subscriber('/dir_str', String, cb_dir_int)
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(100)
 
-    # Start process once
-    queue = Queue()
-    prev = time.time()
-    # force_thread = threading.Thread(target=my_function2, args=(queue, 15, dir_str.data), daemon=True).start()
+
     force_thread = ForceThread()
-    print("process", time.time()-prev)
-    prev = time.time()
-    # force_proc.daemon = True
-    # force_proc.start()
-    print("start", time.time()-prev)
-    prev = time.time()
     force_thread.join() # this blocks until the process terminates
-    print("join", time.time()-prev)
-    prev = time.time()
-    # result = queue.get()
-    # print("get", time.time()-prev)
-    # prev = time.time()
-
-
+    
     # time.sleep(2)
     # rtde_c.forceModeStop()
 
     try:
         while not rospy.is_shutdown():
-            print("FLAG:", dir_change_flag)
             if dir_change_flag:
                 print("flag true")
-                try:
-                    print(force_thread.isAlive())
-                    # dir_change_flag = False
-                    # print("killing")
-                    # print(queue.empty())
-                    # force_proc.kill()
-                except AttributeError as e:
-                    print("no force process found")
+                if force_thread.is_alive():
+                    Exception("ForceThread still alive")
+                force_thread = ForceThread()
+                force_thread.join()
+                dir_change_flag = False
                 prev = time.time()
-                
             rate.sleep()
-            print("here")
     except KeyboardInterrupt:
-        print(queue.empty())
         rospy.signal_shutdown("KeyboardInterrupt")
         # rtde_c.servoStop()
         raise
 
-    print(result)
+    rtde_c.forceModeStop()
+    print("Done")
+
+
+if __name__ == '__main__':
+    main()
 
 
 

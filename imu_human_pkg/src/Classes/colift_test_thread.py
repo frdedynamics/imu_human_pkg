@@ -9,7 +9,7 @@ from sys import argv, stdout
 
 
 class ForceThread(threading.Thread):
-    def __init__(self, group=None):
+    def __init__(self, group=None, deamon=True):
         threading.Thread.__init__(self)
         # super(ForceThread, self).__init__(self) ## ERROR: assert group is None, "group argument must be None for now"
         self._stop_event = threading.Event()
@@ -19,12 +19,13 @@ class ForceThread(threading.Thread):
         print("thread creates!")
 
 
-    def stop(self):
-        self._stop_event.set()
+    ## I need super().__init__ to override stop event.
+    # def stop(self):
+    #     self._stop_event.set()
 
 
-    def stopped(self):
-        return self._stop_event.is_set()
+    # def stopped(self):
+    #     return self._stop_event.is_set()
 
     
     def run(self):
