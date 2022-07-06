@@ -7,10 +7,8 @@ This is a node to test COLIFT state
 from logging import raiseExceptions
 import rospy
 from std_msgs.msg import Int64, String
-import subprocess, time
-from multiprocessing import Process, Queue
-import threading
-from Classes.colift_test_thread import ForceThread
+import time
+from Classes.colift_thread_class import ForceThread
 
 from rtde_control import RTDEControlInterface as RTDEControl
 import rtde_receive
@@ -53,12 +51,8 @@ def main():
     sub_dir_cmd = rospy.Subscriber('/dir_str', String, cb_dir_int)
     rate = rospy.Rate(100)
 
-
     force_thread = ForceThread(rtde_r=rtde_r, rtde_c=rtde_c, mode=dir_str.data)
     force_thread.join() # this blocks until the process terminates
-    
-    # time.sleep(2)
-    # rtde_c.forceModeStop()
 
     try:
         while not rospy.is_shutdown():
@@ -74,6 +68,7 @@ def main():
             rate.sleep()
     except KeyboardInterrupt:
         rospy.signal_shutdown("KeyboardInterrupt")
+        rtde_c.forceModeStop()
         # rtde_c.servoStop()
         raise
 
