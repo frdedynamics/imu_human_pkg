@@ -39,6 +39,7 @@ class RobotCommander:
 		self.current_TCP_list = Float32MultiArray()
 		self.init_list = self.rtde_r.getActualTCPPose()
 		self.init_joints = self.rtde_r.getActualQ()
+		self.tcp_offset = [0.0, 0.0, 0.14, 0.0, 0.0, 0.0] # self.rtde_c.getTCPOffset() non-responsive. Use it with moveL.
 
 		self.release_joints = [0.9088020324707031, -2.710853715936178, -1.2618284225463867, -2.241020818749899, -1.9657891432391565, -1.429659668599264]
 		self.release_approach_joints = [0.7912373542785645, -2.560136457482809, -1.7473573684692383, -1.9465114078917445, -2.089461151753561, -1.5463460127459925]
