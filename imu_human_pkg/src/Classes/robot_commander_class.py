@@ -46,8 +46,8 @@ class RobotCommander:
 		self.before_release_joints = [1.0842461585998535, -2.1514698467650355, -1.7598390579223633, -2.4411307773985804, -2.0929248968707483, -1.60185414949526]
 		self.after_release_joints = [0.6435627937316895, -2.5409981213011683, -1.622014045715332, -2.1787873707213343, -2.3522325197802942, -1.6022732893573206]
 		self.before_home_joints = [0.9844388961791992, -1.9257198772826136, -2.083815574645996, -2.261669775048727, -2.131503407155172, -1.6019018332110804]
-		self.colift_init_list = 6*[None]
-		self.approach_init_list = 6*[None]
+		self.colift_init_list = self.rtde_r.getActualTCPPose()
+		self.approach_init_TCP_list = self.rtde_r.getActualTCPPose()
 
 		self.gripper_cmd = Bool()
 
@@ -82,16 +82,14 @@ class RobotCommander:
 		self.rtde_c.servoL(goal_pose,0.5, 0.3, 0.002, 0.1, 300)
 
 	def open_gripper(self):
-		print("OPEN GRIPPER")
 		self.gripper_cmd.data = False
 		self.pub_grip_cmd.publish(self.gripper_cmd)
-		rospy.sleep(0.5)
+		rospy.sleep(1)
 
 	def close_gripper(self):
-		print("CLOSE GRIPPER")
 		self.gripper_cmd.data = True
 		self.pub_grip_cmd.publish(self.gripper_cmd)
-		rospy.sleep(0.5)
+		rospy.sleep(1)
 		
 
 	def hrc_idle(self, from_colift=False):

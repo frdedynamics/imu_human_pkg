@@ -137,9 +137,9 @@ class HumanCommander:
 		if((self.hand_grip_strength.data > self.emg_sum_th) and self.state.data == "APPROACH"):
 			self.state.data = "COLIFT"
 
-		elif(((self.right_hand_pose.orientation.w > 0.707 and self.right_hand_pose.orientation.x < 0.707) and self.hand_grip_strength.data < self.emg_sum_th)and self.state.data != "COLIFT"): # right rotate downwards
+		elif(((self.right_hand_pose.orientation.w < 0.707 and self.right_hand_pose.orientation.x > 0.707) and self.hand_grip_strength.data < self.emg_sum_th)and self.state.data != "COLIFT"): # right rotate downwards
 			self.state.data = "APPROACH"
-		elif((self.right_hand_pose.orientation.w < 0.707 and self.right_hand_pose.orientation.x > 0.707) and self.hand_grip_strength.data < self.emg_sum_th): # right rotate upwards
+		elif((self.right_hand_pose.orientation.w > 0.707 and self.right_hand_pose.orientation.x < 0.707) and self.hand_grip_strength.data < self.emg_sum_th): # right rotate upwards
 			self.state.data = "IDLE"
 
 		elif((self.right_hand_pose.position.x < -0.25 and self.right_hand_pose.position.z < -0.15)and self.state.data == "COLIFT"):
@@ -152,7 +152,7 @@ class HumanCommander:
 
 	def hands_calib(self):
 		'''
-		This might be depreciated for button enabled calibration
+		This might be depreciated for button enabled calibration. The button uses non-action-client version with wrist_to_robot_2arms.py in arm package.
 		'''
 		if not self.hrc_hand_calib_flag:
 			print("IDLE calib")
@@ -191,6 +191,8 @@ class HumanCommander:
 		corrected_merge_hand_list = 6*[None]
 		corrected_merge_hand_list = kinematic.q_rotate(self.human_to_robot_orientation, self.merge_hand_pose.position)
 
+		print("merged: ", corrected_merge_hand_list)
+
 		robot_goal_pose = 6*[None]
 		robot_goal_pose[0] = robot_pose[0] + self.sl * corrected_merge_hand_list[0]
 		robot_goal_pose[1] = robot_pose[1] - self.sl * corrected_merge_hand_list[1]
@@ -199,6 +201,7 @@ class HumanCommander:
 
 		self.corrected_merge_hand_list.data = corrected_merge_hand_list
 		self.corrected_merge_hand_pose = kinematic.list_to_pose(corrected_merge_hand_list)
+
 		return robot_goal_pose
 
 
