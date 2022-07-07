@@ -20,6 +20,33 @@ from geometry_msgs.msg import Quaternion
 '''
 
 
+def main(): 
+	Robot = RobotCommander(start_node=False)
+	Human = HumanCommander(start_node=False)
+	# Task = TaskEnvironment(start_node=False)
+	rospy.init_node("HRC_state_machine_node")
+	print("robot_move_with_ur_rtde Node Created")
+	Robot.init_subscribers_and_publishers()
+	Human.init_subscribers_and_publishers()
+
+	## Required initializations
+	Human.human_to_robot_init_orientation = Quaternion(0.0, 0.0, 0.707, 0.707)
+	Robot.rtde_c.moveL(Robot.robot_init_list)
+	if not Robot.open_gripper():
+		Exception("Please activate gripper")
+	rate = rospy.Rate(100)
+	try:
+		while not rospy.is_shutdown():
+			Robot.update()
+			Human.update()
+			# Task.update()
+			hrc_state, state_transition_flag = Human.get_state()
+			state_machine(Human, Robot, hrc_state, state_transition_flag)
+			rate.sleep()
+	except KeyboardInterrupt:
+		rospy.signal_shutdown("KeyboardInterrupt")
+		raise
+
 def state_machine(human_commander, robot_commander, state, state_transition_flag):
 
 	## TODO: Add teleop active and teleop idle later
@@ -82,35 +109,6 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 	else:
 		print("state:", state)
 		Exception("Unknown state. Exiting...")
-
-
-def main(): 
-	Robot = RobotCommander(start_node=False)
-	Human = HumanCommander(start_node=False)
-	# Task = TaskEnvironment(start_node=False)
-	rospy.init_node("HRC_state_machine_node")
-	print("robot_move_with_ur_rtde Node Created")
-	Robot.init_subscribers_and_publishers()
-	Human.init_subscribers_and_publishers()
-
-	## Required initializations
-	Human.human_to_robot_init_orientation = Quaternion(0.0, 0.0, 0.707, 0.707)
-	Robot.move_pose(Robot.home_pose)
-	prev_hrc_state = ""
-	if not Robot.open_gripper():
-		Exception("Please activate gripper")
-	rate = rospy.Rate(100)
-	try:
-		while not rospy.is_shutdown():
-			Robot.update()
-			Human.update()
-			# Task.update()
-			hrc_state, state_transition_flag = Human.get_state()
-			state_machine(Human, Robot, hrc_state, state_transition_flag)
-			rate.sleep()
-	except KeyboardInterrupt:
-		rospy.signal_shutdown("KeyboardInterrupt")
-		raise
 
 
 if __name__ == '__main__': main()

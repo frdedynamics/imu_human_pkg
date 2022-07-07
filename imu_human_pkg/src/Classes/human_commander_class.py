@@ -11,12 +11,13 @@ from imu_human_pkg.msg import handCalibrationAction, handCalibrationGoal
 
 from geometry_msgs.msg import Pose, Quaternion 
 from std_msgs.msg import String, Int16
+from std_msgs.msg import Float32MultiArray
 
 from . import Kinematics_with_Quaternions as kinematic
 
 
 class HumanCommander:
-	def __init__(self, rate=100, start_node=False, sr=1.5, sl=1.0, so=2.0):
+	def __init__(self, rate=100, start_node=False, sr=1.0, sl=1.0, so=2.0):
 		"""Initializes the human commander
 			@params s: motion hand - steering hand scale
 			@params k: target hand pose - robot pose scale"""
@@ -29,6 +30,8 @@ class HumanCommander:
 
 		self.merge_hand_pose = Pose()
 		self.corrected_merge_hand_pose = Pose()
+		self.corrected_merge_hand_list = Float32MultiArray()
+		self.corrected_merge_hand_list.data = 6*[None]
 		self.left_hand_pose = Pose()
 		self.right_hand_pose = Pose()
 		self.hand_grip_strength = Int16()
@@ -48,14 +51,9 @@ class HumanCommander:
 		self.state.data = "IDLE"
 		self.role = "HUMAN_LEADING"  # or "ROBOT_LEADING"
 
+		self.prev_colift_dir = ""
 		self.colift_dir = "UP"
-		self.colift_flag = 0
-		self.hrc_hand_calib_flag = False
-		self.hrc_colift_calib_flag = False
-		self.wrist_calib_flag = False
-
-		self.do_flag = 0
-               
+		
 
 	def init_subscribers_and_publishers(self):
 		self.sub_left_hand_pose = rospy.Subscriber('/left_hand_pose', Pose, self.cb_left_hand_pose)
@@ -69,6 +67,7 @@ class HumanCommander:
 		self.pub_colift_dir = rospy.Publisher('/colift_dir', String, queue_size=1)
 		self.pub_merge_hands = rospy.Publisher('/merged_hands', Pose, queue_size=1)
 		self.pub_corr_merge_hands = rospy.Publisher('/corr_merged_hands', Pose, queue_size=1)
+		self.pub_corr_merge_hands_list = rospy.Publisher('/corr_merged_hands_list', Float32MultiArray, queue_size=1)
 
 		try:
 			self.elbow_height_th = rospy.get_param("/elbow_height_th")
@@ -183,6 +182,7 @@ class HumanCommander:
 		self.merge_hand_pose.position.z = self.left_hand_pose.position.z + self.sr * self.right_hand_pose.position.z
 		self.merge_hand_pose.orientation = self.left_hand_pose.orientation
 
+		corrected_merge_hand_list = 6*[None]
 		corrected_merge_hand_list = kinematic.q_rotate(self.human_to_robot_orientation, self.merge_hand_pose.position)
 
 		robot_goal_pose = 6*[None]
@@ -191,11 +191,39 @@ class HumanCommander:
 		robot_goal_pose[2] = self.robot_pose[2] + self.sl * corrected_merge_hand_list[2]
 		robot_goal_pose[3:] = self.robot_pose[3:]
 
+		self.corrected_merge_hand_list.data = corrected_merge_hand_list
 		self.corrected_merge_hand_pose = kinematic.list_to_pose(corrected_merge_hand_list)
 		return robot_goal_pose
+
+
+	def get_dir_from_elbows(self):
+		'''
+		Sets direction for compliance force based on elbow heights
+		'''
+
+		if not self.prev_colift_dir == self.colift_dir:
+			dir_change_flag = True
+		else:
+			dir_change_flag = False
+
+		if((self.elbow_right_height > self.elbow_height_th) and (self.elbow_left_height < self.elbow_height_th)):
+			self.colift_dir = "left"
+			# self.colift_flag = 0
+		elif((self.elbow_left_height > self.elbow_height_th) and (self.elbow_right_height < self.elbow_height_th)):
+			self.colift_dir = "right"
+			# self.colift_flag = 0
+		elif((self.elbow_left_height > self.elbow_height_th) and (self.elbow_right_height > self.elbow_height_th)):
+			self.colift_dir = "up"
+			# self.colift_flag = 0
+		else:
+			self.colift_dir = "null"
+		
+		return self.colift_dir, dir_change_flag
 		
 
 	def update(self):
 		self.pub_hrc_status.publish(self.state)
+		self.pub_colift_dir.publish(self.colift_dir)
 		self.pub_merge_hands.publish(self.merge_hand_pose)
 		self.pub_corr_merge_hands.publish(self.corrected_merge_hand_pose)
+		self.pub_corr_merge_hands_list.publish(self.corrected_merge_hand_list)
