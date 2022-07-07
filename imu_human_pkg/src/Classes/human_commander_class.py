@@ -98,11 +98,9 @@ class HumanCommander:
 
 	def cb_elbow_left(self, msg):
 		self.elbow_left_height = msg.position.z
-
 		
 	def cb_elbow_right(self, msg):
 		self.elbow_right_height = msg.position.z
-
 
 	def cb_human_ori(self, msg):
 		""" Subscribes chest IMU orientation to map human w.r.t the world frame """
@@ -131,6 +129,7 @@ class HumanCommander:
 		print('Hand poses initialized:', msg)
 
 	
+	### HumanClass methods ###
 	def get_state(self):
 		'''
 		Based on gestures, HRC state is determined
@@ -140,7 +139,7 @@ class HumanCommander:
 		elif(self.right_hand_pose.orientation.w < 0.707 and self.right_hand_pose.orientation.x > 0.707): # right rotate upwards
 			self.state = "IDLE"
 		
-		elif(self.hand_grip_strength.data > 75):
+		elif(self.hand_grip_strength.data > self.emg_sum_th):
 			if not self.hrc_colift_calib_flag:
 				# self.call_hand_calib_server()
 				self.robot_colift_init = self.rtde_r.getActualTCPPose()

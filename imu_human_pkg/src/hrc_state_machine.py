@@ -16,23 +16,35 @@ from Classes.colift_thread_class import ForceThread
 '''
 
 
-def state_machine(human_commander, robot_commander, state):
+def state_machine(human_commander, robot_commander, state, prev_state):
 
 	## TODO: Add teleop active and teleop idle later
+
+	if not prev_state == state: ## This makes sure that each state can run a pre-requirements once
+		state_transition_flag = True
+	else:
+		state_transition_flag = False
 
 	if state == "IDLE":
 		robot_commander.rtde_c.servoStop()
 		robot_commander.rtde_c.forceModeStop()
-		# reset hands origin?
+		if state_transition_flag:
+			human_commander.hands_reset()
+			# resets hands origin everytime
 	
 	elif state == "APPROACH":
 		robot_commander.rtde_c.forceModeStop()
+		if state_transition_flag:
+			robot_commander.get_approach_init_TCP_pose()
+			# hope to eliminate the jumps
+
 		human_commander.calculate_relative_merged_hands(robot_commander.get_current_TCP_pose())
 		robot_commander.move_relative_to_current_pose(human_commander.merged_hands)
 
 	elif state == "COLIFT":
 		robot_commander.close_gripper() # dont forget rospy.sleep(2) to make sure proper close
 		robot_commander.rtde_c.servoStop()
+		robot_commander.get_colift_init_TCP_pose()
 		dir_str, dir_change_flag = human_commander.get_dir_from_elbows()
 		force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str)
 		force_thread.join() # this blocks until the process terminates
@@ -61,6 +73,7 @@ def main():
 	Robot.init_subscribers_and_publishers()
 	Human.init_subscribers_and_publishers()
 	Robot.move_pose(Robot.home_pose)
+	prev_hrc_state = ""
 	if not Robot.open_gripper():
 		Exception("Please activate gripper")
 	rate = rospy.Rate(100)
@@ -70,7 +83,8 @@ def main():
 			Human.update()
 			# Task.update()
 			hrc_state = Human.get_state()
-			state_machine(Human, Robot, hrc_state)
+			state_machine(Human, Robot, hrc_state, prev_hrc_state)
+			prev_hrc_state = hrc_state
 			rate.sleep()
 	except KeyboardInterrupt:
 		rospy.signal_shutdown("KeyboardInterrupt")
