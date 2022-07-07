@@ -16,14 +16,9 @@ from Classes.colift_thread_class import ForceThread
 '''
 
 
-def state_machine(human_commander, robot_commander, state, prev_state):
+def state_machine(human_commander, robot_commander, state, state_transition_flag):
 
 	## TODO: Add teleop active and teleop idle later
-
-	if not prev_state == state: ## This makes sure that each state can run a pre-requirements once
-		state_transition_flag = True
-	else:
-		state_transition_flag = False
 
 	if state == "IDLE":
 		robot_commander.rtde_c.servoStop()
@@ -31,6 +26,7 @@ def state_machine(human_commander, robot_commander, state, prev_state):
 		if state_transition_flag:
 			human_commander.hands_reset()
 			# resets hands origin everytime
+			## To connect with the HRC training button, maybe rosparam needed from the init node
 	
 	elif state == "APPROACH":
 		robot_commander.rtde_c.forceModeStop()
@@ -82,9 +78,8 @@ def main():
 			Robot.update()
 			Human.update()
 			# Task.update()
-			hrc_state = Human.get_state()
-			state_machine(Human, Robot, hrc_state, prev_hrc_state)
-			prev_hrc_state = hrc_state
+			hrc_state, state_transition_flag = Human.get_state()
+			state_machine(Human, Robot, hrc_state, state_transition_flag)
 			rate.sleep()
 	except KeyboardInterrupt:
 		rospy.signal_shutdown("KeyboardInterrupt")

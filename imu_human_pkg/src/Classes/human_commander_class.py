@@ -54,6 +54,7 @@ class HumanCommander:
 		self.sl = sl # WS scaling left hand 
 		self.so = so # Orientation scaling of left wrist to robot wrist
 
+		self.prev_state = ""
 		self.state = "IDLE"
 		self.role = "HUMAN_LEADING"  # or "ROBOT_LEADING"
 		self.hrc_status = String()
@@ -134,22 +135,30 @@ class HumanCommander:
 		'''
 		Based on gestures, HRC state is determined
 		'''
-		if(self.right_hand_pose.orientation.w > 0.707 and self.right_hand_pose.orientation.x < 0.707): # right rotate downwards
+
+		if not self.prev_state == self.state: ## This makes sure that each state can run a pre-requirements once
+			state_transition_flag = True
+		else:
+			state_transition_flag = False
+
+		if((self.right_hand_pose.orientation.w > 0.707 and self.right_hand_pose.orientation.x < 0.707) and self.hand_grip_strength.data < self.emg_sum_th): # right rotate downwards
 			self.state = "APPROACH"
-		elif(self.right_hand_pose.orientation.w < 0.707 and self.right_hand_pose.orientation.x > 0.707): # right rotate upwards
+		elif((self.right_hand_pose.orientation.w < 0.707 and self.right_hand_pose.orientation.x > 0.707) and self.hand_grip_strength.data < self.emg_sum_th): # right rotate upwards
 			self.state = "IDLE"
 		
 		elif(self.hand_grip_strength.data > self.emg_sum_th):
-			if not self.hrc_colift_calib_flag:
-				# self.call_hand_calib_server()
-				self.robot_colift_init = self.rtde_r.getActualTCPPose()
-				self.hrc_colift_calib_flag = True
 			self.status = "COLIFT"
 
-		return self.state
+		elif(self.right_hand_pose.position.x < -0.25 and self.right_hand_pose.position.z < -0.15):
+			self.status = "RELEASE"
+
+		return self.state, state_transition_flag
 
 
 	def hands_calib(self):
+		'''
+		This might be depreciated for button enabled calibration
+		'''
 		if not self.hrc_hand_calib_flag:
 			print("IDLE calib")
 			print("Move to initial arm poses in 4 seconds...")
