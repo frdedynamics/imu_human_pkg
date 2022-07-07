@@ -18,8 +18,8 @@ rtde_r = rtde_receive.RTDEReceiveInterface("172.31.1.144")
 test_count = Int64()
 dir_str = String()
 prev_dir_str = String()
-dir_str.data = 'l'
-prev_dir_str.data = 's'
+dir_str.data = "d"
+prev_dir_str.data = "s"
 dir_change_flag = False
 
 
