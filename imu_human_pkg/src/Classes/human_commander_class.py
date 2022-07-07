@@ -56,14 +56,14 @@ class HumanCommander:
 		
 
 	def init_subscribers_and_publishers(self):
-		self.sub_left_hand_pose = rospy.Subscriber('/left_hand_pose', Pose, self.cb_left_hand_pose)
-		self.sub_right_hand_pose = rospy.Subscriber('/right_hand_pose', Pose, self.cb_right_hand_pose)
+		self.sub_left_hand_pose = rospy.Subscriber('/motion_hand_pose', Pose, self.cb_left_hand_pose)
+		self.sub_right_hand_pose = rospy.Subscriber('/steering_hand_pose', Pose, self.cb_right_hand_pose)
 		self.sub_human_ori = rospy.Subscriber('/human_ori', Quaternion, self.cb_human_ori)
 		self.sub_elbow_left = rospy.Subscriber('/elbow_left', Pose, self.cb_elbow_left)
 		self.sub_elbow_right= rospy.Subscriber('/elbow_right', Pose, self.cb_elbow_right)
 		self.sub_emg_sum= rospy.Subscriber('/emg_sum', Int16, self.cb_emg_sum)
 
-		self.pub_hrc_status = rospy.Publisher('/hrc_status', String, queue_size=1)
+		self.pub_hrc_state = rospy.Publisher('/hrc_state', String, queue_size=1)
 		self.pub_colift_dir = rospy.Publisher('/colift_dir', String, queue_size=1)
 		self.pub_merge_hands = rospy.Publisher('/merged_hands', Pose, queue_size=1)
 		self.pub_corr_merge_hands = rospy.Publisher('/corr_merged_hands', Pose, queue_size=1)
@@ -125,21 +125,27 @@ class HumanCommander:
 		Based on gestures, HRC state is determined
 		'''
 
+		print("right: ", self.right_hand_pose.orientation.w)
+		print("strength: ", self.hand_grip_strength.data, "-", self.emg_sum_th)
+
 		if not self.prev_state == self.state: ## This makes sure that each state can run a pre-requirements once
 			state_transition_flag = True
+			print(self.emg_sum_th)
 		else:
 			state_transition_flag = False
 
-		if((self.right_hand_pose.orientation.w > 0.707 and self.right_hand_pose.orientation.x < 0.707) and self.hand_grip_strength.data < self.emg_sum_th): # right rotate downwards
-			self.state = "APPROACH"
-		elif((self.right_hand_pose.orientation.w < 0.707 and self.right_hand_pose.orientation.x > 0.707) and self.hand_grip_strength.data < self.emg_sum_th): # right rotate upwards
-			self.state = "IDLE"
-		
-		elif(self.hand_grip_strength.data > self.emg_sum_th):
-			self.status = "COLIFT"
+		if((self.hand_grip_strength.data > self.emg_sum_th) and self.state.data == "APPROACH"):
+			self.state.data = "COLIFT"
 
-		elif(self.right_hand_pose.position.x < -0.25 and self.right_hand_pose.position.z < -0.15):
-			self.status = "RELEASE"
+		elif(((self.right_hand_pose.orientation.w > 0.707 and self.right_hand_pose.orientation.x < 0.707) and self.hand_grip_strength.data < self.emg_sum_th)and self.state.data != "COLIFT"): # right rotate downwards
+			self.state.data = "APPROACH"
+		elif((self.right_hand_pose.orientation.w < 0.707 and self.right_hand_pose.orientation.x > 0.707) and self.hand_grip_strength.data < self.emg_sum_th): # right rotate upwards
+			self.state.data = "IDLE"
+
+		elif((self.right_hand_pose.position.x < -0.25 and self.right_hand_pose.position.z < -0.15)and self.state.data == "COLIFT"):
+			self.state = "RELEASE"
+		
+		self.prev_state = self.state
 
 		return self.state, state_transition_flag
 
@@ -186,10 +192,10 @@ class HumanCommander:
 		corrected_merge_hand_list = kinematic.q_rotate(self.human_to_robot_orientation, self.merge_hand_pose.position)
 
 		robot_goal_pose = 6*[None]
-		robot_goal_pose[0] = self.robot_pose[0] + self.sl * corrected_merge_hand_list[0]
-		robot_goal_pose[1] = self.robot_pose[1] - self.sl * corrected_merge_hand_list[1]
-		robot_goal_pose[2] = self.robot_pose[2] + self.sl * corrected_merge_hand_list[2]
-		robot_goal_pose[3:] = self.robot_pose[3:]
+		robot_goal_pose[0] = robot_pose[0] + self.sl * corrected_merge_hand_list[0]
+		robot_goal_pose[1] = robot_pose[1] - self.sl * corrected_merge_hand_list[1]
+		robot_goal_pose[2] = robot_pose[2] + self.sl * corrected_merge_hand_list[2]
+		robot_goal_pose[3:] = robot_pose[3:]
 
 		self.corrected_merge_hand_list.data = corrected_merge_hand_list
 		self.corrected_merge_hand_pose = kinematic.list_to_pose(corrected_merge_hand_list)
@@ -222,7 +228,7 @@ class HumanCommander:
 		
 
 	def update(self):
-		self.pub_hrc_status.publish(self.state)
+		self.pub_hrc_state.publish(self.state)
 		self.pub_colift_dir.publish(self.colift_dir)
 		self.pub_merge_hands.publish(self.merge_hand_pose)
 		self.pub_corr_merge_hands.publish(self.corrected_merge_hand_pose)

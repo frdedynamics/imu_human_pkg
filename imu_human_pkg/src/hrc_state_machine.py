@@ -31,7 +31,7 @@ def main():
 
 	## Required initializations
 	Human.human_to_robot_init_orientation = Quaternion(0.0, 0.0, 0.707, 0.707)
-	Robot.rtde_c.moveL(Robot.robot_init_list)
+	# Robot.rtde_c.moveL(Robot.init_list)
 	if not Robot.open_gripper():
 		Exception("Please activate gripper")
 	rate = rospy.Rate(100)
@@ -42,6 +42,7 @@ def main():
 			# Task.update()
 			hrc_state, state_transition_flag = Human.get_state()
 			state_machine(Human, Robot, hrc_state, state_transition_flag)
+			print(Human.state)
 			rate.sleep()
 	except KeyboardInterrupt:
 		rospy.signal_shutdown("KeyboardInterrupt")
@@ -59,53 +60,65 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 			# resets hands origin everytime
 			## To connect with the HRC training button, maybe rosparam needed from the init node
 	
+	
 	elif state == "APPROACH":
 		robot_commander.rtde_c.forceModeStop()
 		if state_transition_flag:
-			robot_commander.get_approach_init_TCP_pose()
+			robot_commander.set_approach_init_TCP_pose()
 			# hope to eliminate the jumps
 
-		robot_goal_pose = human_commander.two_hands_move(robot_commander.approach_init_TCP_pose)
-		robot_commander.move_relative_to_current_pose(robot_goal_pose)
+		robot_goal_pose = human_commander.two_hands_move(robot_commander.approach_init_TCP_list)
+		# robot_commander.move_relative_to_current_pose(robot_goal_pose)
+
 
 	elif state == "COLIFT":
 		robot_commander.rtde_c.servoStop()
 		if state_transition_flag:
 			robot_commander.close_gripper()
 			rospy.sleep(2)
-		robot_commander.get_colift_init_TCP_pose()
-		dir_str, dir_change_flag = human_commander.get_dir_from_elbows()
-		force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str)
-		force_thread.join() # this blocks until the process terminates
+			robot_commander.set_colift_init_TCP_pose()
+			# force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode="up")
+			# force_thread.join()
+			# while force_thread.is_alive():
+			# 	print("wait for compliance mode to be ready")
+		
+		_curr_force = robot_commander.rtde_r.getActualTCPForce()
+		if abs(_curr_force[0]) > 1.6:
+			dir_str, dir_change_flag = human_commander.get_dir_from_elbows()
+			# force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str)
+			# force_thread.join()
 
-		if dir_change_flag:
-			print("flag true")
-			robot_commander.forceModeStop()
-			if force_thread.is_alive():
-				Exception("ForceThread still alive")
-			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str)
-			force_thread.join()
-			dir_change_flag = False
-			# prev = time.time()
+			if dir_change_flag:
+				print("flag true")
+				robot_commander.forceModeStop()
+				# if force_thread.is_alive():
+				# 	Exception("ForceThread still alive")
+				# force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str)
+				# force_thread.join()
+				dir_change_flag = False
+
 	
 	elif state == "RELEASE":
 		robot_commander.rtde_c.servoStop()
 		robot_commander.rtde_c.forceModeStop()
 
 		print("Moving to RELEASE pose")
-		robot_commander.rtde_c.moveL(robot_commander.release_before)
-		robot_commander.rtde_c.moveL(robot_commander.release)
+		# robot_commander.rtde_c.moveL(robot_commander.release_before)
+		# robot_commander.rtde_c.moveL(robot_commander.release)
 		robot_commander.open_gripper()
 		print("Robot at RELEASE")
 		rospy.sleep(4)  # Wait until the gripper is fully open
-		robot_commander.rtde_c.moveL(robot_commander.release_after)
+		# robot_commander.rtde_c.moveL(robot_commander.release_after)
 		print("Robot at RELEASE APPROACH")
 		## new cycle 
 		user_input = input("Ready to new cycle?")
 		if user_input == 'y':
-			robot_commander.rtde_c.moveJ(robot_commander.home_teleop_approach_joints, speed=0.5)
-			robot_commander.rtde_c.moveJ(robot_commander.home_teleop_joints, speed=0.5)
+			# robot_commander.rtde_c.moveJ(robot_commander.home_teleop_approach_joints, speed=0.5)
+			# robot_commander.rtde_c.moveJ(robot_commander.home_teleop_joints, speed=0.5)
 			robot_commander.colift_dir = 'up'
+		else:
+			rospy.signal_shutdown("KeyboardInterrupt")
+			sys.exit()
 	else:
 		print("state:", state)
 		Exception("Unknown state. Exiting...")
