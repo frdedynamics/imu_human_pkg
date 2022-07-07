@@ -52,8 +52,9 @@ class HumanCommander:
 		self.state.data = "IDLE"
 		self.role = "HUMAN_LEADING"  # or "ROBOT_LEADING"
 
-		self.prev_colift_dir = ""
-		self.colift_dir = "UP"
+		self.prev_colift_dir = String()
+		self.colift_dir = String()
+		self.colift_dir.data = "s"
 		
 
 	def init_subscribers_and_publishers(self):
@@ -210,22 +211,29 @@ class HumanCommander:
 		Sets direction for compliance force based on elbow heights
 		'''
 
+		if((self.elbow_right_height > self.elbow_height_th) and (self.elbow_left_height < self.elbow_height_th)):
+			self.colift_dir.data = "l"
+			# self.colift_flag = 0
+		elif((self.elbow_left_height > self.elbow_height_th) and (self.elbow_right_height < self.elbow_height_th)):
+			self.colift_dir.data = "r"
+			# self.colift_flag = 0
+		elif((self.elbow_left_height > self.elbow_height_th) and (self.elbow_right_height > self.elbow_height_th)):
+			self.colift_dir.data = "u"
+			# self.colift_flag = 0
+		elif((self.elbow_left_height < self.elbow_height_th) and (self.elbow_right_height < self.elbow_height_th) and self.colift_dir.data == "u"):
+			self.colift_dir.data = "d"
+		else:
+			self.colift_dir.data = "s"
+
+
+		print(self.prev_colift_dir, "--", self.colift_dir)
+		print(self.elbow_left_height, "--", self.elbow_right_height)
 		if not self.prev_colift_dir == self.colift_dir:
 			dir_change_flag = True
 		else:
 			dir_change_flag = False
-
-		if((self.elbow_right_height > self.elbow_height_th) and (self.elbow_left_height < self.elbow_height_th)):
-			self.colift_dir = "left"
-			# self.colift_flag = 0
-		elif((self.elbow_left_height > self.elbow_height_th) and (self.elbow_right_height < self.elbow_height_th)):
-			self.colift_dir = "right"
-			# self.colift_flag = 0
-		elif((self.elbow_left_height > self.elbow_height_th) and (self.elbow_right_height > self.elbow_height_th)):
-			self.colift_dir = "up"
-			# self.colift_flag = 0
-		else:
-			self.colift_dir = "null"
+		
+		self.prev_colift_dir.data = self.colift_dir.data
 		
 		return self.colift_dir, dir_change_flag
 		

@@ -16,7 +16,7 @@ class ForceThread(threading.Thread):
         self.rtde_c = rtde_c
         self.mode = mode
         self.start()
-        print("thread creates!")
+        print("thread created!")
 
 
     ## I need super().__init__ to override stop event.
@@ -29,7 +29,7 @@ class ForceThread(threading.Thread):
 
     
     def run(self):
-        print("thread here!")
+        print("thread run!")
         f=15
         vector = [0, 0, 0, 0, 0, 0]
         type = 2 
@@ -58,5 +58,4 @@ class ForceThread(threading.Thread):
             wrench = [0, 0.0, 0.0, 0.0, 0.0, 0.0]
             # self.rtde_c.forceModeStop()
 
-        print("thread here!")
         # _curr_force = self.rtde_r.getActualTCPForce()

@@ -31,10 +31,11 @@ def main():
 
 	## Required initializations
 	Human.human_to_robot_init_orientation = Quaternion(0.0, 0.0, 0.707, 0.707)
-	# Robot.rtde_c.moveL(Robot.init_list)
+	# Robot.rtde_c.moveJ(Robot.home)
 	if not Robot.open_gripper():
 		Exception("Please activate gripper")
 	rate = rospy.Rate(100)
+	state_transition_flag = True
 	try:
 		while not rospy.is_shutdown():
 			Robot.update()
@@ -44,6 +45,7 @@ def main():
 			state_machine(Human, Robot, hrc_state.data, state_transition_flag)
 			rate.sleep()
 	except KeyboardInterrupt:
+		Robot.rtde_c.forceModeStop()
 		rospy.signal_shutdown("KeyboardInterrupt")
 		raise
 
@@ -51,7 +53,7 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 
 	## TODO: Add teleop active and teleop idle later
 
-	print("state: ", state)
+	# print("state: ", state)
 
 	if state == "IDLE":
 		robot_commander.rtde_c.servoStop()
@@ -77,15 +79,19 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 			robot_commander.close_gripper()
 			rospy.sleep(2)
 			robot_commander.set_colift_init_TCP_pose()
-			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode="up")
+			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode="u")
 			force_thread.join()
 			while force_thread.is_alive():
 				print("wait for compliance mode to be ready")
 		
+		rospy.sleep(0.5) # trying to eliminate double force readins
 		_curr_force = robot_commander.rtde_r.getActualTCPForce()
-		if abs(_curr_force[0]) > 1.6:
+		if abs(_curr_force[0]) > 0.9:
+			print("force: ",(_curr_force[0]))
 			dir_str, dir_change_flag = human_commander.get_dir_from_elbows()
-			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str)
+			print("dir_change_flag: ", dir_change_flag)
+			print("dir_str: ", dir_str)
+			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str.data)
 			force_thread.join()
 
 			if dir_change_flag:
@@ -127,7 +133,6 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 			sys.exit()
 	else:
 		print("state:", state)
-		Exception("Unknown state. Exiting...")
-
+		raise Exception("Unknown state. Exiting...")
 
 if __name__ == '__main__': main()
