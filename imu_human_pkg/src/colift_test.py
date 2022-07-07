@@ -4,7 +4,6 @@
 This is a node to test COLIFT state
 """
 
-from logging import raiseExceptions
 import rospy
 from std_msgs.msg import Int64, String
 import time
