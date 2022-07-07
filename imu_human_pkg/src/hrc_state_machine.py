@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 
 """
-Whole refactored robot_move_node. Human and Robot commanders are seperated and the code is cleaned
+Human-robot-task merge happens here
+
+(Whole refactored robot_move_node. Human and Robot commanders are seperated and the code is cleaned)
 """
 
 import rospy,sys,numpy, time
 from Classes.robot_commander_class import RobotCommander
 from Classes.human_commander_class import HumanCommander
 from Classes.colift_thread_class import ForceThread
+
+from geometry_msgs.msg import Quaternion
 
 # TODO:
 # from Classes.task_environment_class import TaskEnvironment
@@ -34,8 +38,8 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 			robot_commander.get_approach_init_TCP_pose()
 			# hope to eliminate the jumps
 
-		human_commander.calculate_relative_merged_hands(robot_commander.get_current_TCP_pose())
-		robot_commander.move_relative_to_current_pose(human_commander.merged_hands)
+		robot_goal_pose = human_commander.two_hands_move(robot_commander.approach_init_TCP_pose)
+		robot_commander.move_relative_to_current_pose(robot_goal_pose)
 
 	elif state == "COLIFT":
 		robot_commander.close_gripper() # dont forget rospy.sleep(2) to make sure proper close
@@ -68,6 +72,9 @@ def main():
 	print("robot_move_with_ur_rtde Node Created")
 	Robot.init_subscribers_and_publishers()
 	Human.init_subscribers_and_publishers()
+
+	## Required initializations
+	Human.human_to_robot_init_orientation = Quaternion(0.0, 0.0, 0.707, 0.707)
 	Robot.move_pose(Robot.home_pose)
 	prev_hrc_state = ""
 	if not Robot.open_gripper():

@@ -40,16 +40,18 @@ class HumanCommander:
 			print("Human Commander Node Created")
 
 		# print("============ Arm current pose: ", self.rtde_r.getActualTCPPose())
-		self.target_pose = Pose()
+		self.merge_hand_pose = Pose()
 		self.left_hand_pose = Pose()
 		self.right_hand_pose = Pose()
 		self.hand_grip_strength = Int16()
+
+		self.human_to_robot_init_orientation = Quaternion()
 
 		self.elbow_left_height = 0.0
 		self.elbow_right_height = 0.0
 
 		self.hand_init_orientation = Quaternion()
-		self.human_to_robot_init_orientation = Quaternion(0.0, 0.0, 0.707, 0.707)
+		self.human_to_robot_orientation = Quaternion(0.0, 0.0, 0.707, 0.707)
 		self.sr = sr # WS scaling right hand
 		self.sl = sl # WS scaling left hand 
 		self.so = so # Orientation scaling of left wrist to robot wrist
@@ -105,7 +107,7 @@ class HumanCommander:
 
 	def cb_human_ori(self, msg):
 		""" Subscribes chest IMU orientation to map human w.r.t the world frame """
-		self.human_to_robot_init_orientation = kinematic.q_multiply(Quaternion(0.0, 0.0, 0.707, 0.707), msg)
+		self.human_to_robot_orientation = kinematic.q_multiply(self.human_to_robot_init_orientation, msg)
 
 	def cb_left_hand_pose(self, msg):
 		""" Subscribes left hand pose """
@@ -130,7 +132,9 @@ class HumanCommander:
 		print('Hand poses initialized:', msg)
 
 	
-	### HumanClass methods ###
+
+	####### HumanClass methods #######
+
 	def get_state(self):
 		'''
 		Based on gestures, HRC state is determined
@@ -182,45 +186,26 @@ class HumanCommander:
 		return reset_flag
 	
 
-	def hrc_idle(self):
-		self.hrc_hand_calib_flag = True
-		if not self.hrc_hand_calib_flag:
-			self.hands_calib()
+	def two_hands_move(self, robot_pose):
+		'''
+		Calculate merge hands pose.
+		Move the robot TCP with merged hands command with respect to the previous pose. 
+		@params robot_current_pose: list[6]=[position orientation]
+		'''
+		self.merge_hand_pose.position.x = (- self.left_hand_pose.position.x) - self.sr * self.right_hand_pose.position.x
+		self.merge_hand_pose.position.y = (- self.left_hand_pose.position.y) - self.sr * self.right_hand_pose.position.y
+		self.merge_hand_pose.position.z = self.left_hand_pose.position.z + self.sr * self.right_hand_pose.position.z
+		self.merge_hand_pose.orientation = self.left_hand_pose.orientation
 
+		corrected_merge_hand_pose = kinematic.q_rotate(self.human_to_robot_orientation, self.merge_hand_pose.position)
 
-	def hrc_approach(self):
-		''' old cartesian_2_arms here 
-		robot.init is updated to home_hrc'''
-		self.target_pose.position.x = (- self.left_hand_pose.position.x) - self.sr * self.right_hand_pose.position.x
-		self.target_pose.position.y = (- self.left_hand_pose.position.y) - self.sr * self.right_hand_pose.position.y
-		self.target_pose.position.z = self.left_hand_pose.position.z + self.sr * self.right_hand_pose.position.z
-		self.target_pose.orientation = self.left_hand_pose.orientation
+		robot_goal_pose = 6*[None]
+		robot_goal_pose[0] = self.robot_pose[0] + self.sl * corrected_merge_hand_pose[0]
+		robot_goal_pose[1] = self.robot_pose[1] - self.sl * corrected_merge_hand_pose[1]
+		robot_goal_pose[2] = self.robot_pose[2] + self.sl * corrected_merge_hand_pose[2]
+		robot_goal_pose[3:] = self.robot_pose[3:]
 
-		corrected_target_pose = kinematic.q_rotate(self.human_to_robot_init_orientation, self.target_pose.position)
-		self.robot_pose[0] = self.home_hrc[0] + self.sl * corrected_target_pose[0]
-		self.robot_pose[1] = self.home_hrc[1] - self.sl * corrected_target_pose[1]
-		self.robot_pose[2] = self.home_hrc[2] + self.sl * corrected_target_pose[2]
-		self.robot_pose[3:] = self.home_hrc[3:]
-
-		self.rtde_c.servoL(self.robot_pose,0.5, 0.3, 0.002, 0.1, 300)
-
-		if(self.right_hand_pose.orientation.w < 0.707 and self.right_hand_pose.orientation.x > 0.707): # right rotate upwards
-			self.rtde_c.servoStop()
-			self.status = 'HRC/idle'
-		
-		elif(self.hand_grip_strength.data > 75):
-			if not self.hrc_colift_calib_flag:
-				# self.call_hand_calib_server()
-				self.rtde_c.servoStop()
-				self.robot_colift_init = self.rtde_r.getActualTCPPose()
-				self.hrc_colift_calib_flag = True
-			self.status = 'HRC/colift'
-
-		else:
-			self.status = 'HRC/approach'
-
-	def hrc_colift(self):
-		pass
+		return robot_goal_pose
 
 		
 
