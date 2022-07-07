@@ -4,26 +4,13 @@
 Human Commander
 Subscribes two hand poses and sends robot pose command.
 """
-from os import stat
-import sys, time
-import rospy
-from math import pi
-from math import radians as d2r
-import numpy as np
 
+import rospy
 import actionlib
 from imu_human_pkg.msg import handCalibrationAction, handCalibrationGoal
 
-from geometry_msgs.msg import Pose, Point, Quaternion, Vector3
-from sensor_msgs.msg import JointState
-from std_msgs.msg import String, Int16, Float64, Bool
-from std_msgs.msg import Float32MultiArray
-
-from tf.transformations import quaternion_from_euler as e2q
-from tf.transformations import euler_from_quaternion as q2e
-from tf.transformations import quaternion_multiply
-from tf.transformations import euler_from_matrix
-from tf.transformations import quaternion_about_axis
+from geometry_msgs.msg import Pose, Quaternion 
+from std_msgs.msg import String, Int16
 
 from . import Kinematics_with_Quaternions as kinematic
 
