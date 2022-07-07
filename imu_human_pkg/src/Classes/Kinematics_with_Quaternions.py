@@ -210,6 +210,9 @@ def pose_to_list(p):
     Convert Pose(Point, Quaternion) object as [x,y,z,Rx,Ry,Rz]
     '''
     p_converted = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    if not type(p) == Pose:
+        Exception("Pose wrong") 
+        return p_converted
     p_converted[0] = p.position.x
     p_converted[1] = p.position.y
     p_converted[2] = p.position.z
@@ -225,6 +228,7 @@ def list_to_pose(l):
     '''
     l_converted = Pose()
     if not len(l) == 6:
+        Exception("Length wrong") 
         return l_converted
     else:
         l_converted.position.x = l[0]

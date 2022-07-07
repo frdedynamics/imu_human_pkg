@@ -39,8 +39,9 @@ class HumanCommander:
 			self.r = rospy.Rate(rate)
 			print("Human Commander Node Created")
 
-		# print("============ Arm current pose: ", self.rtde_r.getActualTCPPose())
+
 		self.merge_hand_pose = Pose()
+		self.corrected_merge_hand_pose = Pose()
 		self.left_hand_pose = Pose()
 		self.right_hand_pose = Pose()
 		self.hand_grip_strength = Int16()
@@ -50,19 +51,17 @@ class HumanCommander:
 		self.elbow_left_height = 0.0
 		self.elbow_right_height = 0.0
 
-		self.hand_init_orientation = Quaternion()
 		self.human_to_robot_orientation = Quaternion(0.0, 0.0, 0.707, 0.707)
 		self.sr = sr # WS scaling right hand
 		self.sl = sl # WS scaling left hand 
 		self.so = so # Orientation scaling of left wrist to robot wrist
 
 		self.prev_state = ""
-		self.state = "IDLE"
+		self.state = String()
+		self.state.data = "IDLE"
 		self.role = "HUMAN_LEADING"  # or "ROBOT_LEADING"
-		self.hrc_status = String()
-		self.status = 'TO/idle'
 
-		self.colift_dir = 'up'
+		self.colift_dir = "UP"
 		self.colift_flag = 0
 		self.hrc_hand_calib_flag = False
 		self.hrc_colift_calib_flag = False
@@ -78,11 +77,11 @@ class HumanCommander:
 		self.sub_elbow_left = rospy.Subscriber('/elbow_left', Pose, self.cb_elbow_left)
 		self.sub_elbow_right= rospy.Subscriber('/elbow_right', Pose, self.cb_elbow_right)
 		self.sub_emg_sum= rospy.Subscriber('/emg_sum', Int16, self.cb_emg_sum)
-		# self.sub_sensor_lw = rospy.Subscriber('/sensor_l_wrist_rpy', Vector3, self.cb_sensor_lw) # Later with TO
 
 		self.pub_hrc_status = rospy.Publisher('/hrc_status', String, queue_size=1)
 		self.pub_colift_dir = rospy.Publisher('/colift_dir', String, queue_size=1)
-		self.pub_hands_cmd = rospy.Publisher('/hand_output', String, queue_size=1)
+		self.pub_merge_hands = rospy.Publisher('/merged_hands', Pose, queue_size=1)
+		self.pub_corr_merge_hands = rospy.Publisher('/corr_merged_hands', Pose, queue_size=1)
 
 		try:
 			self.elbow_height_th = rospy.get_param("/elbow_height_th")
@@ -197,93 +196,19 @@ class HumanCommander:
 		self.merge_hand_pose.position.z = self.left_hand_pose.position.z + self.sr * self.right_hand_pose.position.z
 		self.merge_hand_pose.orientation = self.left_hand_pose.orientation
 
-		corrected_merge_hand_pose = kinematic.q_rotate(self.human_to_robot_orientation, self.merge_hand_pose.position)
+		corrected_merge_hand_list = kinematic.q_rotate(self.human_to_robot_orientation, self.merge_hand_pose.position)
 
 		robot_goal_pose = 6*[None]
-		robot_goal_pose[0] = self.robot_pose[0] + self.sl * corrected_merge_hand_pose[0]
-		robot_goal_pose[1] = self.robot_pose[1] - self.sl * corrected_merge_hand_pose[1]
-		robot_goal_pose[2] = self.robot_pose[2] + self.sl * corrected_merge_hand_pose[2]
+		robot_goal_pose[0] = self.robot_pose[0] + self.sl * corrected_merge_hand_list[0]
+		robot_goal_pose[1] = self.robot_pose[1] - self.sl * corrected_merge_hand_list[1]
+		robot_goal_pose[2] = self.robot_pose[2] + self.sl * corrected_merge_hand_list[2]
 		robot_goal_pose[3:] = self.robot_pose[3:]
 
+		self.corrected_merge_hand_pose = kinematic.list_to_pose(corrected_merge_hand_list)
 		return robot_goal_pose
-
 		
 
-	def hrc_release(self):
-		print("Moving to RELEASE pose")
-		self.rtde_c.servoStop()
-		self.rtde_c.forceModeStop()
-		self.rtde_c.moveL(self.release_before)
-		self.rtde_c.moveL(self.release)
-		cmd_release = Bool()
-		cmd_release = False
-		self.pub_grip_cmd.publish(cmd_release)
-		print("Robot at RELEASE")
-		rospy.sleep(4)  # Wait until the gripper is fully open
-		self.rtde_c.moveL(self.release_after)
-		print("Robot at RELEASE APPROACH")
-
-		self.status = 'HRC/release'
-
-
-	def update2(self,x):
-		try:
-			self.teleop_active()
-			print(self.robot_init[0]-self.robot_pose[0],
-				  self.robot_init[1]-self.robot_pose[1],
-				  self.robot_init[2]-self.robot_pose[2])
-			self.rtde_c.servoL(self.robot_pose, 0.5, 0.3, 0.01, 0.1, 300)	
-			# self.rtde_c.servoL([self.robot_pose[0], self.robot_pose[1], self.robot_pose[2], self.robot_init[3], self.robot_init[4], self.robot_init[5]+x], 0.5, 0.3, 0.01, 0.1, 300)	
-
-			return self.status
-		except KeyboardInterrupt:
-			self.rtde_c.stopScript()
-			raise
-
-
 	def update(self):
-		# State machine here
-		status = self.status
-		if status == 'TO/idle':
-			self.teleop_idle()
-		elif status == 'TO/active':
-			self.teleop_active()
-		elif status == 'HRC/idle':
-			self.hrc_idle()
-			# self.rtde_c.stopScript()
-			# sys.exit()
-		elif status == 'HRC/approach':
-			self.hrc_approach()
-		elif status == 'HRC/colift':
-			self.hrc_colift()
-		elif status == 'HRC/release':
-			self.hrc_release()
-			user_input = input("Ready to new cycle?")
-			if user_input == 'y':
-				self.rtde_c.moveJ(self.home_teleop_approach_joints, speed=0.5)
-				self.rtde_c.moveJ(self.home_teleop_joints, speed=0.5)
-				self.colift_dir = 'up'
-				self.colift_flag = False
-				self.hrc_hand_calib_flag = False
-				self.hrc_colift_calib_flag = False
-				self.wrist_calib_flag = False
-				self.status = 'TO/idle'
-			else:
-				self.status = 'IDLE'
-		elif status == 'IDLE':
-			print("System is in halt, please restart all the nodes for calibration")
-			sys.exit()
-		else:
-			print("Unknown state:", status)
-			sys.exit()
-	
-		# print("state:", self.state, "    role:", self.role)
-		# print("status:", status)
-		# self.hrc_status = self.state + ',' + self.role
-		# self.hrc_status = self.status
-
-		self.pub_hrc_status.publish(status)
-		self.robot_current_TCP.data = self.rtde_r.getActualTCPPose()
-		self.pub_tcp_current.publish(self.robot_current_TCP)
-		# robot_pose_pose = kinematic.list_to_pose(self.robot_pose)
-		# self.pub_tcp_goal.publish(robot_pose_pose)
+		self.pub_hrc_status.publish(self.state)
+		self.pub_merge_hands.publish(self.merge_hand_pose)
+		self.pub_corr_merge_hands.publish(self.corrected_merge_hand_pose)
