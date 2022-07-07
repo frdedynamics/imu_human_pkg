@@ -39,12 +39,13 @@ class RobotCommander:
 		self.current_TCP_list = Float32MultiArray()
 		self.init_list = self.rtde_r.getActualTCPPose()
 		self.init_joints = self.rtde_r.getActualQ()
-		self.tcp_offset = [0.0, 0.0, 0.14, 0.0, 0.0, 0.0] # self.rtde_c.getTCPOffset() non-responsive. Use it with moveL.
+		self.tcp_offset = [0.0, 0.0, 0.14, 0.0, 0.0, 0.0] # self.rtde_c.getTCPOffset() non-responsive. Use it with getForwardKinematics().
 
-		self.release_joints = [0.9088020324707031, -2.710853715936178, -1.2618284225463867, -2.241020818749899, -1.9657891432391565, -1.429659668599264]
-		self.release_approach_joints = [0.7912373542785645, -2.560136457482809, -1.7473573684692383, -1.9465114078917445, -2.089461151753561, -1.5463460127459925]
-		self.release_prev_joints = [0.7912373542785645, -2.560136457482809, -1.7473573684692383, -1.9465114078917445, -2.089461151753561, -1.5463460127459925]
-		self.home_approach_joints = [1.8097128868103027, -1.9427601299681605, -1.9727983474731445, -2.3609143696227015, -1.35020620027651, -1.5293439070331019]
+		## You can always set it via roscd arm_motion_control_py3/src/Classes/auto_robot_poses.py
+		self.release_joints = [0.7257862091064453, -2.6378027401366175, -1.342545509338379, -2.389071126977438, -2.3516574541675013, -1.6020453611956995]
+		self.before_release_joints = [1.0842461585998535, -2.1514698467650355, -1.7598390579223633, -2.4411307773985804, -2.0929248968707483, -1.60185414949526]
+		self.after_release_joints = [0.6435627937316895, -2.5409981213011683, -1.622014045715332, -2.1787873707213343, -2.3522325197802942, -1.6022732893573206]
+		self.before_home_joints = [0.9844388961791992, -1.9257198772826136, -2.083815574645996, -2.261669775048727, -2.131503407155172, -1.6019018332110804]
 		self.colift_init_list = 6*[None]
 		self.approach_init_list = 6*[None]
 
@@ -81,12 +82,16 @@ class RobotCommander:
 		self.rtde_c.servoL(goal_pose,0.5, 0.3, 0.002, 0.1, 300)
 
 	def open_gripper(self):
+		print("OPEN GRIPPER")
 		self.gripper_cmd.data = False
 		self.pub_grip_cmd.publish(self.gripper_cmd)
+		rospy.sleep(0.5)
 
 	def close_gripper(self):
+		print("CLOSE GRIPPER")
 		self.gripper_cmd.data = True
 		self.pub_grip_cmd.publish(self.gripper_cmd)
+		rospy.sleep(0.5)
 		
 
 	def hrc_idle(self, from_colift=False):
