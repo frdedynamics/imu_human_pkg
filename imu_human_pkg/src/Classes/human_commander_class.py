@@ -5,6 +5,7 @@ Human Commander
 Subscribes two hand poses and sends robot pose command.
 """
 
+import sys
 import rospy
 import actionlib
 from imu_human_pkg.msg import handCalibrationAction, handCalibrationGoal
@@ -46,7 +47,7 @@ class HumanCommander:
 		self.sl = sl # WS scaling left hand 
 		self.so = so # Orientation scaling of left wrist to robot wrist
 
-		self.prev_state = ""
+		self.prev_state = String()
 		self.state = String()
 		self.state.data = "IDLE"
 		self.role = "HUMAN_LEADING"  # or "ROBOT_LEADING"
@@ -125,15 +126,6 @@ class HumanCommander:
 		Based on gestures, HRC state is determined
 		'''
 
-		print("right: ", self.right_hand_pose.orientation.w)
-		print("strength: ", self.hand_grip_strength.data, "-", self.emg_sum_th)
-
-		if not self.prev_state == self.state: ## This makes sure that each state can run a pre-requirements once
-			state_transition_flag = True
-			print(self.emg_sum_th)
-		else:
-			state_transition_flag = False
-
 		if((self.hand_grip_strength.data > self.emg_sum_th) and self.state.data == "APPROACH"):
 			self.state.data = "COLIFT"
 
@@ -143,9 +135,19 @@ class HumanCommander:
 			self.state.data = "IDLE"
 
 		elif((self.right_hand_pose.position.x < -0.25 and self.right_hand_pose.position.z < -0.15)and self.state.data == "COLIFT"):
-			self.state = "RELEASE"
+			self.state.data = "RELEASE"
+
+
+		if not self.prev_state == self.state: ## This makes sure that each state can run a pre-requirements once
+			state_transition_flag = True
+			print(self.emg_sum_th)
+			print("right: ", self.right_hand_pose.orientation.w)
+			print("strength: ", self.hand_grip_strength.data, "-", self.emg_sum_th)
+			print(self.prev_state, "--", self.state)
+		else:
+			state_transition_flag = False
 		
-		self.prev_state = self.state
+		self.prev_state.data = self.state.data
 
 		return self.state, state_transition_flag
 
@@ -190,8 +192,6 @@ class HumanCommander:
 
 		corrected_merge_hand_list = 6*[None]
 		corrected_merge_hand_list = kinematic.q_rotate(self.human_to_robot_orientation, self.merge_hand_pose.position)
-
-		print("merged: ", corrected_merge_hand_list)
 
 		robot_goal_pose = 6*[None]
 		robot_goal_pose[0] = robot_pose[0] + self.sl * corrected_merge_hand_list[0]
