@@ -31,7 +31,7 @@ def main():
 
 	## Required initializations
 	Human.human_to_robot_init_orientation = Quaternion(0.0, 0.0, 0.707, 0.707)
-	# Robot.rtde_c.moveJ(Robot.home)
+	Robot.rtde_c.moveJ(Robot.home_joints)
 	if not Robot.open_gripper():
 		Exception("Please activate gripper")
 	rate = rospy.Rate(100)

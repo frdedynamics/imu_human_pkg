@@ -42,7 +42,7 @@ class RobotCommander:
 		self.tcp_offset = [0.0, 0.0, 0.14, 0.0, 0.0, 0.0] # self.rtde_c.getTCPOffset() non-responsive. Use it with getForwardKinematics().
 
 		## You can always set it via roscd arm_motion_control_py3/src/Classes/auto_robot_poses.py
-		self.home = [0.10986419767141342, 0.635265588760376, 0.1415291577577591, -1.2114763259887695, 1.1640065908432007, 1.209771990776062]
+		self.home_joints = [1.617659568786621, -1.95817293743276, -2.140641212463379, -2.156917234460348, -1.530267063771383, -1.6029561201678675]
 		self.release_joints = [0.7257862091064453, -2.6378027401366175, -1.342545509338379, -2.389071126977438, -2.3516574541675013, -1.6020453611956995]
 		self.before_release_joints = [1.0842461585998535, -2.1514698467650355, -1.7598390579223633, -2.4411307773985804, -2.0929248968707483, -1.60185414949526]
 		self.after_release_joints = [0.6435627937316895, -2.5409981213011683, -1.622014045715332, -2.1787873707213343, -2.3522325197802942, -1.6022732893573206]
@@ -80,7 +80,12 @@ class RobotCommander:
 		self.colift_init = self.rtde_r.getActualTCPPose()
 
 	def move_relative_to_current_pose(self, goal_pose):
-		self.rtde_c.servoL(goal_pose,0.5, 0.3, 0.002, 0.1, 300)
+		'''
+		Think about speed again: https://www.universal-robots.com/articles/ur/application-installation/automove-speed-and-acceleration/
+
+		SERVOJ(Q, A, V, T=0.002, LOOKAHEAD_TIME=0.1, GAIN=300)
+		'''
+		self.rtde_c.servoL(goal_pose,0.5, 0.3, 0.002, 0.1, 300) # Test a avnd v with Sondre. Set the speed slider to 50% for now.
 
 	def open_gripper(self):
 		self.gripper_cmd.data = False
