@@ -12,6 +12,7 @@ from Classes.human_commander_class import HumanCommander
 from Classes.colift_thread_class import ForceThread
 
 from geometry_msgs.msg import Quaternion
+from std_msgs.msg import Bool
 
 # TODO:
 # from Classes.task_environment_class import TaskEnvironment
@@ -29,6 +30,11 @@ def main():
 	Robot.init_subscribers_and_publishers()
 	Human.init_subscribers_and_publishers()
 
+	game_over_flag = Bool()
+	game_over_flag.data = False
+
+	pub_game_over_flag = rospy.Publisher("/game_over_flag", Bool, queue_size=1)
+
 	## Required initializations
 	Human.human_to_robot_init_orientation = Quaternion(0.0, 0.0, 0.707, 0.707)
 	Robot.rtde_c.moveJ(Robot.home_joints)
@@ -42,14 +48,15 @@ def main():
 			Human.update()
 			# Task.update()
 			hrc_state, state_transition_flag = Human.get_state()
-			state_machine(Human, Robot, hrc_state.data, state_transition_flag)
+			state_machine(Human, Robot, hrc_state.data, state_transition_flag, game_over_flag)
+			pub_game_over_flag.publish(game_over_flag)
 			rate.sleep()
 	except KeyboardInterrupt:
 		Robot.rtde_c.forceModeStop()
 		rospy.signal_shutdown("KeyboardInterrupt")
 		raise
 
-def state_machine(human_commander, robot_commander, state, state_transition_flag):
+def state_machine(human_commander, robot_commander, state, state_transition_flag, game_over_flag):
 
 	## TODO: Add teleop active and teleop idle later
 
@@ -121,16 +128,17 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 		after_release_pose[1] += -0.1
 		robot_commander.rtde_c.moveL(after_release_pose)
 		print("Robot at RELEASE APPROACH")
+		game_over_flag.data = True
 		## new cycle 
-		user_input = input("Ready to new cycle?")
-		if user_input == 'y':
-			robot_commander.rtde_c.moveJ(robot_commander.before_home_joints, speed=1.0)
-			robot_commander.rtde_c.moveJ(robot_commander.init_joints, speed=1.0)
-			robot_commander.colift_dir = 'up'
-			input("Press a key when the user is ready in IDLE state")
-		else:
-			rospy.signal_shutdown("KeyboardInterrupt")
-			sys.exit()
+		# user_input = input("Ready to new cycle?")
+		# if user_input == 'y':
+		# 	robot_commander.rtde_c.moveJ(robot_commander.before_home_joints, speed=1.0)
+		# 	robot_commander.rtde_c.moveJ(robot_commander.init_joints, speed=1.0)
+		# 	robot_commander.colift_dir = 'up'
+		# 	input("Press a key when the user is ready in IDLE state")
+		# else:
+		# 	rospy.signal_shutdown("KeyboardInterrupt")
+		# 	sys.exit()
 	else:
 		print("state:", state)
 		raise Exception("Unknown state. Exiting...")
