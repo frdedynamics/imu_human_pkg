@@ -32,7 +32,7 @@ class HumanCommander:
 		self.merge_hand_pose = Pose()
 		self.corrected_merge_hand_pose = Pose()
 		self.corrected_merge_hand_list = Float32MultiArray()
-		self.corrected_merge_hand_list.data = 6*[None]
+		self.corrected_merge_hand_list.data = 6*[0.0]
 		self.left_hand_pose = Pose()
 		self.right_hand_pose = Pose()
 		self.hand_grip_strength = Int16()
@@ -191,7 +191,7 @@ class HumanCommander:
 		self.merge_hand_pose.position.z = self.left_hand_pose.position.z + self.sr * self.right_hand_pose.position.z
 		self.merge_hand_pose.orientation = self.left_hand_pose.orientation
 
-		corrected_merge_hand_list = 6*[None]
+		corrected_merge_hand_list = 6*[0.0]
 		corrected_merge_hand_list = kinematic.q_rotate(self.human_to_robot_orientation, self.merge_hand_pose.position)
 
 		robot_goal_pose = 6*[None]
@@ -243,4 +243,6 @@ class HumanCommander:
 		self.pub_colift_dir.publish(self.colift_dir)
 		self.pub_merge_hands.publish(self.merge_hand_pose)
 		self.pub_corr_merge_hands.publish(self.corrected_merge_hand_pose)
-		self.pub_corr_merge_hands_list.publish(self.corrected_merge_hand_list)
+		# print(self.corrected_merge_hand_list)
+		# print(type(self.corrected_merge_hand_list))
+		# self.pub_corr_merge_hands_list.publish(self.corrected_merge_hand_list)

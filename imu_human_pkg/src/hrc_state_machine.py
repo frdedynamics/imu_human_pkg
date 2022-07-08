@@ -42,6 +42,7 @@ def main():
 		Exception("Please activate gripper")
 	rate = rospy.Rate(100)
 	state_transition_flag = True
+	rospy.set_param('/robot_move_started', True)
 	try:
 		while not rospy.is_shutdown():
 			Robot.update()
@@ -91,7 +92,7 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 			while force_thread.is_alive():
 				print("wait for compliance mode to be ready")
 		
-		rospy.sleep(0.5) # trying to eliminate double force readins
+		rospy.sleep(0.8) # trying to eliminate double force readins
 		_curr_force = robot_commander.rtde_r.getActualTCPForce()
 		if abs(_curr_force[0]) > 0.9:
 			print("force: ",(_curr_force[0]))
