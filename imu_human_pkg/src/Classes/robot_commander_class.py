@@ -101,6 +101,9 @@ class RobotCommander:
 	def update(self):
 		self.pub_grip_cmd.publish(self.gripper_cmd)
 
+		# _curr_force = self.rtde_r.getActualTCPForce()
+		# print(f'0: {_curr_force[0]:.2f} -- 1: {_curr_force[1]:.2f} -- 2: {_curr_force[2]:.2f} -- 3: {_curr_force[3]:.2f} -- 4: {_curr_force[4]:.2f} -- 5: {_curr_force[5]:.2f} -- ')
+
 		self.current_TCP_list.data = self.rtde_r.getActualTCPPose()
 		self.pub_tcp_current_list.publish(self.current_TCP_list)
 
