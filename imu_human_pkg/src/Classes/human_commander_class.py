@@ -54,7 +54,7 @@ class HumanCommander:
 
 		self.prev_colift_dir = String()
 		self.colift_dir = String()
-		self.colift_dir.data = "s"
+		self.colift_dir.data = "u"
 		
 
 	def init_subscribers_and_publishers(self):
@@ -69,7 +69,7 @@ class HumanCommander:
 		self.pub_colift_dir = rospy.Publisher('/colift_dir', String, queue_size=1)
 		self.pub_merge_hands = rospy.Publisher('/merged_hands', Pose, queue_size=1)
 		self.pub_corr_merge_hands = rospy.Publisher('/corr_merged_hands', Pose, queue_size=1)
-		self.pub_corr_merge_hands_list = rospy.Publisher('/corr_merged_hands_list', Float32MultiArray, queue_size=1)
+		# self.pub_corr_merge_hands_list = rospy.Publisher('/corr_merged_hands_list', Float32MultiArray, queue_size=1)
 
 		try:
 			self.elbow_height_th = rospy.get_param("/elbow_height_th")
@@ -87,10 +87,10 @@ class HumanCommander:
 		self.hand_grip_strength = msg
 
 	def cb_elbow_left(self, msg):
-		self.elbow_left_height = msg.position.z
+		self.elbow_left_height = msg.position.y
 		
 	def cb_elbow_right(self, msg):
-		self.elbow_right_height = msg.position.z
+		self.elbow_right_height = -msg.position.y
 
 	def cb_human_ori(self, msg):
 		""" Subscribes chest IMU orientation to map human w.r.t the world frame """
@@ -129,6 +129,7 @@ class HumanCommander:
 
 		if((self.hand_grip_strength.data > self.emg_sum_th) and self.state.data == "APPROACH"):
 			self.state.data = "COLIFT"
+			rospy.set_param("/colift_set", True)
 
 		elif(((self.right_hand_pose.orientation.w < 0.707 and self.right_hand_pose.orientation.x > 0.707) and self.hand_grip_strength.data < self.emg_sum_th)and self.state.data != "COLIFT"): # right rotate downwards
 			self.state.data = "APPROACH"
@@ -141,7 +142,6 @@ class HumanCommander:
 
 		if not self.prev_state == self.state: ## This makes sure that each state can run a pre-requirements once
 			state_transition_flag = True
-			print(self.emg_sum_th)
 			print("right: ", self.right_hand_pose.orientation.w)
 			print("strength: ", self.hand_grip_strength.data, "-", self.emg_sum_th)
 			print(self.prev_state, "--", self.state)
@@ -211,27 +211,32 @@ class HumanCommander:
 		Sets direction for compliance force based on elbow heights
 		'''
 
+		print("elbow_right_height: ", self.elbow_right_height)
+		print("elbow_left_height: ", self.elbow_left_height)
+		print("current colift_dir: ", self.colift_dir.data)
 		if((self.elbow_right_height > self.elbow_height_th) and (self.elbow_left_height < self.elbow_height_th)):
-			self.colift_dir.data = "l"
+			self.colift_dir.data = "r"
 			# self.colift_flag = 0
 		elif((self.elbow_left_height > self.elbow_height_th) and (self.elbow_right_height < self.elbow_height_th)):
-			self.colift_dir.data = "r"
+			self.colift_dir.data = "l"
 			# self.colift_flag = 0
 		elif((self.elbow_left_height > self.elbow_height_th) and (self.elbow_right_height > self.elbow_height_th)):
 			self.colift_dir.data = "u"
 			# self.colift_flag = 0
-		elif((self.elbow_left_height < self.elbow_height_th) and (self.elbow_right_height < self.elbow_height_th) and self.colift_dir.data == "u"):
-			self.colift_dir.data = "d"
+		elif(self.elbow_left_height < self.elbow_height_th) and (self.elbow_right_height < self.elbow_height_th):
+			if(self.colift_dir.data == "s"):
+				self.colift_dir.data = "d"
+			else:
+				self.colift_dir.data = "s"
 		else:
-			self.colift_dir.data = "s"
+			print("Something very wrong with colift dir.")
 
 
-		print(self.prev_colift_dir, "--", self.colift_dir)
-		print(self.elbow_left_height, "--", self.elbow_right_height)
 		if not self.prev_colift_dir == self.colift_dir:
 			dir_change_flag = True
 		else:
 			dir_change_flag = False
+			print("direction changed to: ", self.colift_dir.data)
 		
 		self.prev_colift_dir.data = self.colift_dir.data
 		

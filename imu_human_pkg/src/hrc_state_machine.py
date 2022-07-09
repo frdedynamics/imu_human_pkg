@@ -85,20 +85,20 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 		robot_commander.rtde_c.servoStop()
 		if state_transition_flag:
 			robot_commander.close_gripper()
-			rospy.sleep(2)
+			print("Closing gripper")
 			robot_commander.set_colift_init_TCP_pose()
 			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode="u")
 			force_thread.join()
 			while force_thread.is_alive():
 				print("wait for compliance mode to be ready")
 		
-		rospy.sleep(0.8) # trying to eliminate double force readins
+		rospy.sleep(0.5) # trying to eliminate double force readins
 		_curr_force = robot_commander.rtde_r.getActualTCPForce()
-		if abs(_curr_force[0]) > 0.9:
-			print("force: ",(_curr_force[0]))
+		if abs(_curr_force[1]) > 20:
+			print("force: ",(_curr_force[1]))
 			dir_str, dir_change_flag = human_commander.get_dir_from_elbows()
-			print("dir_change_flag: ", dir_change_flag)
-			print("dir_str: ", dir_str)
+			# print("dir_change_flag: ", dir_change_flag)
+			# print("dir_str: ", dir_str)
 			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str.data)
 			force_thread.join()
 
