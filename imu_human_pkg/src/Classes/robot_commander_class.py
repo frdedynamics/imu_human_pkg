@@ -90,12 +90,12 @@ class RobotCommander:
 	def open_gripper(self):
 		self.gripper_cmd.data = False
 		self.pub_grip_cmd.publish(self.gripper_cmd)
-		rospy.sleep(1)
+		rospy.sleep(1.5)
 
 	def close_gripper(self):
 		self.gripper_cmd.data = True
 		self.pub_grip_cmd.publish(self.gripper_cmd)
-		rospy.sleep(1)
+		rospy.sleep(1.5)
 		
 
 	def update(self):
