@@ -15,8 +15,9 @@ class ForceThread(threading.Thread):
         self.rtde_r = rtde_r
         self.rtde_c = rtde_c
         self.mode = mode
+        print("self.mode: ", self.mode)
         self.start()
-        # print("thread created!")
+        print("thread created!")
 
 
     ## I need super().__init__ to override stop event.
@@ -50,15 +51,16 @@ class ForceThread(threading.Thread):
             selection_vector = [0, 0, 1, 0, 0, 0]
             self.rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
         elif self.mode =="d":
-            wrench = [0.0, 0.0, -f, 0.0, 0.0, 0.0]
+            wrench = [0.0, 0.0, -f/2, 0.0, 0.0, 0.0]
             limits = [0.3, 0.3, 0.5, 0.17, 0.17, 0.17]
             selection_vector = [0, 0, 1, 0, 0, 0]
             self.rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
         else:
-            wrench = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-            limits = [0.3, 0.3, 0.3, 0.17, 0.17, 0.17]
-            selection_vector = [0, 0, 0, 0, 0, 0]
-            self.rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
-            # self.rtde_c.forceModeStop()
+            # wrench = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            # limits = [0.3, 0.3, 0.3, 0.17, 0.17, 0.17]
+            # selection_vector = [0, 0, 0, 0, 0, 0]
+            # self.rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
+            self.rtde_c.forceModeStop()
+        print("Applied force: ", self.mode)
 
         # _curr_force = self.rtde_r.getActualTCPForce()

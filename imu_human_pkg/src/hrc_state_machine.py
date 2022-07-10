@@ -96,10 +96,8 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 		_curr_force = robot_commander.rtde_r.getActualTCPForce()
 		if abs(_curr_force[1]) > 20:
 			print("force: ",(_curr_force[1]))
-			dir_str, dir_change_flag = human_commander.get_dir_from_elbows()
-			# print("dir_change_flag: ", dir_change_flag)
-			# print("dir_str: ", dir_str)
-			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str.data)
+			dir_str, dir_change_flag = human_commander.get_dir_from_elbows(_curr_force[1])
+			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str)
 			force_thread.join()
 
 			if dir_change_flag:

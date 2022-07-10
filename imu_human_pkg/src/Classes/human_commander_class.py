@@ -238,7 +238,7 @@ class HumanCommander:
 		
 		self.prev_colift_dir.data = self.colift_dir.data
 		
-		return self.colift_dir, dir_change_flag
+		return self.colift_dir.data, dir_change_flag
 		
 
 	def update(self):

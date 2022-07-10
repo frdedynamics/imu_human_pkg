@@ -110,6 +110,7 @@ class RobotCommander:
 		self.pub_grip_cmd.publish(self.gripper_cmd)
 
 		self.tcp_force.data = self.rtde_r.getActualTCPForce()
+		# _curr_force = self.rtde_r.getActualTCPForce()
 		# print(f'0: {_curr_force[0]:.2f} -- 1: {_curr_force[1]:.2f} -- 2: {_curr_force[2]:.2f} -- 3: {_curr_force[3]:.2f} -- 4: {_curr_force[4]:.2f} -- 5: {_curr_force[5]:.2f} -- ')
 		self.pub_tcp_force.publish(self.tcp_force)
 
