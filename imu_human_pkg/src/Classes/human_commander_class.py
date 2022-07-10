@@ -206,7 +206,7 @@ class HumanCommander:
 		return robot_goal_pose
 
 
-	def get_dir_from_elbows(self):
+	def get_dir_from_elbows(self, force):
 		'''
 		Sets direction for compliance force based on elbow heights
 		'''
@@ -214,22 +214,20 @@ class HumanCommander:
 		print("elbow_right_height: ", self.elbow_right_height)
 		print("elbow_left_height: ", self.elbow_left_height)
 		print("current colift_dir: ", self.colift_dir.data)
-		if((self.elbow_right_height > self.elbow_height_th) and (self.elbow_left_height < self.elbow_height_th)):
-			self.colift_dir.data = "r"
-			# self.colift_flag = 0
-		elif((self.elbow_left_height > self.elbow_height_th) and (self.elbow_right_height < self.elbow_height_th)):
-			self.colift_dir.data = "l"
-			# self.colift_flag = 0
-		elif((self.elbow_left_height > self.elbow_height_th) and (self.elbow_right_height > self.elbow_height_th)):
-			self.colift_dir.data = "u"
-			# self.colift_flag = 0
-		elif(self.elbow_left_height < self.elbow_height_th) and (self.elbow_right_height < self.elbow_height_th):
-			if(self.colift_dir.data == "s"):
-				self.colift_dir.data = "d"
+
+		if (self.colift_dir.data == "s" and force < 0):
+			if((self.elbow_right_height > self.elbow_height_th) and (self.elbow_left_height < self.elbow_height_th)):
+				self.colift_dir.data = "r"
+			elif((self.elbow_left_height > self.elbow_height_th) and (self.elbow_right_height < self.elbow_height_th)):
+				self.colift_dir.data = "l"
+			elif((self.elbow_left_height > self.elbow_height_th) and (self.elbow_right_height > self.elbow_height_th)):
+				self.colift_dir.data = "u"
 			else:
-				self.colift_dir.data = "s"
+				print("Something wrong colift 1: ", self.colift_dir.data, '--', force)
+		elif (self.colift_dir.data == "s" and force > 0):
+			self.colift_dir.data = "d"
 		else:
-			print("Something very wrong with colift dir.")
+			self.colift_dir.data = "s"
 
 
 		if not self.prev_colift_dir == self.colift_dir:
