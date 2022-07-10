@@ -14,7 +14,7 @@ import numpy as np
 from geometry_msgs.msg import Pose, Point, Quaternion, Vector3
 from sensor_msgs.msg import JointState
 from std_msgs.msg import String, Int16, Float64, Bool
-from std_msgs.msg import Float32MultiArray
+from std_msgs.msg import Float32MultiArray, MultiArrayDimension
 from std_msgs.msg import Header
 
 from tf.transformations import quaternion_from_euler as e2q
@@ -36,7 +36,13 @@ class RobotCommander:
 		self.rtde_c = RTDEControl("172.31.1.144", RTDEControl.FLAG_USE_EXT_UR_CAP)
 		self.rtde_r = rtde_receive.RTDEReceiveInterface("172.31.1.144")
 
-		self.current_TCP_list = Float32MultiArray()
+		self.tcp_force = Float32MultiArray()
+		## Skip this for now to reduce the rosbag size. Directly uncomment to use.
+		# tcp_layout = MultiArrayDimension()
+		# tcp_layout.label = "tcp_force"
+		# tcp_layout.size = 1
+		# tcp_layout.stride = 6
+		# self.tcp_force.layout.dim.append(tcp_layout)
 		self.init_list = self.rtde_r.getActualTCPPose()
 		self.init_joints = self.rtde_r.getActualQ()
 		self.tcp_offset = [0.0, 0.0, 0.14, 0.0, 0.0, 0.0] # self.rtde_c.getTCPOffset() non-responsive. Use it with getForwardKinematics().
@@ -49,6 +55,7 @@ class RobotCommander:
 		self.before_home_joints = [0.9844388961791992, -1.9257198772826136, -2.083815574645996, -2.261669775048727, -2.131503407155172, -1.6019018332110804]
 		self.colift_init_list = self.rtde_r.getActualTCPPose()
 		self.approach_init_TCP_list = self.rtde_r.getActualTCPPose()
+		self.current_TCP_list = Float32MultiArray()
 
 		self.gripper_cmd = Bool()
 
@@ -69,6 +76,7 @@ class RobotCommander:
 		self.pub_tcp_current_list = rospy.Publisher('/tcp_current_list', Float32MultiArray, queue_size=1)
 		self.pub_tcp_current_pose = rospy.Publisher('/tcp_current_pose', Pose, queue_size=1)
 		self.pub_robot_joints = rospy.Publisher('/ur5e_joint_state', JointState, queue_size=1)
+		self.pub_tcp_force = rospy.Publisher('/tcp_force', Float32MultiArray, queue_size=1)
 
 
 	####### State methods #######
@@ -101,8 +109,9 @@ class RobotCommander:
 	def update(self):
 		self.pub_grip_cmd.publish(self.gripper_cmd)
 
-		# _curr_force = self.rtde_r.getActualTCPForce()
+		self.tcp_force.data = self.rtde_r.getActualTCPForce()
 		# print(f'0: {_curr_force[0]:.2f} -- 1: {_curr_force[1]:.2f} -- 2: {_curr_force[2]:.2f} -- 3: {_curr_force[3]:.2f} -- 4: {_curr_force[4]:.2f} -- 5: {_curr_force[5]:.2f} -- ')
+		self.pub_tcp_force.publish(self.tcp_force)
 
 		self.current_TCP_list.data = self.rtde_r.getActualTCPPose()
 		self.pub_tcp_current_list.publish(self.current_TCP_list)
