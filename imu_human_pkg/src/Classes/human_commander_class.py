@@ -224,6 +224,8 @@ class HumanCommander:
 				self.colift_dir.data = "u"
 			else:
 				print("Something wrong colift 1: ", self.colift_dir.data, '--', force)
+				print("left:", self.elbow_left_height)
+				print("right:", self.elbow_right_height)
 		elif (self.colift_dir.data == "s" and force > 0):
 			self.colift_dir.data = "d"
 		else:

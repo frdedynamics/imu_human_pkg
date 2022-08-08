@@ -14,6 +14,8 @@ from Classes.colift_thread_class import ForceThread
 from geometry_msgs.msg import Quaternion
 from std_msgs.msg import Bool
 
+from subprocess import Popen
+
 # TODO:
 # from Classes.task_environment_class import TaskEnvironment
 '''
@@ -129,7 +131,10 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 		print("Robot at RELEASE APPROACH")
 		game_over_flag.data = True
 		robot_commander.rtde_c.servoStop()
-		sys.exit()
+
+		## Fix it later:
+		Popen(["rosnode", "kill", "/rviz_markers"])
+		# sys.exit()
 		## new cycle 
 		# user_input = input("Ready to new cycle?")
 		# if user_input == 'y':
