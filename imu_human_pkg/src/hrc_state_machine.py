@@ -128,6 +128,8 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 		robot_commander.rtde_c.moveL(after_release_pose)
 		print("Robot at RELEASE APPROACH")
 		game_over_flag.data = True
+		robot_commander.rtde_c.servoStop()
+		sys.exit()
 		## new cycle 
 		# user_input = input("Ready to new cycle?")
 		# if user_input == 'y':
