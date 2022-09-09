@@ -69,9 +69,10 @@ def main():
 
     release_pose = robot_commander.rtde_c.getForwardKinematics(robot_commander.release_joints, robot_commander.tcp_offset)
     before_release_pose = release_pose
-    release_pose[2] -= 0.3
+    release_pose[2] += 0.3
     
-    move_thread = MoveThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, goal=release_pose)
+    # move_thread = MoveThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, goal=release_pose)
+    robot_commander.rtde_c.moveL(release_pose, 0.25, 1.2, True)
     
     # release_pose = robot_commander.rtde_c.getForwardKinematics(robot_commander.release_joints, robot_commander.tcp_offset)
     # robot_commander.rtde_c.moveL(release_pose)
@@ -85,7 +86,7 @@ def main():
     # game_over_flag.data = True
     # robot_commander.rtde_c.servoStop()
     
-    move_thread.join() # this blocks until the process terminates
+    # move_thread.join() # this blocks until the process terminates
 
     try:
         while not rospy.is_shutdown():
