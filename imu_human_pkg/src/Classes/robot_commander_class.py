@@ -56,7 +56,6 @@ class RobotCommander:
 		before_release_pose[2] += 0.3
 		after_release_pose = release_pose.copy()
 		after_release_pose[1] += -0.1
-		target_poses = [before_release_pose, release_pose, after_release_pose]
 
 		self.target_poses = [before_release_pose, release_pose, after_release_pose]
 		self.colift_init_list = self.rtde_r.getActualTCPPose()

@@ -116,15 +116,36 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 			print("HERE RELEASE")
 			robot_commander.rtde_c.servoStop()
 			robot_commander.rtde_c.forceModeStop()
+			robot_commander.close_gripper()
 			print("Moving to RELEASE pose")
 
 		if robot_commander.rtde_c.isSteady():
 			print("Robot steady")
 			if len(robot_commander.target_poses) == 0:
-				sys.exit()
+				print("THE END")
+				game_over_flag.data = True
+				robot_commander.rtde_c.servoStop()
+
+				#restart_new_trial()
+				user_input = input("Ready to new cycle?")
+				if user_input == 'y':
+					if rospy.has_param('/robot_move_started'):
+						rospy.delete_param('/robot_move_started')
+					if rospy.has_param('/colift_set'):
+						rospy.delete_param('/colift_set')
+					if rospy.has_param('/elbow_height_th'):
+						rospy.delete_param('/elbow_height_th')
+					if rospy.has_param('/emg_sum_th'):
+						rospy.delete_param('/emg_sum_th')
+					Popen(["rosnode", "kill", "/visualize_and_gamify"])
+					state = "IDLE"
+					game_over_flag.data = False
+
 			elif len(robot_commander.target_poses) == 1:
-				print("open grippper")
-				sys.exit()
+				robot_commander.open_gripper()
+				print("gripper open")
+				robot_commander.rtde_c.moveL(robot_commander.target_poses[0], 0.25, 1.2, True)
+				robot_commander.target_poses.pop(0)
 			else:
 				print(robot_commander.target_poses)
 				robot_commander.rtde_c.moveL(robot_commander.target_poses[0], 0.25, 1.2, True)
