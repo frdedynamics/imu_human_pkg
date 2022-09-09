@@ -12,6 +12,7 @@ from Classes.robot_commander_class import RobotCommander
 
 import queue
 import threading
+import sys
 
 from rtde_control import RTDEControlInterface as RTDEControl
 import rtde_receive
@@ -68,22 +69,32 @@ def main():
 
 
     release_pose = robot_commander.rtde_c.getForwardKinematics(robot_commander.release_joints, robot_commander.tcp_offset)
-    before_release_pose = release_pose
-    release_pose[2] += 0.3
+    before_release_pose = release_pose.copy()
+    before_release_pose[2] += 0.3
+    after_release_pose = release_pose.copy()
+    after_release_pose[1] += -0.1
+    target_poses = [before_release_pose, release_pose, after_release_pose]
+
     
     # move_thread = MoveThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, goal=release_pose)
-    robot_commander.rtde_c.moveL(release_pose, 0.25, 1.2, True)
+    
+    
+    
+    
     
     # release_pose = robot_commander.rtde_c.getForwardKinematics(robot_commander.release_joints, robot_commander.tcp_offset)
     # robot_commander.rtde_c.moveL(release_pose)
     # robot_commander.open_gripper()
     # print("Robot at RELEASE")
-    # ## check game_end_param set
-    # after_release_pose = release_pose
-    # after_release_pose[1] += -0.1
+    ## check game_end_param set
+    
     # robot_commander.rtde_c.moveL(after_release_pose)
     # print("Robot at RELEASE APPROACH")
     # game_over_flag.data = True
+
+    
+
+
     # robot_commander.rtde_c.servoStop()
     
     # move_thread.join() # this blocks until the process terminates
@@ -91,6 +102,17 @@ def main():
     try:
         while not rospy.is_shutdown():
             update(pub_test_cmd)
+            if robot_commander.rtde_c.isSteady():
+                print("Robot steady")
+                if not len(target_poses) == 0:
+                    print(target_poses)
+                    robot_commander.rtde_c.moveL(target_poses[0], 0.25, 1.2, True)
+                    target_poses.pop(0)
+                else:
+                    sys.exit()
+                rospy.sleep(0.5)
+            else:
+                pass
             rate.sleep()
     except KeyboardInterrupt:
         rospy.signal_shutdown("KeyboardInterrupt")
