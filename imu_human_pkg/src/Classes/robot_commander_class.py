@@ -50,9 +50,15 @@ class RobotCommander:
 		## You can always set it via roscd arm_motion_control_py3/src/Classes/auto_robot_poses.py
 		self.home_joints = [-4.576090637837545, -2.1403819523253382, -1.5566396713256836, -2.5860406361021937, -1.4400008360492151, -1.5566766897784632]
 		self.release_joints = [-3.885580841694967, -2.403839250604147, -1.5563268661499023, -2.267588277856344, -1.0008147398578089, -1.5738585630999964]
-		# self.before_release_joints = [1.0842461585998535, -2.1514698467650355, -1.7598390579223633, -2.4411307773985804, -2.0929248968707483, -1.60185414949526]
-		# self.after_release_joints = [0.6435627937316895, -2.5409981213011683, -1.622014045715332, -2.1787873707213343, -2.3522325197802942, -1.6022732893573206]
-		# self.before_home_joints = [0.9844388961791992, -1.9257198772826136, -2.083815574645996, -2.261669775048727, -2.131503407155172, -1.6019018332110804]
+		release_pose = self.rtde_c.getForwardKinematics(self.release_joints, self.tcp_offset)
+
+		before_release_pose = release_pose.copy()
+		before_release_pose[2] += 0.3
+		after_release_pose = release_pose.copy()
+		after_release_pose[1] += -0.1
+		target_poses = [before_release_pose, release_pose, after_release_pose]
+
+		self.target_poses = [before_release_pose, release_pose, after_release_pose]
 		self.colift_init_list = self.rtde_r.getActualTCPPose()
 		self.approach_init_TCP_list = self.rtde_r.getActualTCPPose()
 		self.current_TCP_list = Float32MultiArray()

@@ -22,7 +22,6 @@ from subprocess import Popen
 	Arduino buttons subscriber, table imu subscriber. All will be in TaskEnvironment class.
 '''
 
-
 def main(): 
 	Robot = RobotCommander(start_node=False)
 	Human = HumanCommander(start_node=False)
@@ -113,49 +112,70 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 
 	
 	elif state == "RELEASE":
-		print("HERE RELEASE")
-		robot_commander.rtde_c.servoStop()
-		robot_commander.rtde_c.forceModeStop()
-		print("Moving to RELEASE pose")
-		release_pose = robot_commander.rtde_c.getForwardKinematics(robot_commander.release_joints, robot_commander.tcp_offset)
-		before_release_pose = release_pose
-		release_pose[2] += 0.3
-		robot_commander.rtde_c.moveL(before_release_pose)
-		release_pose = robot_commander.rtde_c.getForwardKinematics(robot_commander.release_joints, robot_commander.tcp_offset)
-		robot_commander.rtde_c.moveL(release_pose)
-		robot_commander.open_gripper()
-		print("Robot at RELEASE")
-		## check game_end_param set
-		after_release_pose = release_pose
-		after_release_pose[1] += -0.1
-		robot_commander.rtde_c.moveL(after_release_pose)
-		print("Robot at RELEASE APPROACH")
-		game_over_flag.data = True
-		robot_commander.rtde_c.servoStop()
+		if state_transition_flag == True:
+			print("HERE RELEASE")
+			robot_commander.rtde_c.servoStop()
+			robot_commander.rtde_c.forceModeStop()
+			print("Moving to RELEASE pose")
 
-		##restart_new_trial()
-		user_input = input("Ready to new cycle?")
-		if user_input == 'y':
-			if rospy.has_param('/robot_move_started'):
-				rospy.delete_param('/robot_move_started')
-			if rospy.has_param('/colift_set'):
-				rospy.delete_param('/colift_set')
-			if rospy.has_param('/elbow_height_th'):
-				rospy.delete_param('/elbow_height_th')
-			if rospy.has_param('/emg_sum_th'):
-				rospy.delete_param('/emg_sum_th')
-			Popen(["rosnode", "kill", "/visualize_and_gamify"])
-			state = "IDLE"
-			game_over_flag.data = False
-
-			sys.exit()
-			
+		if robot_commander.rtde_c.isSteady():
+			print("Robot steady")
+			if len(robot_commander.target_poses) == 0:
+				sys.exit()
+			elif len(robot_commander.target_poses) == 1:
+				print("open grippper")
+				sys.exit()
+			else:
+				print(robot_commander.target_poses)
+				robot_commander.rtde_c.moveL(robot_commander.target_poses[0], 0.25, 1.2, True)
+				robot_commander.target_poses.pop(0)
+			rospy.sleep(0.5)
 		else:
-			sys.exit()
+			pass
+
+
+		# if robot_commander.rtde_c.isSteady():
+		# 	print("Robot steady")
+		# 	if len(target_poses) == 0:
+		# 		print("THE END")
+		# 		game_over_flag.data = True
+		# 		robot_commander.rtde_c.servoStop()
+
+		# 		##restart_new_trial()
+		# 		user_input = input("Ready to new cycle?")
+		# 		if user_input == 'y':
+		# 			if rospy.has_param('/robot_move_started'):
+		# 				rospy.delete_param('/robot_move_started')
+		# 			if rospy.has_param('/colift_set'):
+		# 				rospy.delete_param('/colift_set')
+		# 			if rospy.has_param('/elbow_height_th'):
+		# 				rospy.delete_param('/elbow_height_th')
+		# 			if rospy.has_param('/emg_sum_th'):
+		# 				rospy.delete_param('/emg_sum_th')
+		# 			Popen(["rosnode", "kill", "/visualize_and_gamify"])
+		# 			state = "IDLE"
+		# 			game_over_flag.data = False
+
+		# 			sys.exit()
+		# 	elif len(target_poses) == 1:
+		# 		robot_commander.open_gripper()
+		# 		print("gripper open")
+		# 	else:
+		# 		print("here")
+		# 		print(target_poses)
+		# 		robot_commander.rtde_c.moveL(target_poses[0], 0.25, 1.2, True)
+		# 		target_poses.pop(0)
+		# 	rospy.sleep(0.5)
+		
+
+		
+			
+		# else:
+		# 	sys.exit()
 
 
 		## Fix it later:
-		Popen(["rosnode", "kill", "/rviz_markers"])
+		# Popen(["rosnode", "kill", "/rviz_markers"])
 		# sys.exit()
 		## new cycle 
 		# user_input = input("Ready to new cycle?")
