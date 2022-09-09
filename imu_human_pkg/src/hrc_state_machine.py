@@ -131,6 +131,7 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 		print("Robot at RELEASE APPROACH")
 		game_over_flag.data = True
 		robot_commander.rtde_c.servoStop()
+		sys.exit()
 
 		## Fix it later:
 		Popen(["rosnode", "kill", "/rviz_markers"])

@@ -104,12 +104,15 @@ def main():
             update(pub_test_cmd)
             if robot_commander.rtde_c.isSteady():
                 print("Robot steady")
-                if not len(target_poses) == 0:
+                if len(target_poses) == 0:
+                    sys.exit()
+                elif len(target_poses) == 1:
+                    print("open grippper")
+                    sys.exit()
+                else:
                     print(target_poses)
                     robot_commander.rtde_c.moveL(target_poses[0], 0.25, 1.2, True)
                     target_poses.pop(0)
-                else:
-                    sys.exit()
                 rospy.sleep(0.5)
             else:
                 pass

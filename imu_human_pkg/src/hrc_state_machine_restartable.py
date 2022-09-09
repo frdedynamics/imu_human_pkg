@@ -53,6 +53,23 @@ def main():
 			state_machine(Human, Robot, hrc_state.data, state_transition_flag, game_over_flag)
 			pub_game_over_flag.publish(game_over_flag)
 			rate.sleep()
+
+			if game_over_flag.data == True:
+			#restart_new_trial()
+				user_input = input("Ready to new cycle?")
+				if user_input == 'y':
+					if rospy.has_param('/robot_move_started'):
+						rospy.delete_param('/robot_move_started')
+					if rospy.has_param('/colift_set'):
+						rospy.delete_param('/colift_set')
+					if rospy.has_param('/elbow_height_th'):
+						rospy.delete_param('/elbow_height_th')
+					if rospy.has_param('/emg_sum_th'):
+						rospy.delete_param('/emg_sum_th')
+					Robot.rtde_c.disconnect()
+					Popen(["rosnode", "kill", "/visualize_and_gamify"])
+					state = "IDLE"
+					game_over_flag.data = False
 	except KeyboardInterrupt:
 		Robot.rtde_c.forceModeStop()
 		rospy.signal_shutdown("KeyboardInterrupt")
@@ -125,22 +142,6 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 				print("THE END")
 				game_over_flag.data = True
 				robot_commander.rtde_c.servoStop()
-
-				#restart_new_trial()
-				user_input = input("Ready to new cycle?")
-				if user_input == 'y':
-					if rospy.has_param('/robot_move_started'):
-						rospy.delete_param('/robot_move_started')
-					if rospy.has_param('/colift_set'):
-						rospy.delete_param('/colift_set')
-					if rospy.has_param('/elbow_height_th'):
-						rospy.delete_param('/elbow_height_th')
-					if rospy.has_param('/emg_sum_th'):
-						rospy.delete_param('/emg_sum_th')
-					Popen(["rosnode", "kill", "/visualize_and_gamify"])
-					state = "IDLE"
-					game_over_flag.data = False
-
 			elif len(robot_commander.target_poses) == 1:
 				robot_commander.open_gripper()
 				print("gripper open")
