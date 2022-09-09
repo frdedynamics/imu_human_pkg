@@ -69,8 +69,9 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 		robot_commander.rtde_c.servoStop()
 		robot_commander.rtde_c.forceModeStop()
 		if state_transition_flag:
-			human_commander.hands_reset()
-			print("Human hands reset.")
+			pass
+			# human_commander.hands_reset()
+			# print("Human hands reset.")
 			# resets hands origin everytime
 	
 	
@@ -78,6 +79,9 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 		if state_transition_flag:
 			robot_commander.set_approach_init_TCP_pose()
 			robot_commander.rtde_c.forceModeStop()
+			## Reseting hand poses in the beginning of approach
+			human_commander.hands_reset()
+			print("Human hands reset.")
 			# hope to eliminate the jumps
 		robot_goal_pose = human_commander.two_hands_move(robot_commander.approach_init_TCP_list)
 		robot_commander.move_relative_to_current_pose(robot_goal_pose)
