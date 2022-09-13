@@ -131,9 +131,9 @@ class HumanCommander:
 			self.state.data = "COLIFT"
 			rospy.set_param("/colift_set", True)
 
-		elif(((self.right_hand_pose.orientation.w < 0.707 and self.right_hand_pose.orientation.x > 0.707) and self.hand_grip_strength.data < self.emg_sum_th)and self.state.data != "COLIFT"): # right rotate downwards
+		elif(((self.right_hand_pose.orientation.w < 0.707 and self.right_hand_pose.orientation.x > 0.707) and self.hand_grip_strength.data < self.emg_sum_th)and (self.state.data != "COLIFT" or self.state.data != "RELEASE")): # right rotate downwards
 			self.state.data = "APPROACH"
-		elif(((self.right_hand_pose.orientation.w > 0.707 and self.right_hand_pose.orientation.x < 0.707) and self.hand_grip_strength.data < self.emg_sum_th) and self.state.data != "COLIFT"): # right rotate upwards
+		elif(((self.right_hand_pose.orientation.w > 0.707 and self.right_hand_pose.orientation.x < 0.707) and self.hand_grip_strength.data < self.emg_sum_th) and (self.state.data != "COLIFT" or self.state.data != "RELEASE")): # right rotate upwards
 			self.state.data = "IDLE"
 
 		elif((self.right_hand_pose.position.x < -0.25 and self.right_hand_pose.position.z < -0.15)and self.state.data == "COLIFT"):
