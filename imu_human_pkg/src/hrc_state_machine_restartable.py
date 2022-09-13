@@ -141,7 +141,8 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 			if len(robot_commander.target_poses) == 0:
 				print("THE END")
 				game_over_flag.data = True
-				robot_commander.rtde_c.servoStop()
+				robot_commander.rtde_c.disconnect()
+				sys.exit()
 			elif len(robot_commander.target_poses) == 1:
 				robot_commander.open_gripper()
 				print("gripper open")
