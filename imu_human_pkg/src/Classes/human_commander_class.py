@@ -148,22 +148,41 @@ class HumanCommander:
 		Based on gestures, HRC state is determined
 		'''
 
-		if((self.hand_grip_strength.data > self.emg_sum_th) and self.state.data == "APPROACH"):
-			self.state.data = "COLIFT"
-			rospy.set_param("/colift_set", True)
+		if self.state.data == "IDLE":
+			if(self.gesture_hand_pose.orientation.w < 0.707 and self.gesture_hand_pose.orientation.x > 0.707):
+				self.state.data = "APPROACH"
+		elif self.state.data == "APPROACH":
+			if(self.hand_grip_strength.data > self.emg_sum_th):
+				self.state.data = "COLIFT"
+				rospy.set_param("/colift_set", True)
+			elif(self.gesture_hand_pose.orientation.w > 0.707 and self.gesture_hand_pose.orientation.x < 0.707):
+				self.state.data = "IDLE"
+		elif self.state.data == "COLIFT":
+			print("x:{0:.3f}, z:{1:.3f}".format(self.gesture_hand_pose.position.x, self.gesture_hand_pose.position.z))
+			if(self.gesture_hand_pose.position.x < -0.25 and self.gesture_hand_pose.position.z < -0.15):
+				self.state.data = "RELEASE"
+				print("RELEASE triggered")
+			
 
-		elif(((self.gesture_hand_pose.orientation.w < 0.707 and self.gesture_hand_pose.orientation.x > 0.707) and self.hand_grip_strength.data < self.emg_sum_th)and (self.state.data != "COLIFT" or self.state.data != "RELEASE")): # right rotate downwards
-			self.state.data = "APPROACH"
-		elif(((self.gesture_hand_pose.orientation.w > 0.707 and self.gesture_hand_pose.orientation.x < 0.707) and self.hand_grip_strength.data < self.emg_sum_th) and (self.state.data != "COLIFT" or self.state.data != "RELEASE")): # right rotate upwards
-			self.state.data = "IDLE"
 
-		elif((self.gesture_hand_pose.position.x < -0.25 and self.gesture_hand_pose.position.z < -0.15)and self.state.data == "COLIFT"):
-			self.state.data = "RELEASE"
+
+
+		# if((self.hand_grip_strength.data > self.emg_sum_th) and self.state.data == "APPROACH"):
+		# 	self.state.data = "COLIFT"
+		# 	rospy.set_param("/colift_set", True)
+
+		# elif(((self.uncalib_right_hand_pose.orientation.w < 0.707 and self.uncalib_right_hand_pose.orientation.x > 0.707) and self.hand_grip_strength.data < self.emg_sum_th)and (self.state.data != "COLIFT" or self.state.data != "RELEASE")): # right rotate downwards
+		# 	self.state.data = "APPROACH"
+		# elif(((self.uncalib_right_hand_pose.orientation.w > 0.707 and self.uncalib_right_hand_pose.orientation.x < 0.707) and self.hand_grip_strength.data < self.emg_sum_th) and (self.state.data != "COLIFT" or self.state.data != "RELEASE")): # right rotate upwards
+		# 	self.state.data = "IDLE"
+
+		# elif((self.uncalib_right_hand_pose.position.x < -0.25 and self.uncalib_right_hand_pose.position.z < -0.15)and self.state.data == "COLIFT"):
+		# 	self.state.data = "RELEASE"
 
 
 		if not self.prev_state == self.state: ## This makes sure that each state can run a pre-requirements once
 			state_transition_flag = True
-			print("right: ", self.gesture_hand_pose.orientation.w)
+			print("right: ", self.uncalib_right_hand_pose.orientation.w)
 			print("strength: ", self.hand_grip_strength.data, "-", self.emg_sum_th)
 			print(self.prev_state, "--", self.state)
 		else:
@@ -221,7 +240,9 @@ class HumanCommander:
 		# rot_x_m45 = np.array([[1,0,0], [0, 0.7071068, 0.7071068], [0,-0.7071068, 0.7071068]])
 		# rot_y_45 = np.array([[0.7071068,0, -0.7071068], [0, 1, 0], [0.7071068, 0, 0.7071068]])
 		# rot_z_45 = np.array([[0.7071068, 0.7071068, 0], [-0.7071068, 0.7071068, 0], [0, 0, 1]])
-		rot_test = np.array([[  1.0000000,  0.0000000,  0.0000000],[0.0000000, -0.8191521, 0.5735765],[0.0000000,  -0.5735765, -0.8191521 ]]) ## This is finally right! -x axis 145 degree rotation
+
+		# rot_test = np.array([[  1.0000000,  0.0000000,  0.0000000],[0.0000000, -0.8191521, 0.5735765],[0.0000000,  -0.5735765, -0.8191521 ]]) ## This is finally right! -x axis 145 degree rotation
+		rot_test = np.array([[  1.0000000,  0.0000000,  0.0000000], [0.0000000, -0.7071068,  0.7071068],[0.0000000, -0.7071068, -0.7071068 ]]) ## This is finally right! -x axis 135 degree rotation # TODO: take it from real-time data.
 
 		# rot1 = rotation_matrix(math.radians(80), (1, 0, 0))
 		# rot_right_imu = kinematic.q2m([self.gesture_hand_pose.orientation.x, self.gesture_hand_pose.orientation.y, self.gesture_hand_pose.orientation.z, self.gesture_hand_pose.orientation.w])
