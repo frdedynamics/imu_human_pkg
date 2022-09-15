@@ -77,12 +77,16 @@ class RobotCommander:
 
 		self.colift_force = 15
 		self.release_speed = 0.25
+		self.lookahead_time = 0.1 # opposite proportional to approach speed
 		if rospy.has_param('/robot_colift_force'):
 			self.colift_force = rospy.get_param('/robot_colift_force')
 			print("Colift force set:", self.colift_force)
 		if rospy.has_param('/robot_release_speed'):
 			self.release_speed = rospy.get_param('/robot_release_speed')
 			print("Release speed set:", self.release_speed)
+		if rospy.has_param('/robot_approach_speed'):
+			self.lookahead_time = rospy.get_param('/robot_approach_speed')
+			print("Approach speed set:", self.lookahead_time)
              
 
 	def init_subscribers_and_publishers(self):
@@ -101,13 +105,13 @@ class RobotCommander:
 	def set_colift_init_TCP_pose(self):
 		self.colift_init = self.rtde_r.getActualTCPPose()
 
-	def move_relative_to_current_pose(self, goal_pose):
+	def move_relative_to_current_pose(self, goal_pose, lookahead_time=0.1):
 		'''
 		Think about speed again: https://www.universal-robots.com/articles/ur/application-installation/automove-speed-and-acceleration/
 
 		SERVOJ(Q, A, V, T=0.002, LOOKAHEAD_TIME=0.1, GAIN=300)
 		'''
-		self.rtde_c.servoL(goal_pose,0.5, 0.3, 0.002, 0.1, 300) # Test a avnd v with Sondre. Set the speed slider to 50% for now.
+		self.rtde_c.servoL(goal_pose,0.5, 0.3, 0.002, lookahead_time, 300) # Test a avnd v with Sondre. Set the speed slider to 50% for now.
 
 	def open_gripper(self):
 		self.gripper_cmd.data = False
