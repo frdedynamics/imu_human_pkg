@@ -63,6 +63,7 @@ def main():
 					Robot.rtde_c.disconnect()
 					# Popen(["rosnode", "kill", "/visualize_and_gamify"])
 					print("Please stop the robot and start from measure thresholds")
+					print("REMEMBER ARDUINO BUTTONS!!!")
 					state = "IDLE"
 					game_over_flag.data = False
 	except KeyboardInterrupt:
