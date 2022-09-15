@@ -59,6 +59,7 @@ def main():
 				user_input = input("Ready to new cycle?")
 				if user_input == 'y':
 					rospy.set_param('/robot_move_started', False)
+					rospy.set_param('/colift_set', False)
 					Robot.rtde_c.disconnect()
 					# Popen(["rosnode", "kill", "/visualize_and_gamify"])
 					print("Please stop the robot and start from measure thresholds")
