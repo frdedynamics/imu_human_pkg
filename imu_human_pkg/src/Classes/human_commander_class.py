@@ -9,12 +9,15 @@ import sys
 import rospy
 import actionlib
 from imu_human_pkg.msg import handCalibrationAction, handCalibrationGoal
+import numpy as np
 
 from geometry_msgs.msg import Pose, Quaternion 
 from std_msgs.msg import String, Int16
 from std_msgs.msg import Float32MultiArray
 
 from . import Kinematics_with_Quaternions as kinematic
+from Classes.DH_matrices import DHmatrices
+DHmatrices = DHmatrices()
 
 
 class HumanCommander:
@@ -35,12 +38,18 @@ class HumanCommander:
 		self.corrected_merge_hand_list.data = 6*[0.0]
 		self.left_hand_pose = Pose()
 		self.right_hand_pose = Pose()
+		self.uncalib_left_hand_pose = Pose()
+		self.uncalib_right_hand_pose = Pose()
+		self.gesture_hand_pose = Pose() # a patch for now. Basicaly old wrist_to_robot_2arms steering hand. But with the current hand reset, the hands are always 0
 		self.hand_grip_strength = Int16()
 
 		self.human_to_robot_init_orientation = Quaternion()
 
 		self.elbow_left_height = 0.0
 		self.elbow_right_height = 0.0
+
+		self.left_htm_init_inv = 4*[0.0, 0.0, 0.0, 0.0]
+		self.right_htm_init_inv = 4*[0.0, 0.0, 0.0, 0.0]
 
 		self.human_to_robot_orientation = Quaternion(0.0, 0.0, 0.707, 0.707)
 		self.sr = sr # WS scaling right hand
@@ -58,8 +67,11 @@ class HumanCommander:
 		
 
 	def init_subscribers_and_publishers(self):
-		self.sub_left_hand_pose = rospy.Subscriber('/motion_hand_pose', Pose, self.cb_left_hand_pose)
-		self.sub_right_hand_pose = rospy.Subscriber('/steering_hand_pose', Pose, self.cb_right_hand_pose)
+		# self.sub_left_hand_pose = rospy.Subscriber('/motion_hand_pose', Pose, self.cb_left_hand_pose)
+		# self.sub_right_hand_pose = rospy.Subscriber('/steering_hand_pose', Pose, self.cb_right_hand_pose)
+		self.sub_gesture_hand_pose = rospy.Subscriber('/steering_hand_pose', Pose, self.cb_gesture_hand_pose)
+		self.sub_left_hand_pose = rospy.Subscriber('/wrist_left', Pose, self.cb_left_hand_pose)
+		self.sub_right_hand_pose = rospy.Subscriber('/wrist_right', Pose, self.cb_right_hand_pose)
 		self.sub_human_ori = rospy.Subscriber('/human_ori', Quaternion, self.cb_human_ori)
 		self.sub_elbow_left = rospy.Subscriber('/elbow_left', Pose, self.cb_elbow_left)
 		self.sub_elbow_right= rospy.Subscriber('/elbow_right', Pose, self.cb_elbow_right)
@@ -96,15 +108,20 @@ class HumanCommander:
 		""" Subscribes chest IMU orientation to map human w.r.t the world frame """
 		self.human_to_robot_orientation = kinematic.q_multiply(self.human_to_robot_init_orientation, msg)
 
+	def cb_gesture_hand_pose(self, msg):
+		""" A patch solution for now. It is basically getting the all the way initially calibrated (by wrist_to_robot_2arms) right hand pose"""
+		self.gesture_hand_pose = msg	
+		
 	def cb_left_hand_pose(self, msg):
 		""" Subscribes left hand pose """
-		self.left_hand_pose = msg	
+		self.uncalib_left_hand_pose = msg	
 
 	def cb_right_hand_pose(self, msg):
 		""" Subscribes right hand pose """
-		self.right_hand_pose = msg
+		self.uncalib_right_hand_pose = msg
 
 	def call_hand_calib_server(self):
+		print("left1:", self.left_hand_pose)
 		self.client = actionlib.SimpleActionClient('hand_calibration_as', handCalibrationAction)
 		self.client.wait_for_server()
 		self.goal = handCalibrationGoal()
@@ -112,6 +129,7 @@ class HumanCommander:
 		self.client.send_goal(self.goal, feedback_cb=self.hand_calib_feedback_cb)
 		self.client.wait_for_result()
 		result = self.client.get_result()
+		print("left2:", self.left_hand_pose)
 
 		return result # maybe result is not needed?
 	
@@ -131,18 +149,18 @@ class HumanCommander:
 			self.state.data = "COLIFT"
 			rospy.set_param("/colift_set", True)
 
-		elif(((self.right_hand_pose.orientation.w < 0.707 and self.right_hand_pose.orientation.x > 0.707) and self.hand_grip_strength.data < self.emg_sum_th)and (self.state.data != "COLIFT" or self.state.data != "RELEASE")): # right rotate downwards
+		elif(((self.gesture_hand_pose.orientation.w < 0.707 and self.gesture_hand_pose.orientation.x > 0.707) and self.hand_grip_strength.data < self.emg_sum_th)and (self.state.data != "COLIFT" or self.state.data != "RELEASE")): # right rotate downwards
 			self.state.data = "APPROACH"
-		elif(((self.right_hand_pose.orientation.w > 0.707 and self.right_hand_pose.orientation.x < 0.707) and self.hand_grip_strength.data < self.emg_sum_th) and (self.state.data != "COLIFT" or self.state.data != "RELEASE")): # right rotate upwards
+		elif(((self.gesture_hand_pose.orientation.w > 0.707 and self.gesture_hand_pose.orientation.x < 0.707) and self.hand_grip_strength.data < self.emg_sum_th) and (self.state.data != "COLIFT" or self.state.data != "RELEASE")): # right rotate upwards
 			self.state.data = "IDLE"
 
-		elif((self.right_hand_pose.position.x < -0.25 and self.right_hand_pose.position.z < -0.15)and self.state.data == "COLIFT"):
+		elif((self.gesture_hand_pose.position.x < -0.25 and self.gesture_hand_pose.position.z < -0.15)and self.state.data == "COLIFT"):
 			self.state.data = "RELEASE"
 
 
 		if not self.prev_state == self.state: ## This makes sure that each state can run a pre-requirements once
 			state_transition_flag = True
-			print("right: ", self.right_hand_pose.orientation.w)
+			print("right: ", self.gesture_hand_pose.orientation.w)
 			print("strength: ", self.hand_grip_strength.data, "-", self.emg_sum_th)
 			print(self.prev_state, "--", self.state)
 		else:
@@ -176,7 +194,12 @@ class HumanCommander:
 		It is like immediate calibration.
 		'''
 		reset_flag = False
-		reset_flag = self.call_hand_calib_server()
+		# reset_flag = self.call_hand_calib_server()
+		left_htm_init = DHmatrices.pose_to_htm(self.uncalib_left_hand_pose)
+		right_htm_init = DHmatrices.pose_to_htm(self.uncalib_right_hand_pose)
+		self.left_htm_init_inv = np.linalg.inv(left_htm_init)
+		self.right_htm_init_inv = np.linalg.inv(right_htm_init)
+		reset_flag = True
 		return reset_flag
 	
 
@@ -186,6 +209,11 @@ class HumanCommander:
 		Move the robot TCP with merged hands command with respect to the previous pose. 
 		@params robot_current_pose: list[6]=[position orientation]
 		'''
+		tf_left = np.matmul(self.left_htm_init_inv, DHmatrices.pose_to_htm(self.uncalib_left_hand_pose))
+		tf_right = np.matmul(self.right_htm_init_inv, DHmatrices.pose_to_htm(self.uncalib_right_hand_pose))
+		self.left_hand_pose = DHmatrices.htm_to_pose(tf_left)
+		self.right_hand_pose = DHmatrices.htm_to_pose(tf_right)
+
 		self.merge_hand_pose.position.x = (- self.left_hand_pose.position.x) - self.sr * self.right_hand_pose.position.x
 		self.merge_hand_pose.position.y = (- self.left_hand_pose.position.y) - self.sr * self.right_hand_pose.position.y
 		self.merge_hand_pose.position.z = self.left_hand_pose.position.z + self.sr * self.right_hand_pose.position.z
