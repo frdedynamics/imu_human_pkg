@@ -5,13 +5,16 @@ Human Commander
 Subscribes two hand poses and sends robot pose command.
 """
 
+import imp
 import sys
 import rospy
 import actionlib
 from imu_human_pkg.msg import handCalibrationAction, handCalibrationGoal
 import numpy as np
 
-from geometry_msgs.msg import Pose, Quaternion 
+from tf.transformations import *
+
+from geometry_msgs.msg import Pose, Quaternion, Point
 from std_msgs.msg import String, Int16
 from std_msgs.msg import Float32MultiArray
 
@@ -212,11 +215,30 @@ class HumanCommander:
 		tf_left = np.matmul(self.left_htm_init_inv, DHmatrices.pose_to_htm(self.uncalib_left_hand_pose))
 		tf_right = np.matmul(self.right_htm_init_inv, DHmatrices.pose_to_htm(self.uncalib_right_hand_pose))
 		self.left_hand_pose = DHmatrices.htm_to_pose(tf_left)
-		self.right_hand_pose = DHmatrices.htm_to_pose(tf_right)
+		# pre_right_hand_pose = DHmatrices.htm_to_pose(tf_right)
+
+		# rot_x_60 = np.array([[1,0,0], [0, 0.5, 0.866], [0,-0.866, 0.5]])
+		# rot_x_m45 = np.array([[1,0,0], [0, 0.7071068, 0.7071068], [0,-0.7071068, 0.7071068]])
+		# rot_y_45 = np.array([[0.7071068,0, -0.7071068], [0, 1, 0], [0.7071068, 0, 0.7071068]])
+		# rot_z_45 = np.array([[0.7071068, 0.7071068, 0], [-0.7071068, 0.7071068, 0], [0, 0, 1]])
+		rot_test = np.array([[  1.0000000,  0.0000000,  0.0000000],[0.0000000, -0.8191521, 0.5735765],[0.0000000,  -0.5735765, -0.8191521 ]]) ## This is finally right! -x axis 145 degree rotation
+
+		# rot1 = rotation_matrix(math.radians(80), (1, 0, 0))
+		# rot_right_imu = kinematic.q2m([self.gesture_hand_pose.orientation.x, self.gesture_hand_pose.orientation.y, self.gesture_hand_pose.orientation.z, self.gesture_hand_pose.orientation.w])
+
+
+		# print(euler_from_matrix(rot_right_imu))
+		
+
+
+		right_hand_vec = np.dot(rot_test, tf_right[:3,3])
+		# rot = np.dot(rot1, rot_right_imu)
+		# right_hand_vec = np.dot(rot[:3,:3], tf_right[:3,3])
+		self.right_hand_pose = Pose(Point(right_hand_vec[0], right_hand_vec[1], right_hand_vec[2]), Quaternion(0.0, 0.0, 0.0, 1.0))
 
 		self.merge_hand_pose.position.x = (- self.left_hand_pose.position.x) - self.sr * self.right_hand_pose.position.x
-		self.merge_hand_pose.position.y = (- self.left_hand_pose.position.y) - self.sr * self.right_hand_pose.position.y
-		self.merge_hand_pose.position.z = self.left_hand_pose.position.z + self.sr * self.right_hand_pose.position.z
+		self.merge_hand_pose.position.y = (- self.left_hand_pose.position.y) - self.sr * self.right_hand_pose.position.z
+		self.merge_hand_pose.position.z = self.left_hand_pose.position.z - self.sr * self.right_hand_pose.position.y
 		self.merge_hand_pose.orientation = self.left_hand_pose.orientation
 
 		corrected_merge_hand_list = 6*[0.0]
