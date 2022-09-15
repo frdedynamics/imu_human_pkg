@@ -9,12 +9,13 @@ from sys import argv, stdout
 
 
 class ForceThread(threading.Thread):
-    def __init__(self, rtde_r, rtde_c, mode, group=None, deamon=True):
+    def __init__(self, rtde_r, rtde_c, mode, force=15, group=None, deamon=True):
         threading.Thread.__init__(self)
         # super(ForceThread, self).__init__(self) ## ERROR: assert group is None, "group argument must be None for now"
         self.rtde_r = rtde_r
         self.rtde_c = rtde_c
         self.mode = mode
+        self.force = force
         print("self.mode: ", self.mode)
         self.start()
         print("thread created!")
@@ -31,7 +32,8 @@ class ForceThread(threading.Thread):
     
     def run(self):
         # print("thread run!")
-        f=15
+        # f=15
+        f = self.force
         vector = [0, 0, 0, 0, 0, 0]
         type = 2 
 

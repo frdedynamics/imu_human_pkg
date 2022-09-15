@@ -74,6 +74,15 @@ class RobotCommander:
 		self.joints.header = Header()
 		self.joints.header.frame_id = 'base_link'
 		self.joints.name = ['shoulder_pan', 'shoulder_lift', 'elbow', 'wrist_1', 'wrist_2', 'wrist_3']
+
+		self.colift_force = 15
+		self.release_speed = 0.25
+		if rospy.has_param('/robot_colift_force'):
+			self.colift_force = rospy.get_param('/robot_colift_force')
+			print("Colift force set:", self.colift_force)
+		if rospy.has_param('/robot_release_speed'):
+			self.release_speed = rospy.get_param('/robot_release_speed')
+			print("Release speed set:", self.release_speed)
              
 
 	def init_subscribers_and_publishers(self):

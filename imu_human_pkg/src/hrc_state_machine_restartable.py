@@ -103,7 +103,7 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 			robot_commander.close_gripper()
 			print("Closing gripper")
 			robot_commander.set_colift_init_TCP_pose()
-			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode="u")
+			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode="u", force=robot_commander.colift_force)
 			force_thread.join()
 			while force_thread.is_alive():
 				print("wait for compliance mode to be ready")
@@ -113,7 +113,7 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 		if abs(_curr_force[1]) > 20:
 			print("force: ",(_curr_force[1]))
 			dir_str, dir_change_flag = human_commander.get_dir_from_elbows(_curr_force[1])
-			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str)
+			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str, force=robot_commander.colift_force)
 			force_thread.join()
 
 			if dir_change_flag:
@@ -121,7 +121,7 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 				robot_commander.rtde_c.forceModeStop()
 				if force_thread.is_alive():
 					Exception("ForceThread still alive")
-				force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str)
+				force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str, force=robot_commander.colift_force)
 				force_thread.join()
 				dir_change_flag = False
 
@@ -144,11 +144,11 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 			elif len(robot_commander.target_poses) == 1:
 				robot_commander.open_gripper()
 				print("gripper open")
-				robot_commander.rtde_c.moveL(robot_commander.target_poses[0], 0.25, 1.2, True)
+				robot_commander.rtde_c.moveL(robot_commander.target_poses[0], robot_commander.release_speed, 1.2, True)
 				robot_commander.target_poses.pop(0)
 			else:
 				print(robot_commander.target_poses)
-				robot_commander.rtde_c.moveL(robot_commander.target_poses[0], 0.25, 1.2, True)
+				robot_commander.rtde_c.moveL(robot_commander.target_poses[0], robot_commander.release_speed, 1.2, True)
 				robot_commander.target_poses.pop(0)
 			rospy.sleep(0.5)
 		else:
