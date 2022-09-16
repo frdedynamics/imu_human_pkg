@@ -38,12 +38,12 @@ class ForceThread(threading.Thread):
         type = 2 
 
         if self.mode =="l":
-            wrench = [f, 0.0, 0.0, 0.0, 0.0, 0.0]
-            limits = [0.5, 0.3, 0.3, 0.17, 0.17, 0.17]
+            wrench = [f*1.5, 0.0, 0.0, 0.0, 0.0, 0.0]
+            limits = [0.8, 0.3, 0.3, 0.17, 0.17, 0.17]
             selection_vector = [1, 0, 0, 0, 0, 0]
             self.rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
         elif self.mode =="r":
-            wrench = [-f, 0.0, 0.0, 0.0, 0.0, 0.0]
+            wrench = [-f*1.5, 0.0, 0.0, 0.0, 0.0, 0.0]
             limits = [0.8, 0.3, 0.3, 0.17, 0.17, 0.17]
             selection_vector = [1, 0, 0, 0, 0, 0]
             self.rtde_c.forceMode(vector, selection_vector, wrench, type, limits)
