@@ -12,7 +12,7 @@ from Classes.human_commander_class import HumanCommander
 from Classes.colift_thread_class import ForceThread
 
 from geometry_msgs.msg import Quaternion
-from std_msgs.msg import Bool
+from std_msgs.msg import Bool, Float32MultiArray
 
 from subprocess import Popen
 
@@ -22,14 +22,28 @@ from subprocess import Popen
 	Arduino buttons subscriber, table imu subscriber. All will be in TaskEnvironment class.
 '''
 
+tcp_force = Float32MultiArray()
+colift_flag = False
+
+def robot_tcp_force_cb(msg):
+	"""This is a standalone callback to create an interrupt on COLIFT state"""
+	global tcp_force, colift_flag
+	tcp_force = msg
+
+	# rospy.sleep(0.5) # trying to eliminate double force readins
+	if abs(tcp_force.data[1]) > 20:
+		colift_flag = True
+
+
 def main(): 
 	Robot = RobotCommander(start_node=False)
 	Human = HumanCommander(start_node=False)
 	# Task = TaskEnvironment(start_node=False)
 	rospy.init_node("HRC_state_machine_node")
-	print("robot_move_with_ur_rtde Node Created")
+	print("HRC_state_machine_node Node Created")
 	Robot.init_subscribers_and_publishers()
 	Human.init_subscribers_and_publishers()
+
 
 	game_over_flag = Bool()
 	game_over_flag.data = False
@@ -75,15 +89,11 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 
 	## TODO: Add teleop active and teleop idle later
 
-	# print("state: ", state)
+	global tcp_force, colift_flag
 
 	if state == "IDLE":
 		robot_commander.rtde_c.servoStop()
 		robot_commander.rtde_c.forceModeStop()
-		# if state_transition_flag:
-		# 	human_commander.hands_reset()
-		# 	print("Human hands reset.")
-			# resets hands origin everytime
 	
 	
 	elif state == "APPROACH":
@@ -91,7 +101,6 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 			robot_commander.set_approach_init_TCP_pose()
 			robot_commander.rtde_c.forceModeStop()
 			human_commander.hands_reset()
-			# hope to eliminate the jumps
 		robot_goal_pose = human_commander.two_hands_move(robot_commander.approach_init_TCP_list)
 		robot_commander.move_relative_to_current_pose(robot_goal_pose, lookahead_time=robot_commander.lookahead_time)
 
@@ -107,13 +116,12 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 			while force_thread.is_alive():
 				print("wait for compliance mode to be ready")
 		
-		rospy.sleep(0.5) # trying to eliminate double force readins
-		_curr_force = robot_commander.rtde_r.getActualTCPForce()
-		if abs(_curr_force[1]) > 20:  ## TODO: make it as interrupt
-			print("force: ",(_curr_force[1]))
-			dir_str, dir_change_flag = human_commander.get_dir_from_elbows(_curr_force[1])
+		if colift_flag:  ## TODO: make it as interrupt
+			print("force: ",(tcp_force.data[1]))
+			dir_str, dir_change_flag = human_commander.get_dir_from_elbows(tcp_force.data[1])
 			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str, force=robot_commander.colift_force)
 			force_thread.join()
+			colift_flag = False
 
 			if dir_change_flag:
 				print("flag true")

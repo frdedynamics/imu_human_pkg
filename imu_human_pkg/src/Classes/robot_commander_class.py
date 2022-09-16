@@ -36,7 +36,6 @@ class RobotCommander:
 		self.rtde_c = RTDEControl("172.31.1.144", RTDEControl.FLAG_USE_EXT_UR_CAP)
 		self.rtde_r = rtde_receive.RTDEReceiveInterface("172.31.1.144")
 
-		self.tcp_force = Float32MultiArray()
 		## Skip this for now to reduce the rosbag size. Directly uncomment to use.
 		# tcp_layout = MultiArrayDimension()
 		# tcp_layout.label = "tcp_force"
@@ -60,7 +59,6 @@ class RobotCommander:
 		self.target_poses = [before_release_pose, release_pose, after_release_pose]
 		self.colift_init_list = self.rtde_r.getActualTCPPose()
 		self.approach_init_TCP_list = self.rtde_r.getActualTCPPose()
-		self.current_TCP_list = Float32MultiArray()
 
 		self.gripper_cmd = Bool()
 
@@ -91,10 +89,7 @@ class RobotCommander:
 
 	def init_subscribers_and_publishers(self):
 		self.pub_grip_cmd = rospy.Publisher('/cmd_grip_bool', Bool, queue_size=1)
-		self.pub_tcp_current_list = rospy.Publisher('/tcp_current_list', Float32MultiArray, queue_size=1)
-		self.pub_tcp_current_pose = rospy.Publisher('/tcp_current_pose', Pose, queue_size=1)
 		self.pub_robot_joints = rospy.Publisher('/ur5e_joint_state', JointState, queue_size=1)
-		self.pub_tcp_force = rospy.Publisher('/tcp_force', Float32MultiArray, queue_size=1)
 
 
 	####### State methods #######
@@ -126,17 +121,6 @@ class RobotCommander:
 
 	def update(self):
 		self.pub_grip_cmd.publish(self.gripper_cmd)
-
-		self.tcp_force.data = self.rtde_r.getActualTCPForce()
-		# _curr_force = self.rtde_r.getActualTCPForce()
-		# print(f'0: {_curr_force[0]:.2f} -- 1: {_curr_force[1]:.2f} -- 2: {_curr_force[2]:.2f} -- 3: {_curr_force[3]:.2f} -- 4: {_curr_force[4]:.2f} -- 5: {_curr_force[5]:.2f} -- ')
-		self.pub_tcp_force.publish(self.tcp_force)
-
-		self.current_TCP_list.data = self.rtde_r.getActualTCPPose()
-		self.pub_tcp_current_list.publish(self.current_TCP_list)
-
-		self.pub_tcp_current_pose = kinematic.list_to_pose(self.current_TCP_list.data)
-		self.pub_tcp_current_pose = rospy.Publisher('/tcp_current_pose', Pose, queue_size=1)
 
 		self.joints.position = self.rtde_r.getActualQ()
 		self.joints.header.stamp = rospy.Time.now()		
