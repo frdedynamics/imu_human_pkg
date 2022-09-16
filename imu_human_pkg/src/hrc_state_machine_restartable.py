@@ -6,6 +6,7 @@ Human-robot-task merge happens here
 (Whole refactored robot_move_node. Human and Robot commanders are seperated and the code is cleaned)
 """
 
+from readline import remove_history_item
 import rospy,sys,numpy, time
 from Classes.robot_commander_class import RobotCommander
 from Classes.human_commander_class import HumanCommander
@@ -24,15 +25,17 @@ from subprocess import Popen
 
 tcp_force = Float32MultiArray()
 colift_flag = False
+effective_colift_force = 0
 
 def robot_tcp_force_cb(msg):
 	"""This is a standalone callback to create an interrupt on COLIFT state"""
-	global tcp_force, colift_flag
+	global tcp_force, colift_flag, effective_colift_force
 	tcp_force = msg
 
-	# rospy.sleep(0.5) # trying to eliminate double force readins
-	if abs(tcp_force.data[1]) > 20:
+	if (abs(tcp_force.data[1]) > 17 and (colift_flag == False)):
 		colift_flag = True
+		effective_colift_force = tcp_force.data[1]
+		print("force exceed, colift triggered: ", tcp_force.data[1])
 
 
 def main(): 
@@ -66,6 +69,7 @@ def main():
 			hrc_state, state_transition_flag = Human.get_state()
 			state_machine(Human, Robot, hrc_state.data, state_transition_flag, game_over_flag)
 			pub_game_over_flag.publish(game_over_flag)
+			sub_tcp_force = rospy.Subscriber('/tcp_force', Float32MultiArray, robot_tcp_force_cb)
 			rate.sleep()
 
 			if game_over_flag.data == True:
@@ -89,7 +93,7 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 
 	## TODO: Add teleop active and teleop idle later
 
-	global tcp_force, colift_flag
+	global colift_flag, effective_colift_force
 
 	if state == "IDLE":
 		robot_commander.rtde_c.servoStop()
@@ -116,12 +120,10 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 			while force_thread.is_alive():
 				print("wait for compliance mode to be ready")
 		
-		if colift_flag:  ## TODO: make it as interrupt
-			print("force: ",(tcp_force.data[1]))
-			dir_str, dir_change_flag = human_commander.get_dir_from_elbows(tcp_force.data[1])
+		if colift_flag:
+			dir_str, dir_change_flag = human_commander.get_dir_from_elbows(effective_colift_force)
 			force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str, force=robot_commander.colift_force)
 			force_thread.join()
-			colift_flag = False
 
 			if dir_change_flag:
 				print("flag true")
@@ -131,6 +133,9 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 				force_thread = ForceThread(rtde_r=robot_commander.rtde_r, rtde_c=robot_commander.rtde_c, mode=dir_str, force=robot_commander.colift_force)
 				force_thread.join()
 				dir_change_flag = False
+
+			rospy.sleep(0.3) # trying to eliminate double force readins
+			colift_flag = False
 
 	
 	elif state == "RELEASE":

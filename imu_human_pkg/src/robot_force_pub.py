@@ -21,7 +21,7 @@ def main():
     pub_tcp_current_pose = rospy.Publisher('/tcp_current_pose', Pose, queue_size=10)
 
     rospy.init_node('rtde_receive_node', anonymous=False)
-    rate = rospy.Rate(100)
+    rate = rospy.Rate(10)
     while not rospy.is_shutdown():
         tcp_force.data = rtde_r.getActualTCPForce()
         current_TCP_list.data = rtde_r.getActualTCPPose()
