@@ -126,7 +126,6 @@ class HumanCommander:
 		self.uncalib_right_hand_pose = msg
 
 	def call_hand_calib_server(self):
-		print("left1:", self.left_hand_pose)
 		self.client = actionlib.SimpleActionClient('hand_calibration_as', handCalibrationAction)
 		self.client.wait_for_server()
 		self.goal = handCalibrationGoal()
@@ -134,7 +133,6 @@ class HumanCommander:
 		self.client.send_goal(self.goal, feedback_cb=self.hand_calib_feedback_cb)
 		self.client.wait_for_result()
 		result = self.client.get_result()
-		print("left2:", self.left_hand_pose)
 
 		return result # maybe result is not needed?
 	
@@ -160,33 +158,17 @@ class HumanCommander:
 			elif(self.gesture_hand_pose.orientation.w > 0.707 and self.gesture_hand_pose.orientation.x < 0.707):
 				self.state.data = "IDLE"
 		elif self.state.data == "COLIFT":
-			print("x:{0:.3f}, z:{1:.3f}".format(self.gesture_hand_pose.position.x, self.gesture_hand_pose.position.z))
+			# print("x:{0:.3f}, z:{1:.3f}".format(self.gesture_hand_pose.position.x, self.gesture_hand_pose.position.z))
 			if(self.gesture_hand_pose.position.x < -0.25 and self.gesture_hand_pose.position.z < -0.15):
 				self.state.data = "RELEASE"
 				print("RELEASE triggered")
 			
 
-
-
-
-		# if((self.hand_grip_strength.data > self.emg_sum_th) and self.state.data == "APPROACH"):
-		# 	self.state.data = "COLIFT"
-		# 	rospy.set_param("/colift_set", True)
-
-		# elif(((self.uncalib_right_hand_pose.orientation.w < 0.707 and self.uncalib_right_hand_pose.orientation.x > 0.707) and self.hand_grip_strength.data < self.emg_sum_th)and (self.state.data != "COLIFT" or self.state.data != "RELEASE")): # right rotate downwards
-		# 	self.state.data = "APPROACH"
-		# elif(((self.uncalib_right_hand_pose.orientation.w > 0.707 and self.uncalib_right_hand_pose.orientation.x < 0.707) and self.hand_grip_strength.data < self.emg_sum_th) and (self.state.data != "COLIFT" or self.state.data != "RELEASE")): # right rotate upwards
-		# 	self.state.data = "IDLE"
-
-		# elif((self.uncalib_right_hand_pose.position.x < -0.25 and self.uncalib_right_hand_pose.position.z < -0.15)and self.state.data == "COLIFT"):
-		# 	self.state.data = "RELEASE"
-
-
 		if not self.prev_state == self.state: ## This makes sure that each state can run a pre-requirements once
 			state_transition_flag = True
 			print("right: ", self.uncalib_right_hand_pose.orientation.w)
 			print("strength: ", self.hand_grip_strength.data, "-", self.emg_sum_th)
-			print(self.prev_state, "--", self.state)
+			print("state changed:", self.prev_state, "--", self.state)
 		else:
 			state_transition_flag = False
 		
@@ -224,6 +206,7 @@ class HumanCommander:
 		self.left_htm_init_inv = np.linalg.inv(left_htm_init)
 		self.right_htm_init_inv = np.linalg.inv(right_htm_init)
 		reset_flag = True
+		print("Human hands reset.")
 		return reset_flag
 	
 
@@ -237,6 +220,8 @@ class HumanCommander:
 		tf_right = np.matmul(self.right_htm_init_inv, DHmatrices.pose_to_htm(self.uncalib_right_hand_pose))
 		self.left_hand_pose = DHmatrices.htm_to_pose(tf_left)
 		# pre_right_hand_pose = DHmatrices.htm_to_pose(tf_right)
+
+		# TODO: clean here
 
 		# rot_x_60 = np.array([[1,0,0], [0, 0.5, 0.866], [0,-0.866, 0.5]])
 		# rot_x_m45 = np.array([[1,0,0], [0, 0.7071068, 0.7071068], [0,-0.7071068, 0.7071068]])

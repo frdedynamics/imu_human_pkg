@@ -91,7 +91,6 @@ def state_machine(human_commander, robot_commander, state, state_transition_flag
 			robot_commander.set_approach_init_TCP_pose()
 			robot_commander.rtde_c.forceModeStop()
 			human_commander.hands_reset()
-			print("Human hands reset.")
 			# hope to eliminate the jumps
 		robot_goal_pose = human_commander.two_hands_move(robot_commander.approach_init_TCP_list)
 		robot_commander.move_relative_to_current_pose(robot_goal_pose, lookahead_time=robot_commander.lookahead_time)
