@@ -82,6 +82,8 @@ class HumanCommander:
 
 		self.pub_hrc_state = rospy.Publisher('/hrc_state', String, queue_size=1)
 		self.pub_colift_dir = rospy.Publisher('/colift_dir', String, queue_size=1)
+		self.pub_calib_right_hand = rospy.Publisher('/calib_right_hand', Pose, queue_size=1)
+		self.pub_calib_left_hand = rospy.Publisher('/calib_left_hand', Pose, queue_size=1)
 		self.pub_merge_hands = rospy.Publisher('/merged_hands', Pose, queue_size=1)
 		self.pub_corr_merge_hands = rospy.Publisher('/corr_merged_hands', Pose, queue_size=1)
 		# self.pub_corr_merge_hands_list = rospy.Publisher('/corr_merged_hands_list', Float32MultiArray, queue_size=1)
@@ -319,6 +321,8 @@ class HumanCommander:
 		self.pub_colift_dir.publish(self.colift_dir)
 		self.pub_merge_hands.publish(self.merge_hand_pose)
 		self.pub_corr_merge_hands.publish(self.corrected_merge_hand_pose)
+		self.pub_calib_right_hand.publish(self.right_hand_pose)
+		self.pub_calib_left_hand.publish(self.left_hand_pose)
 		# print(self.corrected_merge_hand_list)
 		# print(type(self.corrected_merge_hand_list))
 		# self.pub_corr_merge_hands_list.publish(self.corrected_merge_hand_list)
