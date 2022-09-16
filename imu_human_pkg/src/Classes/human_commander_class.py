@@ -246,6 +246,9 @@ class HumanCommander:
 		# rot_test = np.array([[  1.0000000,  0.0000000,  0.0000000],[0.0000000, -0.8191521, 0.5735765],[0.0000000,  -0.5735765, -0.8191521 ]]) ## This is finally right! -x axis 145 degree rotation
 		rot_test = np.array([[  1.0000000,  0.0000000,  0.0000000], [0.0000000, -0.7071068,  0.7071068],[0.0000000, -0.7071068, -0.7071068 ]]) ## This is finally right! -x axis 135 degree rotation # TODO: take it from real-time data.
 
+		q_right = kinematic.m2q(tf_right) # q_of_rot_test
+
+
 		# rot1 = rotation_matrix(math.radians(80), (1, 0, 0))
 		# rot_right_imu = kinematic.q2m([self.gesture_hand_pose.orientation.x, self.gesture_hand_pose.orientation.y, self.gesture_hand_pose.orientation.z, self.gesture_hand_pose.orientation.w])
 
@@ -257,7 +260,8 @@ class HumanCommander:
 		right_hand_vec = np.dot(rot_test, tf_right[:3,3])
 		# rot = np.dot(rot1, rot_right_imu)
 		# right_hand_vec = np.dot(rot[:3,:3], tf_right[:3,3])
-		self.right_hand_pose = Pose(Point(right_hand_vec[0], right_hand_vec[1], right_hand_vec[2]), Quaternion(0.0, 0.0, 0.0, 1.0))
+		self.right_hand_pose = Pose(Point(right_hand_vec[0], right_hand_vec[1], right_hand_vec[2]), Quaternion(q_right[0], q_right[1], q_right[2], q_right[3]))
+		# self.right_hand_pose = Pose(Point(right_hand_vec[0], right_hand_vec[1], right_hand_vec[2]), Quaternion(0.0, 0.0, 0.0, 1.0))
 
 		self.merge_hand_pose.position.x = (- self.left_hand_pose.position.x) - self.sr * self.right_hand_pose.position.x
 		self.merge_hand_pose.position.y = (- self.left_hand_pose.position.y) - self.sr * self.right_hand_pose.position.z
