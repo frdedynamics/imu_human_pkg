@@ -32,7 +32,7 @@ def robot_tcp_force_cb(msg):
 	global tcp_force, colift_flag, effective_colift_force
 	tcp_force = msg
 
-	if (abs(tcp_force.data[1]) > 17 and (colift_flag == False)):
+	if (abs(tcp_force.data[1]) > 20 and (colift_flag == False)):
 		colift_flag = True
 		effective_colift_force = tcp_force.data[1]
 		print("force exceed, colift triggered: ", tcp_force.data[1])
